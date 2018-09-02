@@ -70,6 +70,49 @@ export const constantRouterMap = [
       onlyShow: true,
       meta: { title: 'editGoods', icon: 'people' }
     }]
+  },
+  {
+    path: '/goodsBack',
+    component: Layout,
+    redirect: '/goodsBack/list',
+    alwaysShow: true,
+    meta: {
+      title: 'goodsBack',
+      icon: 'people'
+    },
+    children: [
+      {
+        path: 'list',
+        component: () => import('@/views/goodsBack/goodsBackList'),
+        name: 'goodsBackList',
+        meta: { title: 'goodsBackList' }
+      },
+      {
+        path: 'classifyBackList',
+        component: () => import('@/views/goodsBack/classifyBackList'),
+        name: 'classifyBackList',
+        meta: { title: 'classifyBackList' }
+      },
+      {
+        path: 'brandBacklist',
+        component: () => import('@/views/goodsBack/brandBacklist'),
+        name: 'brandBacklist',
+        meta: { title: 'brandBacklist' }
+      },
+      {
+        path: 'specBacklist',
+        component: () => import('@/views/goodsBack/specBacklist'),
+        name: 'specBacklist',
+        meta: { title: 'specBacklist', noCache: true }
+      },
+      {
+        path: 'specBackValueList',
+        component: () => import('@/views/goodsBack/specBackValueList'),
+        name: 'specBacklist',
+        hidden: true,
+        meta: { title: 'specBackValueList', noCache: true }
+      }
+    ]
   }
 ]
 
@@ -80,7 +123,6 @@ export default new Router({
 })
 
 export const asyncRouterMap = [
-
   {
     path: '/um',
     component: Layout,
