@@ -9,13 +9,21 @@ export default {
     page404: '404',
     errorLog: 'Error Log',
     i18n: 'I18n',
-    user: 'user',
-    changePwd: 'changePwd',
-    userList: 'userList',
-    permissionList: 'permissionList',
+    userManagement: 'User Management',
+    changePwd: 'Change Pwd',
+    userList: 'User list',
+    permissionList: 'Permission List',
     assignPermissions: 'Allocation permissions',
     assignRole: 'Allocation roles',
-    webSwitch: 'webSwitch'
+    webSwitch: 'WebSwitch',
+    // 商家端
+    goodsManagement: 'Goods Management',
+    warehouseGoodsList: 'Warehouse Goods List',
+    sellGoodsList: 'Sel Goods List',
+    recycleGoodsList: 'Recycle Goods List',
+    sendGoods: 'Send Goods',
+    editGoods: 'Edit Goods'
+    // 商家端
   },
   navbar: {
     logOut: 'Log Out',
@@ -74,7 +82,10 @@ export default {
     on: 'On',
     off: 'Off',
     createTime: 'CreateTime',
-    updateTime: 'UpdateTime'
+    updateTime: 'UpdateTime',
+    stock: 'Stock',
+    xj: 'Lower Frame',
+    sj: 'On The Shelf'
   },
   user: {
     nickName: 'nickName',

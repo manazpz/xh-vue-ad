@@ -9,13 +9,21 @@ export default {
     page404: '404',
     errorLog: '错误日志',
     i18n: '国际化',
-    user: '用户管理',
+    userManagement: '用户管理',
     changePwd: '修改密码',
     userList: '用户列表',
     permissionList: '权限列表',
     assignPermissions: '分配权限',
     assignRole: '分配角色',
-    webSwitch: 'web站点'
+    webSwitch: 'web站点',
+    // 商家端
+    goodsManagement: '商品管理',
+    warehouseGoodsList: '仓库商品',
+    sellGoodsList: '销售商品',
+    recycleGoodsList: '商品回收站',
+    sendGoods: '发布商品',
+    editGoods: '编辑商品'
+    // 商家端
   },
   navbar: {
     logOut: '退出登录',
@@ -90,7 +98,10 @@ export default {
     on: '开启',
     off: '关闭',
     createTime: '创建时间',
-    updateTime: '修改时间'
+    updateTime: '修改时间',
+    stock: '库存',
+    xj: '下架',
+    sj: '上架'
   },
   errorLog: {
     tips: '请点击右上角bug小图标',

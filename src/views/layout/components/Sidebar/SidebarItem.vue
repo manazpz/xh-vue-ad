@@ -1,7 +1,7 @@
 <template>
   <div v-if="!item.hidden&&item.children" class="menu-wrapper">
 
-    <router-link v-if="hasOneShowingChild(item.children) && !onlyOneChild.children&&!item.alwaysShow" :to="resolvePath(onlyOneChild.path)">
+    <router-link v-if="hasOneShowing(item)||(hasOneShowingChild(item.children)&&!onlyOneChild.children&&!item.alwaysShow)" :to="resolvePath(onlyOneChild.path)">
       <el-menu-item v-if="!hasDashboard(onlyOneChild.name)" :index="resolvePath(onlyOneChild.path)" :class="{'submenu-title-noDropdown':!isNest}">
         <svg-icon v-if="onlyOneChild.meta&&onlyOneChild.meta.icon" :icon-class="onlyOneChild.meta.icon"></svg-icon>
         <span v-if="onlyOneChild.meta&&onlyOneChild.meta.title" slot="title">{{generateTitle(onlyOneChild.meta.title)}}</span>
@@ -60,6 +60,10 @@
     methods: {
       hasOneShowingChild(children) {
         const showingChildren = children.filter(item => {
+          if (item.onlyShow) {
+            this.onlyOneChild = item
+            return true
+          }
           if (item.hidden) {
             return false
           } else {
@@ -69,6 +73,13 @@
           }
         })
         if (showingChildren.length === 1) {
+          return true
+        }
+        return false
+      },
+      hasOneShowing(item) {
+        if (item.onlyShow) {
+          this.onlyOneChild = item
           return true
         }
         return false

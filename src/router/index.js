@@ -35,6 +35,41 @@ export const constantRouterMap = [
       name: 'dashboard',
       meta: { title: 'dashboard', img: process.env.RESOURCE_URL + '/favicon.jpg', noCache: true }
     }]
+  },
+
+  {
+    path: '/bf/gm',
+    component: Layout,
+    redirect: '/bf/gm/warehouseGoodsList',
+    meta: {
+      title: 'goodsManagement',
+      icon: 'people'
+    },
+    children: [{
+      path: 'warehouseGoodsList',
+      component: () => import('@/views/bf/goods/warehouseGoodsList'),
+      name: 'warehouseGoodsList',
+      meta: { title: 'warehouseGoodsList', icon: 'people', noCache: true }
+    },
+    {
+      path: 'sellGoodsList',
+      component: () => import('@/views/bf/goods/sellGoodsList'),
+      name: 'sellGoodsList',
+      meta: { title: 'sellGoodsList', icon: 'people', noCache: true }
+    },
+    {
+      path: 'recycleGoodsList',
+      component: () => import('@/views/bf/goods/recycleGoodsList'),
+      name: 'recycleGoodsList',
+      meta: { title: 'recycleGoodsList', icon: 'people', noCache: true }
+    },
+    {
+      path: 'editGoods',
+      component: () => import('@/views/bf/goods/editGoods'),
+      name: 'editGoods',
+      onlyShow: true,
+      meta: { title: 'editGoods', icon: 'people' }
+    }]
   }
 ]
 
@@ -47,23 +82,23 @@ export default new Router({
 export const asyncRouterMap = [
 
   {
-    path: '/user',
+    path: '/um',
     component: Layout,
-    redirect: '/user/list',
+    redirect: '/um/userList',
     alwaysShow: true, // will always show the root menu
     meta: {
-      title: 'user',
+      title: 'userManagement',
       icon: 'people',
       roles: ['AM', 'UM']
     },
     children: [{
-      path: 'list',
+      path: 'userList',
       component: () => import('@/views/user/basic/userList'),
       name: 'userList',
       meta: { title: 'userList' }
     },
     {
-      path: 'permissions',
+      path: 'permissionList',
       component: () => import('@/views/user/permission/permissionList'),
       name: 'permissionList',
       meta: { title: 'permissionList' }
