@@ -1,149 +1,362 @@
 <template>
-  <div class="app-container">
-    <el-card class="box-card" v-loading="listLoading" :key='tableKey' :data="list">
-      <div slot="header" class="clearfix">
-        <span>一级分类</span>
-        <el-button style="float: right; padding: 8px 16px" type="primary" v-waves @click.native="addClassify('first')">新增</el-button>
-      </div>
-      <!--<el-table :key='tableKey' :data="list" v-loading="listLoading" border fit highlight-current-row-->
-                <!--style="width: 100%;min-height:100%;">-->
-        <!--<el-table-column align="center" label="序号" width="60">-->
-          <!--<template slot-scope="scope">-->
-            <!--<span>{{scope.$index+1}}</span>-->
-          <!--</template>-->
-        <!--</el-table-column>-->
-        <!--<el-table-column align="center" label="名称" width="380">-->
-          <!--<template slot-scope="scope">-->
-            <!--<span>{{scope.row.name}}</span>-->
-          <!--</template>-->
-        <!--</el-table-column>-->
-      <!--</el-table>-->
-      <div v-for="item in list" class="text item">
-        {{ item.name }}
-      </div>
-    </el-card>
-    <el-card class="box-card">
-      <div slot="header" class="clearfix">
-        <span>二级分类</span>
-        <el-button style="float: right; padding: 8px 16px" type="primary" v-waves @click.native="addClassify">新增</el-button>
-      </div>
-      <div v-for="item in list" class="text item">
-        <div v-for="item in item.secondClassify" class="text item">
-          {{ item.name }}
-        </div>
-      </div>
-    </el-card>
-    <el-card class="box-card">
-      <div slot="header" class="clearfix">
-        <span>三级分类</span>
-        <el-button style="float: right; padding: 8px 16px" type="primary" v-waves @click.native="addClassify">新增</el-button>
-      </div>
-      <div v-for="item in list" class="text item">
-        <div v-for="item in item.secondClassify" class="text item">
-          <div v-for="item in item.third" class="text item">
-            {{ item.name }}
-          </div>
-        </div>
-      </div>
-    </el-card>
+  <div>
+    <el-form :model="temp" ref="dataForm" label-width="100px" class="from-content bg-from">
+      <div class="step1">
+        <el-row :gutter="24">
+          <el-col :span="8">
+            <el-card>
+              <div slot="header" class="clearfix">
+                <span>一级分类</span>
+                <el-button style="float: right; padding: 3px 0" type="text" @click="handleCreate('0')">添加一级分类</el-button>
+              </div>
+              <el-table :key='0' :data="classifyCascades1" :row-class-name="tableRowClassName" :show-header="false"
+                        :row-style="selectedHighlight1" @row-click="rowClick1" :header-cell-style="selectHeadStyle" @cell-mouse-enter="showOper" @cell-mouse-leave="displayOper">
+                <el-table-column>
+                  <template slot-scope="scope">
+                    <span>{{scope.row.name}}</span>
+                  </template>
+                </el-table-column>
+                <el-table-column>
+                  <template slot-scope="scope" v-if="scope.row.showDropDown" style="display: inline-block">
+                    <el-button-group style="float: right">
+                      <el-button size="mini" type="primary" icon="el-icon-edit" @click="handleUpdate(scope.row)">编辑</el-button>
+                      <el-button size="mini" type="primary" icon="el-icon-delete" @click="handleDeleteClassify(scope.row)">删除</el-button>
+                    </el-button-group>
+                  </template>
+                </el-table-column>
+              </el-table>
+            </el-card>
+          </el-col>
+          <el-col v-if="isShow2" :span="8">
+            <el-card>
+              <div slot="header" class="clearfix">
+                <span>二级分类</span>
+                <el-button style="float: right; padding: 3px 0" type="text" @click="handleCreate('1')">添加二级分类</el-button>
+              </div>
+              <el-table :data="classifyCascades2" :row-class-name="tableRowClassName" :show-header="false"
+                        :row-style="selectedHighlight2" @row-click="rowClick2" :header-cell-style="selectHeadStyle" @cell-mouse-enter="showOper" @cell-mouse-leave="displayOper">
+                <el-table-column>
+                  <template slot-scope="scope">
+                    <span>{{scope.row.name}}</span>
+                  </template>
+                </el-table-column>
+                <el-table-column>
+                  <template slot-scope="scope" v-if="scope.row.showDropDown" style="display: inline-block">
+                    <el-button-group style="float: right">
+                      <el-button size="mini" type="primary" icon="el-icon-edit" @click="handleUpdate(scope.row)">编辑</el-button>
+                      <el-button size="mini" type="primary" icon="el-icon-delete" @click="handleDeleteClassify(scope.row)">删除</el-button>
+                    </el-button-group>
+                  </template>
+                </el-table-column>
+              </el-table>
+            </el-card>
+          </el-col>
+          <el-col v-if="isShow3" :span="8">
+            <el-card>
+              <div slot="header" class="clearfix">
+                <span>三级分类</span>
+                <el-button style="float: right; padding: 3px 0" type="text" @click="handleCreate('2')">添加三级分类</el-button>
+              </div>
+              <el-table :data="classifyCascades3" :row-class-name="tableRowClassName" :show-header="false"
+                        :row-style="selectedHighlight3" @row-click="rowClick3" :header-cell-style="selectHeadStyle" @cell-mouse-enter="showOper" @cell-mouse-leave="displayOper">
+                <el-table-column min-width="100">
+                  <template slot-scope="scope">
+                    <span>{{scope.row.name}}</span>
+                  </template>
+                </el-table-column>
+                <el-table-column min-width="310">
+                  <template slot-scope="scope" v-if="scope.row.showDropDown" style="display: inline-block">
+                    <el-button-group style="float: right" >
+                      <el-button size="mini" type="primary" icon="el-icon-edit" @click="handleBrand(scope.row)">品牌</el-button>
+                      <el-button size="mini" type="primary" icon="el-icon-edit" @click="handleSpec(scope.row)">规格</el-button>
+                      <el-button size="mini" type="primary" icon="el-icon-edit" @click="handleUpdate(scope.row)">编辑</el-button>
+                      <el-button size="mini" type="primary" icon="el-icon-delete" @click="handleDeleteClassify(scope.row)">删除</el-button>
+                    </el-button-group>
+                  </template>
+                </el-table-column>
+              </el-table>
+            </el-card>
+          </el-col>
+        </el-row>
 
+        <el-row>
+          <el-col :span="24"><div style="background: #FFF8DC;padding: 10px">
+            <span>您当前选择的分类是： {{text}}</span>
+          </div></el-col>
+        </el-row>
 
-  <!-- 弹出框 start -->
-  <el-dialog :title="dialogStatus" :visible.sync="dialogFormVisible">
-    <el-form :rules="rule" ref="dataForm" :model="temp" label-position="left" label-width="70px"
-             style='width: 400px; margin-left:50px;'>
-      <el-form-item label-width="110px" label="分类名称"  prop="name" class="postInfo-container-item">
-        <el-input v-model="temp.name" required placeholder="请输入分类名称"></el-input>
-      </el-form-item>
-      <el-form-item label-width="110px" label="分类排序"  prop="sort" class="postInfo-container-item">
-        <el-input v-model="temp.sort" required placeholder="请输入分类排序"></el-input>
-      </el-form-item>
+      </div>
     </el-form>
-    <div slot="footer" class="dialog-footer">
-      <el-button @click="dialogFormVisible = false">{{$t('table.cancel')}}</el-button>
-      <el-button type="primary" v-loading="btnLoading" @click="createData">{{$t('table.confirm')}}</el-button>
-    </div>
-  </el-dialog>
-  <!-- 弹出框 end -->
+
+
+    <!-- 弹出框 start -->
+    <el-dialog :title="dialogStatus" :visible.sync="dialogFormVisible">
+      <el-form :rules="rule" ref="dataForm" :model="temp" label-position="left" label-width="70px"
+               style='width: 400px; margin-left:50px;'>
+        <el-form-item label-width="110px" label="分类名称"  prop="name" class="postInfo-container-item">
+          <el-input v-model="temp.name" required placeholder="请输入分类名称"></el-input>
+        </el-form-item>
+        <el-form-item label-width="110px" label="排序号"  prop="px" class="postInfo-container-item">
+          <el-input v-model="temp.px" required placeholder="请输入排序号"></el-input>
+        </el-form-item>
+        <el-form-item label-width="110px" label="备注"   class="postInfo-container-item">
+          <el-input  v-model="temp.remarks" placeholder="请输入备注"></el-input>
+        </el-form-item>
+      </el-form>
+
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogFormVisible = false">{{$t('table.cancel')}}</el-button>
+        <el-button v-if="dialogStatus=='新增分类'" type="primary" @click="createData">{{$t('table.confirm')}}</el-button>
+        <el-button v-else type="primary" @click="updateData">{{$t('table.confirm')}}</el-button>
+      </div>
+    </el-dialog>
+    <!-- 弹出框 end -->
+
+    <!-- 弹出框 start -->
+    <el-dialog :title="dialogBrandStatus" :visible.sync="dialogBrandFormVisible">
+      <el-form :rules="rule" ref="dataBrandForm" :model="tempBrands" label-position="left" label-width="150px"
+               style='width: 400px; margin-left:50px;'>
+        <el-form-item label-width="110px" label="已选品牌"  prop="name" class="postInfo-container-item">
+          <el-select v-model="tempBrands.brandId" multiple placeholder="请选择">
+            <el-option v-for="item in brandOptions" :key="item.id" :label="item.name" :value="item.id">
+            </el-option>
+          </el-select>
+        </el-form-item>
+      </el-form>
+
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogBrandFormVisible = false">{{$t('table.cancel')}}</el-button>
+        <el-button type="primary" @click="updateDataBrand">{{$t('table.confirm')}}</el-button>
+      </div>
+    </el-dialog>
+    <!-- 弹出框 end -->
+
+    <!-- 弹出框 start -->
+    <el-dialog :title="dialogSpecStatus" :visible.sync="dialogSpecFormVisible">
+      <el-form :rules="rule" ref="dataSpecForm" :model="tempSpecs" label-position="left" label-width="70px"
+               style='width: 400px; margin-left:50px;'>
+        <el-form-item label-width="110px" label="已选规格"  prop="specName" class="postInfo-container-item">
+          <el-select v-model="tempSpecs.specId" multiple placeholder="请选择">
+            <el-option v-for="item in specOptions" :key="item.id" :label="item.specName" :value="item.id">
+            </el-option>
+          </el-select>
+        </el-form-item>
+      </el-form>
+
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogSpecFormVisible = false">{{$t('table.cancel')}}</el-button>
+        <el-button type="primary" @click="updateDataSpec">{{$t('table.confirm')}}</el-button>
+      </div>
+    </el-dialog>
+    <!-- 弹出框 end -->
+
 
   </div>
 </template>
 
-
 <script>
-  import { getClassify } from '@/api/goods'
-  import waves from '@/directive/waves' // 水波纹指令
+  import { createClassify, getClassify, updateClassify, deleteClassify, brandList, specList, updateClassifyBrand } from '@/api/goods'
   import store from '@/store'
-
   export default {
     name: 'classifyBackList',
-    directives: {
-      waves
+    inject: ['reload'],
+    model: {
+      prop: 'classify',
+      event: 'classify'
+    },
+    props: {
+      classify: ''
     },
     data() {
       return {
-        tableKey: 0,
-        list: null,
-        listSecond: [],
-        listThird: [],
-        total: null,
-        listLoading: true,
-        btnLoading: false,
-        dialogFormVisible: false,
+        falg: true,
+        preStep: true,
+        nextStep: false,
+        publish: false,
+        classifyId1: '',
+        classifyId2: '',
+        brandOptions: [],
+        specOptions: [],
+        classifyCascades1: !this.classify ? [] : this.classify.history.classifyCascades1,
+        classifyCascades2: !this.classify ? [] : this.classify.history.classifyCascades2,
+        classifyCascades3: !this.classify ? [] : this.classify.history.classifyCascades3,
+        isShow2: !this.classify ? false : this.classify.history.isShow2,
+        isShow3: !this.classify ? false : this.classify.history.isShow3,
+        getIndex1: !this.classify ? -1 : this.classify.history.getIndex1,
+        getIndex2: !this.classify ? -1 : this.classify.history.getIndex2,
+        getIndex3: !this.classify ? -1 : this.classify.history.getIndex3,
+        step: 1,
+        text: !this.classify ? '' : this.classify.history.text,
         dialogStatus: '',
+        dialogFormVisible: false,
+        dialogBrandStatus: '',
+        dialogBrandFormVisible: false,
+        dialogSpecStatus: '',
+        dialogSpecFormVisible: false,
+        textMap: {
+          update: 'Edit',
+          create: 'Create'
+        },
+        listQuery: {
+          id: undefined,
+          pageNum: 1,
+          pageSize: 10,
+          sort: 'lastCreateTime DESC'
+        },
         temp: {
           id: undefined,
           name: '',
-          sort: '',
-          status: 'published'
+          remarks: ''
         },
-        rule: {}
+        tempBrands: {
+          id: '',
+          brandId: [],
+          index: '',
+          name: []
+        },
+        tempSpecs: {
+          id: '',
+          specId: [],
+          index: '',
+          specName: []
+        },
+        rule: {
+          name: [{ required: true, message: '分类名称不能为空', trigger: 'change' }]
+        }
       }
     },
     created() {
-      this.getList()
+      this.getClassifyCascade()
+      this.getType()
     },
     methods: {
-      getList() {
-        this.listLoading = true
-        getClassify(this.listQuery).then(response => {
-          if (response.code === 50001) {
-            store.dispatch('GetRefreshToken').then(() => {
-              this.getList()
-            })
-          }
-          if (response.code === 200) {
-            this.list = response.data.items
-            this.list.forEach(function(c) {
-              this.listSecond = c.secondClassify
-            })
-            this.listSecond.forEach(function(c) {
-              this.listThird = c.third
-            })
-            debugger
-            this.total = response.data.total
-            setTimeout(() => {
-              this.listLoading = false
-            }, 1.5 * 1000)
-          }
-        }).catch(() => {
-          this.listLoading = false
+      getType() {
+        brandList(this.listQuery).then(response => {
+          if (!response.data.items) return
+          this.brandOptions = response.data.items
         })
+        specList(this.listQuery).then(response => {
+          if (!response.data.items) return
+          this.specOptions = response.data.items
+        })
+      },
+      getClassifyCascade() {
+        if (this.classifyCascades1.length < 1) {
+          getClassify().then(response => {
+            for (var i = 0; i < response.data.items.length; i++) {
+              response.data.items[i].showDropDown = false
+              if (response.data.items[i].children.length > 0) {
+                for (var s = 0; s < response.data.items[i].children.length; s++) {
+                  response.data.items[i].children[s].showDropDown = false
+                  if (response.data.items[i].children[s].children.length > 0) {
+                    for (var z = 0; z < response.data.items[i].children[s].children.length; z++) {
+                      response.data.items[i].children[s].children[z].showDropDown = false
+                    }
+                  }
+                }
+              }
+            }
+            this.classifyCascades1 = response.data.items
+          })
+        }
+      },
+      showOper(row) {
+        row.showDropDown = true
+      },
+      displayOper(row) {
+        row.showDropDown = false
       },
       resetTemp() {
         this.temp = {
           id: undefined,
+          parentId: '',
+          index: '',
+          px: '',
           name: '',
-          sort: '',
-          type: '',
-          status: 'published'
+          remarks: ''
         }
       },
-      addClassify(val) {
+      handleBrand(row) {
+        this.dialogBrandStatus = '绑定品牌'
+        this.dialogBrandFormVisible = true
+        this.tempBrands.id = row.id
+        this.tempBrands.index = row.index
+        this.$nextTick(() => {
+          this.$refs['dataBrandForm'].clearValidate()
+        })
+      },
+      updateDataBrand(row) {
+        this.$refs['dataBrandForm'].validate((valid) => {
+          if (valid) {
+            this.listLoading = true
+            updateClassifyBrand(this.tempBrands).then((response) => {
+              if (response.code === 50001) {
+                store.dispatch('GetRefreshToken').then(() => {
+                  this.updateData()
+                })
+              }
+              if (response.code === 200) {
+                this.reload()
+                this.listLoading = false
+                this.dialogBrandFormVisible = false
+                this.$notify({
+                  title: '成功',
+                  message: '更新成功',
+                  type: 'success',
+                  duration: 2000
+                })
+              }
+            })
+          }
+        })
+      },
+      handleSpec(row) {
+        // this.resetSpecTemp()
+        this.dialogSpecStatus = '绑定规格'
+        this.dialogSpecFormVisible = true
+        this.tempSpecs.id = row.id
+        this.tempSpecs.index = row.index
+        this.$nextTick(() => {
+          this.$refs['dataSpecForm'].clearValidate()
+        })
+      },
+      updateDataSpec(row) {
+        // this.tempSpec.specId = this.tempSpecs.id
+        this.$refs['dataSpecForm'].validate((valid) => {
+          if (valid) {
+            this.listLoading = true
+            updateClassifyBrand(this.tempSpecs).then((response) => {
+              if (response.code === 50001) {
+                store.dispatch('GetRefreshToken').then(() => {
+                  this.updateDataSpec()
+                })
+              }
+              if (response.code === 200) {
+                this.reload()
+                this.listLoading = false
+                this.dialogSpecFormVisible = false
+                this.$notify({
+                  title: '成功',
+                  message: '更新成功',
+                  type: 'success',
+                  duration: 2000
+                })
+              }
+            })
+          }
+        })
+      },
+      handleCreate(index) {
         this.resetTemp()
-        this.temp.type = val
         this.dialogStatus = '新增分类'
         this.dialogFormVisible = true
+        this.temp.index = index
+        if (index === '1') {
+          this.temp.parentId = this.classifyId1
+        }
+        if (index === '2') {
+          this.temp.parentId = this.classifyId2
+        }
         this.$nextTick(() => {
           this.$refs['dataForm'].clearValidate()
         })
@@ -151,50 +364,246 @@
       createData() {
         this.$refs['dataForm'].validate((valid) => {
           if (valid) {
-            this.btnLoading = true
-            // createContract(this.temp).then(response => {
-            //   if (response.code === 50001) {
-            //     store.dispatch('GetRefreshToken').then(() => {
-            //       this.createData()
-            //     })
-            //   }
-            //   if (response.code === 200) {
-            //     this.reload()
-            //     this.dialogFormVisible = false
-            //     this.$notify({
-            //       title: '成功',
-            //       message: '创建成功',
-            //       type: 'success',
-            //       duration: 2000
-            //     })
-            //   }
-            // })
+            this.listLoading = true
+            createClassify(this.temp).then(response => {
+              if (response.code === 50001) {
+                store.dispatch('GetRefreshToken').then(() => {
+                  this.createData()
+                })
+              }
+              if (response.code === 200) {
+                this.reload()
+                this.dialogFormVisible = false
+                this.$notify({
+                  title: '成功',
+                  message: '创建成功',
+                  type: 'success',
+                  duration: 2000
+                })
+              }
+            })
           }
         })
+      },
+      handleUpdate(row) {
+        this.falg = false
+        this.temp = Object.assign({}, row)
+        this.dialogStatus = '编辑分类'
+        this.dialogFormVisible = true
+        this.temp.index = row.index
+        if (row.index === '1') {
+          this.temp.parentId = this.classifyId1
+        }
+        if (row.index === '2') {
+          this.temp.parentId = this.classifyId2
+        }
+        this.$nextTick(() => {
+          this.$refs['dataForm'].clearValidate()
+        })
+      },
+      updateData() {
+        this.$refs['dataForm'].validate((valid) => {
+          if (valid) {
+            this.listLoading = true
+            updateClassify(this.temp).then((response) => {
+              if (response.code === 50001) {
+                store.dispatch('GetRefreshToken').then(() => {
+                  this.updateData()
+                })
+              }
+              if (response.code === 200) {
+                this.reload()
+                for (const v of this.list) {
+                  if (v.id === this.temp.id) {
+                    const index = this.list.indexOf(v)
+                    this.list.splice(index, 1, this.temp)
+                    break
+                  }
+                }
+                this.listLoading = false
+                this.dialogFormVisible = false
+                this.$notify({
+                  title: '成功',
+                  message: '更新成功',
+                  type: 'success',
+                  duration: 2000
+                })
+              }
+            })
+          }
+        })
+      },
+      handleDeleteClassify(row) {
+        this.falg = false
+        this.$confirm('您确定删除吗？').then(_ => {
+          this.listLoading = true
+          const params = { id: row.id }
+          debugger
+          deleteClassify(params).then(response => {
+            if (response.code === 50001) {
+              store.dispatch('GetRefreshToken').then(() => {
+                this.handleModifyStatus(row)
+              })
+            }
+            if (response.code === 200) {
+              this.reload()
+              this.listLoading = false
+              this.dialogFormVisible = false
+              this.$message({
+                message: '操作成功',
+                type: 'success'
+              })
+            }
+          }).catch(() => {
+            this.listLoading = false
+            this.falg = true
+          })
+        }).catch(_ => {
+          return
+        })
+      },
+      handlePreStep() {
+        this.step--
+        this.goStep(this.step)
+        // $('html,body').animate({scrollTop:0},500);
+      },
+      handleNextStep() {
+        this.step++
+        this.goStep(this.step)
+        // $('html,body').animate({scrollTop:0},500);
+      },
+      goStep(n) {
+        switch (n) {
+          case 1 :
+            this.preStep = false
+            this.nextStep = true
+            this.publish = false
+            break
+          case 2 :
+            this.preStep = true
+            this.nextStep = true
+            this.publish = false
+            break
+          case 3 :
+            this.preStep = true
+            this.nextStep = false
+            this.publish = true
+            break
+        }
+      },
+      selectHeadStyle({ row, column, rowIndex, columnIndex }) {
+        return {
+          'color': 'rgb(250, 195, 100',
+          'font-size': '18px',
+          'text-align': 'center'
+        }
+      },
+      tableRowClassName({ row, rowIndex }) {
+        row.index = rowIndex
+      },
+      selectedHighlight1({ row, rowIndex }) {
+        if ((this.getIndex1) === rowIndex) {
+          return {
+            'background-color': 'rgb(250, 195, 100)'
+          }
+        }
+      },
+      selectedHighlight2({ row, rowIndex }) {
+        if ((this.getIndex2) === rowIndex) {
+          return {
+            'background-color': 'rgb(250, 195, 100)'
+          }
+        }
+      },
+      selectedHighlight3({ row, rowIndex }) {
+        if ((this.getIndex3) === rowIndex) {
+          return {
+            'background-color': 'rgb(250, 195, 100)'
+          }
+        }
+      },
+      rowClick1(row) {
+        if (this.falg) {
+          // if (row.children.length > 0) {
+          this.isShow2 = true
+          // } else {
+          //   this.isShow2 = false
+          //   this.isShow3 = false
+          //   this.getIndex2 = -1
+          //   this.getIndex3 = -1
+          // }
+          this.classifyId1 = row.id
+          this.text = row.name
+          this.getIndex1 = row.index
+          this.classifyCascades2 = row.children
+          this.$emit('classify', '')
+        } else {
+          this.falg = true
+        }
+      },
+      rowClick2(row) {
+        // if (row.children.length > 0) {
+        if (this.falg) {
+          this.isShow3 = true
+          // } else {
+          //   this.isShow3 = false
+          //   this.getIndex3 = -1
+          // }
+          this.classifyId2 = row.id
+          this.text = this.text.split('>')[0] + ' > ' + row.name
+          this.getIndex2 = row.index
+          this.classifyCascades3 = row.children
+          this.$emit('classify', '')
+        } else {
+          this.falg = true
+        }
+      },
+      sendHistoryData(row) {
+        row.history = {}
+        row.history.isShow2 = this.isShow2
+        row.history.isShow3 = this.isShow3
+        row.history.classifyCascades1 = this.classifyCascades1
+        row.history.classifyCascades2 = this.classifyCascades2
+        row.history.classifyCascades3 = this.classifyCascades3
+        row.history.getIndex1 = this.getIndex1
+        row.history.getIndex2 = this.getIndex2
+        row.history.getIndex3 = this.getIndex3
+        row.history.text = this.text
+      },
+      rowClick3(row) {
+        this.Index3 = row.index
+        this.text = this.text.split('>')[0] + ' > ' + this.text.split('>')[1] + ' > ' + row.name
+        this.getIndex3 = row.index
+        this.sendHistoryData(row)
+        this.$emit('classify', row)
+        debugger
+        if (row.parameter !== null) {
+          this.tempBrands.brandId = []
+          this.tempSpecs.specId = []
+          for (var i = 0; i < row.parameter.__ob__.value.brand.length; i++) {
+            this.tempBrands.brandId.push(row.parameter.__ob__.value.brand[i].id)
+          }
+          for (var s = 0; s < row.parameter.__ob__.value.spec.length; s++) {
+            this.tempSpecs.specId.push(row.parameter.__ob__.value.spec[s].id)
+          }
+        }
+        debugger
       }
     }
   }
 </script>
 
 <style>
-  .text {
-    font-size: 14px;
+  .bg-from {
+    background: #f8f8f8;
   }
-
-  .item {
-    margin-bottom: 18px;
+  .from-content {
+    margin: 10px;
+    padding: 10px;
+    border-radius: 4px;
+    min-height: 100%;
   }
-
-  .clearfix:before,
-  .clearfix:after {
-    display: table;
-    content: "";
-  }
-  .clearfix:after {
-    clear: both
-  }
-
-  .box-card {
-    width: 480px;
+  .el-select {
+    width: 400px;
   }
 </style>

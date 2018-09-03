@@ -8,6 +8,22 @@ export function getClassify(query) {
   })
 }
 
+export function createClassify(params) {
+  return request({
+    url: '/goods/insertClassify',
+    method: 'POST',
+    data: params
+  })
+}
+
+export function updateClassify(params) {
+  return request({
+    url: '/goods/updateClassify',
+    method: 'POST',
+    data: params
+  })
+}
+
 export function brandList(query) {
   return request({
     url: '/goods/brandList',
@@ -96,3 +112,18 @@ export function updateSpecValue(params) {
   })
 }
 
+export function updateClassifyBrand(params) {
+  return request({
+    url: '/goods/updateClassifyBrand',
+    method: 'POST',
+    data: params
+  })
+}
+
+export function deleteClassify(params) {
+  return request({
+    url: '/goods/deleteClassify',
+    method: 'POST',
+    data: params
+  })
+}

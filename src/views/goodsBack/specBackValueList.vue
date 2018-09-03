@@ -37,8 +37,8 @@
       </el-table-column>
       <el-table-column align="center" label="规格值描述" width="200" v-if="showtext" style="display: inline-block">
         <template slot-scope="scope">
-          <el-input v-if="scope.row.isEdit" size="small" v-model="scope.row.specText"></el-input>
-          <span v-else>{{scope.row.specText}}</span>
+          <el-input v-if="scope.row.isEdit" size="small" v-model="scope.row.tipsText"></el-input>
+          <span v-else>{{scope.row.tipsText}}</span>
         </template>
       </el-table-column>
       <el-table-column align="left" label="规格值图片" min-width="200" v-if="showimg" style="display: inline-block">
@@ -52,7 +52,7 @@
             list-type="picture">
             <el-button size="small" type="primary">点击上传</el-button>
           </el-upload>
-          <img src="scope.row.specImg" width="100%" alt="" />
+          <img src="scope.row.tipsImg" width="100%" alt="" />
         </template>
       </el-table-column>
       <el-table-column align="center" label="操作" min-width="150" class-name="small-padding fixed-width">
@@ -86,10 +86,10 @@
         <el-form-item label-width="110px" label="规格值排序"  prop="spec_sort" class="postInfo-container-item">
           <el-input  v-model="temp.spec_sort"  required placeholder="请输入规格组名称"></el-input>
         </el-form-item>
-        <el-form-item label-width="110px" label="规格值描述"  prop="spectext" class="postInfo-container-item" v-if="showtext" style="display: inline-block">
-          <el-input  v-model="temp.spectext"  required placeholder="请输入规格值描述"></el-input>
+        <el-form-item label-width="110px" label="规格值描述"  prop="tipsText" class="postInfo-container-item" v-if="showtext" style="display: inline-block">
+          <el-input  v-model="temp.tipsText"  required placeholder="请输入规格值描述"></el-input>
         </el-form-item>
-        <el-form-item label-width="110px" label="规格值图片"  prop="specImg" class="postInfo-container-item" v-if="showimg" style="display: inline-block">
+        <el-form-item label-width="110px" label="规格值图片"  prop="tipsImg" class="postInfo-container-item" v-if="showimg" style="display: inline-block">
           <el-upload
             class="avatar-uploader"
             action="uploadUrl"
@@ -99,7 +99,7 @@
             list-type="picture">
             <el-button size="small" type="primary">点击上传</el-button>
           </el-upload>
-          <img src="temp.specImg" width="100%" alt="" />
+          <img src="temp.tipsImg" width="100%" alt="" />
         </el-form-item>
       </el-form>
 
@@ -148,7 +148,7 @@
           id: undefined,
           spec_value_name: '',
           spec_sort: '',
-          specImg: '',
+          tipsImg: '',
           isEnable: false,
           isEdit: false,
           remarks: ''
@@ -229,7 +229,7 @@
           id: undefined,
           spec_value_name: '',
           spec_sort: '',
-          specImg: '',
+          tipsImg: '',
           isEdit: '',
           index: 0,
           remarks: ''

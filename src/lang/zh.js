@@ -17,6 +17,7 @@ export default {
     brandBacklist: '商品品牌',
     specBacklist: '商品规格',
     specBackValueList: '商品规格值',
+    orderList: '订单列表',
     changePwd: '修改密码',
     userList: '用户列表',
     permissionList: '权限列表',

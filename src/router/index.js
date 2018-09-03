@@ -119,6 +119,23 @@ export const constantRouterMap = [
         meta: { title: 'specBackValueList', noCache: true }
       }
     ]
+  },
+  {
+    path: '/order',
+    component: Layout,
+    redirect: '/order/list',
+    alwaysShow: true,
+    meta: {
+      title: 'orderList',
+      icon: 'people'
+    },
+    children: [
+      {
+        path: 'orderList',
+        component: () => import('@/views/order/orderList'),
+        name: 'orderList',
+        meta: { title: 'orderList' }
+      }]
   }
 ]
 
