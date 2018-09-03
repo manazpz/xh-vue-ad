@@ -22,7 +22,8 @@ export default {
     sellGoodsList: 'Sel Goods List',
     recycleGoodsList: 'Recycle Goods List',
     sendGoods: 'Send Goods',
-    editGoods: 'Edit Goods'
+    editGoods: 'Edit Goods',
+    lable: 'Lable'
     // 商家端
   },
   navbar: {

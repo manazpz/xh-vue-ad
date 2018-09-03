@@ -29,7 +29,8 @@ export default {
     sellGoodsList: '销售商品',
     recycleGoodsList: '商品回收站',
     sendGoods: '发布商品',
-    editGoods: '编辑商品'
+    editGoods: '编辑商品',
+    lable: '标签'
     // 商家端
   },
   navbar: {

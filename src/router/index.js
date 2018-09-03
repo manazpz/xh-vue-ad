@@ -66,9 +66,15 @@ export const constantRouterMap = [
     {
       path: 'editGoods',
       component: () => import('@/views/bf/goods/editGoods'),
+      hidden: true,
       name: 'editGoods',
-      onlyShow: true,
       meta: { title: 'editGoods', icon: 'people' }
+    },
+    {
+      path: 'lable',
+      component: () => import('@/views/bf/goods/lable'),
+      name: 'lable',
+      meta: { title: 'lable', icon: 'people' }
     }]
   },
   {

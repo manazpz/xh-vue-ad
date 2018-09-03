@@ -13,7 +13,7 @@
               <div class="col-content bg-purple-col" >
                 <el-form ref="dataForm" :model="temp" label-width="110px" style='margin-left:50px;'>
                   <el-form-item label="商品品类：" class="postInfo-container-item">
-                    <label>{{detail.classify.history.text}}</label>
+                    <label>{{info.classify.history.text}}</label>
                   </el-form-item>
                   <el-form-item label="商品分类：" class="postInfo-container-item">
                     <el-select v-model="temp.model" placeholder="请选择分组">
@@ -64,7 +64,7 @@
                       </el-select>
                   </el-form-item>
                   <el-form-item label="库存：" class="postInfo-container-item">
-                    <el-input style="width: 200px" v-model="temp.stock"></el-input>
+                    <el-input style="width: 200px" :disabled="!!info.info" v-model="temp.stock"></el-input>
                   </el-form-item>
                   <el-form-item label="邮递类型：" class="postInfo-container-item">
                     <el-select v-model="temp.logistcs" placeholder="请选择分组">
@@ -109,7 +109,7 @@
                       </el-table-column>
                       <el-table-column label="参数" min-width="200">
                         <template slot-scope="scope">
-                          <el-checkbox-group v-model="checkedCities"@change="handleCheckAllChange" >
+                          <el-checkbox-group v-model="checkedCities" @change="handleCheckAllChange" >
                             <el-checkbox v-for="item in scope.row.param"  :label="item" :key="item.spec_sort" >{{item.spec_value_name}}</el-checkbox>
                           </el-checkbox-group>
                         </template>
@@ -211,15 +211,16 @@
     name: 'step1',
     components: { Ueditor, Ueditor1 },
     model: {
-      prop: 'detail',
-      event: 'detail'
+      prop: 'info',
+      event: 'info'
     },
     props: {
-      detail: ''
+      info: ''
     },
     data() {
       return {
         tableKey: 0,
+        goodsId: '',
         listLoading: true,
         activeName: 'first',
         brands: [],
@@ -229,7 +230,7 @@
         spanArr: [],
         checkedCities: [],
         pos: 0,
-        temp: {
+        temp: !this.info.info ? {
           id: undefined,
           model: '01',
           logistcs: '01',
@@ -242,7 +243,7 @@
           specParameter: [],
           parameter: '',
           detail: ''
-        },
+        } : this.info.info,
         config1: {
           autoHeightEnabled: false,
           autoFloatEnabled: true,
@@ -263,8 +264,26 @@
         }
       }
     },
+    mounted() {
+      window.onbeforeunload = function(e) {
+        e = e || window.event
+        // 兼容IE8和Firefox 4之前的版本
+        if (e) {
+          e.returnValue = '关闭提示'
+        }
+        // Chrome, Safari, Firefox 4+, Opera 12+ , IE 9+
+        return '关闭提示'
+      }
+    },
     created() {
-      this.detail.data = this.temp
+      this.info.data = this.temp
+      if (this.info.data.specParameter.length > 0) {
+        this.getSpanArr(this.info.data.specParameter)
+        this.checkedCities = this.info.data.specParameter
+        for (var i = 0; i < this.checkedCities.length; i++) {
+          delete this.checkedCities[i].value
+        }
+      }
       this.getBrands()
       this.getUnits()
       this.getClassifySpecParam()
@@ -286,7 +305,7 @@
       },
       getClassifySpecParam() {
         if (this.classifySpecParam.length < 1) {
-          classifySpecParam(this.detail.classify.id).then(response => {
+          classifySpecParam(this.info.classify.id).then(response => {
             this.classifySpecParam = response.data.items
             this.listLoading = false
           })

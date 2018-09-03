@@ -3,7 +3,7 @@
 
     <!-- 过滤条件 start -->
     <div class="filter-container">
-      <el-button type="success" size="mini" class="filter-item" round>发布商品</el-button>
+      <el-button type="success" size="mini" @click="onJump" class="filter-item" round>发布商品</el-button>
       <div style="float: right;">
         <label class="filter-item">分类：</label>
         <el-select clearable @change='handleFilter' style="width: 140px;" class="filter-item" v-model="listQuery.model">
@@ -52,6 +52,11 @@
           <span>￥{{scope.row.banPrice}}</span>
         </template>
       </el-table-column>
+      <el-table-column align="center" label="标签" width="120">
+        <template slot-scope="scope">
+          <span>{{scope.row.lable | lableFormat}}</span>
+        </template>
+      </el-table-column>
       <el-table-column align="center" label="当前库存" width="90">
         <template slot-scope="scope">
           <span>{{scope.row.currentStock}}</span>
@@ -69,7 +74,7 @@
       </el-table-column>
       <el-table-column align="center" label="更新时间" min-width="110">
         <template slot-scope="scope">
-          <span>{{scope.row.lastcreateTime}}</span>
+          <span>{{scope.row.lastCreateTime}}</span>
         </template>
       </el-table-column>
       <el-table-column width="70" align="center" :label="$t('table.status')">
@@ -81,7 +86,7 @@
       <el-table-column align="center" :label="$t('table.actions')" width="300" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button size="mini" type="success"
-                      @click="handleUpdate(scope.row)">{{$t('table.edit')}}
+                      @click="handleUpdate(scope.row.id)">{{$t('table.edit')}}
           </el-button>
           <el-button v-if="scope.row.status === '02'" size="mini" type="warning"
                      @click="handleSj(scope.row.id,'01')">{{$t('table.sj')}}
@@ -135,6 +140,14 @@
     name: 'warehouseGoodsList',
     directives: {
       waves
+    },
+    filters: {
+      lableFormat(val) {
+        switch (val) {
+          case '01' :
+            return '热门商品'
+        }
+      }
     },
     data() {
       return {
@@ -194,6 +207,7 @@
         this.getList()
       },
       handleUpdate(val) {
+        this.$router.push('/bf/gm/editGoods?goodsId=' + val)
       },
       handleDeleteRecovery(id) {
         this.$confirm('删除商品, 是否继续?', '提示', {
@@ -278,6 +292,9 @@
           })
           return true
         })
+      },
+      onJump() {
+        this.$router.push('editGoods')
       }
     }
   }

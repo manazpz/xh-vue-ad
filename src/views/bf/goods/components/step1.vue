@@ -90,12 +90,10 @@
       handlePreStep() {
         this.step--
         this.goStep(this.step)
-        // $('html,body').animate({scrollTop:0},500);
       },
       handleNextStep() {
         this.step++
         this.goStep(this.step)
-        // $('html,body').animate({scrollTop:0},500);
       },
       handlePublish() {
         console.log('发布')

@@ -3,7 +3,6 @@
 
     <!-- 过滤条件 start -->
     <div class="filter-container">
-      <el-button type="success" size="mini" class="filter-item" round>发布商品</el-button>
       <div style="float: right;">
         <label class="filter-item">商品名：</label>
         <el-input clearable v-model="listQuery.name" style="width: 140px;" @change='handleFilter' class="filter-item" placeholder="请输入商品名"></el-input>
@@ -55,7 +54,7 @@
       </el-table-column>
       <el-table-column align="center" label="更新时间" min-width="110">
         <template slot-scope="scope">
-          <span>{{scope.row.lastcreateTime}}</span>
+          <span>{{scope.row.lastCreateTime}}</span>
         </template>
       </el-table-column>
       <el-table-column align="center" :label="$t('table.actions')" width="220" class-name="small-padding fixed-width">

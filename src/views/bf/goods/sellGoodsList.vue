@@ -3,7 +3,7 @@
 
     <!-- 过滤条件 start -->
     <div class="filter-container">
-      <el-button type="success" size="mini" class="filter-item" round>发布商品</el-button>
+      <el-button type="success" @click="onJump" size="mini" class="filter-item" round>发布商品</el-button>
       <div style="float: right;">
         <label class="filter-item">商品名：</label>
         <el-input clearable v-model="listQuery.name" style="width: 140px;" @change='handleFilter' class="filter-item" placeholder="请输入商品名"></el-input>
@@ -56,6 +56,11 @@
           <span>{{scope.row.useableStock}}</span>
         </template>
       </el-table-column>
+      <el-table-column align="center" label="标签" width="120">
+        <template slot-scope="scope">
+          <span>{{scope.row.lable | lableFormat}}</span>
+        </template>
+      </el-table-column>
       <el-table-column align="center" label="创建时间" min-width="110">
         <template slot-scope="scope">
           <span>{{scope.row.createTime}}</span>
@@ -63,7 +68,7 @@
       </el-table-column>
       <el-table-column align="center" label="更新时间" min-width="110">
         <template slot-scope="scope">
-          <span>{{scope.row.lastcreateTime}}</span>
+          <span>{{scope.row.lastCreateTime}}</span>
         </template>
       </el-table-column>
       <el-table-column width="70" align="center" :label="$t('table.status')">
@@ -126,6 +131,14 @@
     name: 'sellGoodsList',
     directives: {
       waves
+    },
+    filters: {
+      lableFormat(val) {
+        switch (val) {
+          case '01' :
+            return '热门商品'
+        }
+      }
     },
     data() {
       return {
@@ -244,6 +257,9 @@
         }).catch(() => {
           this.btnLoading = false
         })
+      },
+      onJump() {
+        this.$router.push('editGoods')
       }
     }
   }

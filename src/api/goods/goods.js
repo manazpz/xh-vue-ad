@@ -60,6 +60,13 @@ export function classifyCascade(params) {
   })
 }
 
+export function goodsClassifyCascade(params) {
+  return request({
+    url: '/bf/goods/classify/cascade/' + params,
+    method: 'get'
+  })
+}
+
 export function classifySpecParam(params) {
   return request({
     url: '/bf/goods/classify/specs/param/' + params,
@@ -71,5 +78,20 @@ export function brands(params) {
   return request({
     url: '/bf/goods/brands',
     method: 'get'
+  })
+}
+
+export function lables(params) {
+  return request({
+    url: '/bf/goods/lables',
+    method: 'get'
+  })
+}
+
+export function batchUpdateGoods(params) {
+  return request({
+    url: '/bf/goods/batchUpdate',
+    method: 'post',
+    data: params
   })
 }
