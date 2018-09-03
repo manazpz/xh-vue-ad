@@ -114,7 +114,7 @@ export const constantRouterMap = [
       {
         path: 'specBackValueList',
         component: () => import('@/views/goodsBack/specBackValueList'),
-        name: 'specBacklist',
+        name: 'specBackValueList',
         hidden: true,
         meta: { title: 'specBackValueList', noCache: true }
       }

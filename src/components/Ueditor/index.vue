@@ -33,7 +33,6 @@
       })
     },
     destoryed() {
-      debugger
       this.editor.destory()
     },
     methods: {

@@ -100,7 +100,7 @@
               <div class="col-content bg-purple-col">
                 <el-form ref="dataForm" :model="temp" label-width="110px" style="margin-left:50px;">
                   <el-form-item label="选定规格：" class="postInfo-container-item">
-                    <el-table :key='tableKey' :data="classifySpecParam" v-loading="listLoading" border fit highlight-current-row
+                    <el-table :key='tableKey' :data="classifySpecs" v-loading="listLoading" border fit highlight-current-row
                               style="width:97%;height:100%;" :header-cell-style="{background:'#c0c0c0'}">
                       <el-table-column align="center" label="规格组" width="100">
                         <template slot-scope="scope">
@@ -126,32 +126,32 @@
                     </el-input>
                     <el-table :key='tableKey' :data="temp.specParameter" border fit highlight-current-row :span-method="objectSpanMethod"
                               style="width:97%;height:100%;" :header-cell-style="{background:'#c0c0c0'}">
-                        <el-table-column align="center" label="规格组" width="100">
+                        <el-table-column align="center" label="规格组" width="80">
                           <template slot-scope="scope">
                             {{scope.row.name}}
                           </template>
                         </el-table-column>
-                        <el-table-column align="center" label="规格值" min-width="80">
+                        <el-table-column align="center" label="规格值" min-width="70">
                           <template slot-scope="scope">
                             {{scope.row.spec_value_name}}
                           </template>
                         </el-table-column>
-                        <el-table-column align="center" label="修正值" width="110">
+                        <el-table-column align="center" label="修正值" width="100">
                           <template slot-scope="scope">
                             <el-input v-model="scope.row.correntPrice"></el-input>
                           </template>
                         </el-table-column>
-                        <el-table-column align="center" label="保底总价" width="110">
+                        <el-table-column align="center" label="保底总价" width="130">
                           <template slot-scope="scope">
                             <el-input v-model="scope.row.minPrice"></el-input>
                           </template>
                         </el-table-column>
-                        <el-table-column align="center" label="封顶总价" width="140">
+                        <el-table-column align="center" label="封顶总价" width="100">
                           <template slot-scope="scope">
                             <el-input v-model="scope.row.cappedPrice"></el-input>
                           </template>
                         </el-table-column>
-                        <el-table-column align="center" label="提示类型" width="130">
+                        <el-table-column align="center" label="提示类型" width="100">
                           <template slot-scope="scope">
                             <el-select v-model="scope.row.tipsType" placeholder="请选择">
                               <el-option key="01" label="不提示" value="01"></el-option>
@@ -189,12 +189,12 @@
       </el-tab-pane>
       <el-tab-pane label="商品参数" name="second">
         <div>
-          <Ueditor v-model="temp.parameter" id="u1" :config="config1" ref="ueditor1"></Ueditor>
+          <Ueditor v-model="temp.parameter" :id="u1" :config="config1" ref="ueditor1"></Ueditor>
         </div>
       </el-tab-pane>
       <el-tab-pane label="商品详情" name="three">
         <div>
-          <Ueditor1 v-model="temp.detail" id="u2" :config="config2" ref="ueditor2"></Ueditor1>
+          <Ueditor v-model="temp.detail" :id="u2" :config="config2" ref="ueditor2"></Ueditor>
         </div>
       </el-tab-pane>
     </el-tabs>
@@ -205,11 +205,10 @@
   import { brands, classifySpecParam } from '@/api/goods/goods'
   import { getConfig } from '@/api/user'
   import Ueditor from '@/components/Ueditor'
-  import Ueditor1 from '@/components/Ueditor'
 
   export default {
     name: 'step1',
-    components: { Ueditor, Ueditor1 },
+    components: { Ueditor },
     model: {
       prop: 'info',
       event: 'info'
@@ -226,7 +225,9 @@
         brands: [],
         units: [],
         fileList: [],
-        classifySpecParam: [],
+        u1: 'u1' + new Date(),
+        u2: 'u2' + new Date(),
+        classifySpecs: [],
         spanArr: [],
         checkedCities: [],
         pos: 0,
@@ -279,10 +280,6 @@
       this.info.data = this.temp
       if (this.info.data.specParameter.length > 0) {
         this.getSpanArr(this.info.data.specParameter)
-        this.checkedCities = this.info.data.specParameter
-        for (var i = 0; i < this.checkedCities.length; i++) {
-          delete this.checkedCities[i].value
-        }
       }
       this.getBrands()
       this.getUnits()
@@ -304,9 +301,23 @@
         }
       },
       getClassifySpecParam() {
-        if (this.classifySpecParam.length < 1) {
+        if (this.classifySpecs.length < 1) {
           classifySpecParam(this.info.classify.id).then(response => {
-            this.classifySpecParam = response.data.items
+            this.classifySpecs = response.data.items
+            if (this.info.data.specParameter.length > 0) {
+              var specParameter = this.info.data.specParameter
+              for (var i = 0; i < specParameter.length; i++) {
+                for (var j = 0; j < this.classifySpecs.length; j++) {
+                  var param = this.classifySpecs[j].param
+                  for (var z = 0; z < param.length; z++) {
+                    if (specParameter[i].spec_value_name === param[z].spec_value_name &&
+                      specParameter[i].spec_sort === param[z].spec_sort) {
+                      this.checkedCities.push(param[z])
+                    }
+                  }
+                }
+              }
+            }
             this.listLoading = false
           })
         }
