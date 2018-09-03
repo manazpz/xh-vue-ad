@@ -3,7 +3,7 @@
 
     <!-- 过滤条件 start -->
     <div class="filter-container">
-      <el-input @keyup.enter.native="handleFilter" style="width: 200px;" class="filter-item"
+      <el-input @keyup.enter.native="handleFilter" style="width: 200px;" class="filter-item" clearable
                 placeholder="订单编号" v-model="listQuery.number">
       </el-input>
       <el-select clearable @change='handleFilter' style="width: 140px;" class="filter-item" v-model="listQuery.orderStatus" placeholder="订单状态">
@@ -40,7 +40,7 @@
           <span>{{scope.$index+1}}</span>
         </template>
       </el-table-column>
-      <el-table-column label="图片" width="110">
+      <el-table-column align="center" label="图片" width="110">
         <template slot-scope="scope">
           <!--<img v-if="scope.row.imgs[0] != null" :src=" scope.row.imgs[0].url " style="width: 90px;height: 50px">-->
         </template>

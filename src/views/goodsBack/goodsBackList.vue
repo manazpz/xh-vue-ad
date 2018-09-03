@@ -3,23 +3,23 @@
 
     <!-- 过滤条件 start -->
     <div class="filter-container">
-      <el-button type="success" size="mini" class="filter-item" round>发布商品</el-button>
-      <div style="float: right;">
-        <label class="filter-item">商品名：</label>
-        <el-input clearable v-model="listQuery.name" style="width: 140px;" @change='handleFilter' class="filter-item" placeholder="请输入商品名"></el-input>
-        <label class="filter-item">分类：</label>
-        <el-select clearable @change='handleFilter' style="width: 140px;" class="filter-item" v-model="listQuery.model">
+        <el-input @keyup.enter.native="handleFilter" style="width: 200px;" class="filter-item"
+                  placeholder="商品名称" v-model="listQuery.name" clearable>
+        </el-input>
+        <el-select clearable @change='handleFilter' style="width: 140px;" class="filter-item" v-model="listQuery.model" placeholder="分类">
+
+          <el-option key="01" label="已完成" value="01">
           </el-option>
-          <el-option key="01" label="新机" value="01">
+          <el-option key="02" label="已取消" value="02">
           </el-option>
-          <el-option key="02" label="旧机" value="02">
+          <el-option key="03" label="进行中" value="03">
+          </el-option>
+          <el-option key="04" label="售后中" value="04">
           </el-option>
         </el-select>
         <el-button class="filter-item" type="primary" v-waves icon="el-icon-search" size="mini" @click="handleFilter">
           {{$t('table.search')}}
         </el-button>
-      </div>
-
     </div>
     <!-- 过滤条件 end -->
 

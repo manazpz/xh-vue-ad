@@ -4,7 +4,7 @@
     <!-- 过滤条件 start -->
     <div class="filter-container">
       <el-input @keyup.enter.native="handleFilter" style="width: 200px;" class="filter-item"
-                placeholder="分组名称" v-model="listQuery.name">
+                placeholder="分组名称" v-model="listQuery.name" clearable>
       </el-input>
       <el-button class="filter-item" type="primary" v-waves icon="el-icon-search" @click="handleFilter">
         {{$t('table.search')}}

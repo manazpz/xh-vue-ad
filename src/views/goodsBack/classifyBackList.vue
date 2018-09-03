@@ -117,7 +117,7 @@
       <el-form :rules="rule" ref="dataBrandForm" :model="tempBrands" label-position="left" label-width="150px"
                style='width: 400px; margin-left:50px;'>
         <el-form-item label-width="110px" label="已选品牌"  prop="name" class="postInfo-container-item">
-          <el-select v-model="tempBrands.brandId" multiple placeholder="请选择">
+          <el-select v-model="tempBrands.name" multiple placeholder="请选择">
             <el-option v-for="item in brandOptions" :key="item.id" :label="item.name" :value="item.id">
             </el-option>
           </el-select>
@@ -262,9 +262,29 @@
       },
       showOper(row) {
         row.showDropDown = true
+        if (row.parameter !== null) {
+          this.tempBrands.name = []
+          this.tempSpecs.specId = []
+          this.tempBrands.index = row.index
+          this.tempSpecs.index = row.index
+          if (row.parameter.brand !== undefined) {
+            for (var i = 0; i < row.parameter.brand.length; i++) {
+              this.tempBrands.name.push(row.parameter.brand[i].id)
+            }
+          }
+          if (row.parameter.spec !== undefined) {
+            for (var j = 0; j < row.parameter.spec.length; j++) {
+              this.tempSpecs.specId.push(row.parameter.spec[j].id)
+            }
+          }
+        }
       },
       displayOper(row) {
         row.showDropDown = false
+        if (row.index !== this.tempBrands.index && row.index !== this.tempSpecs.index) {
+          this.tempBrands.name = []
+          this.tempSpecs.specId = []
+        }
       },
       resetTemp() {
         this.temp = {
@@ -576,18 +596,6 @@
         this.getIndex3 = row.index
         this.sendHistoryData(row)
         this.$emit('classify', row)
-        debugger
-        if (row.parameter !== null) {
-          this.tempBrands.brandId = []
-          this.tempSpecs.specId = []
-          for (var i = 0; i < row.parameter.__ob__.value.brand.length; i++) {
-            this.tempBrands.brandId.push(row.parameter.__ob__.value.brand[i].id)
-          }
-          for (var s = 0; s < row.parameter.__ob__.value.spec.length; s++) {
-            this.tempSpecs.specId.push(row.parameter.__ob__.value.spec[s].id)
-          }
-        }
-        debugger
       }
     }
   }

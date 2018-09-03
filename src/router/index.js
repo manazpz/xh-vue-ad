@@ -43,25 +43,25 @@ export const constantRouterMap = [
     redirect: '/bf/gm/warehouseGoodsList',
     meta: {
       title: 'goodsManagement',
-      icon: 'people'
+      icon: 'goods'
     },
     children: [{
       path: 'warehouseGoodsList',
       component: () => import('@/views/bf/goods/warehouseGoodsList'),
       name: 'warehouseGoodsList',
-      meta: { title: 'warehouseGoodsList', icon: 'people', noCache: true }
+      meta: { title: 'warehouseGoodsList', icon: 'component', noCache: true }
     },
     {
       path: 'sellGoodsList',
       component: () => import('@/views/bf/goods/sellGoodsList'),
       name: 'sellGoodsList',
-      meta: { title: 'sellGoodsList', icon: 'people', noCache: true }
+      meta: { title: 'sellGoodsList', icon: 'guide', noCache: true }
     },
     {
       path: 'recycleGoodsList',
       component: () => import('@/views/bf/goods/recycleGoodsList'),
       name: 'recycleGoodsList',
-      meta: { title: 'recycleGoodsList', icon: 'people', noCache: true }
+      meta: { title: 'recycleGoodsList', icon: 'nested', noCache: true }
     },
     {
       path: 'editGoods',
@@ -74,7 +74,7 @@ export const constantRouterMap = [
       path: 'lable',
       component: () => import('@/views/bf/goods/lable'),
       name: 'lable',
-      meta: { title: 'lable', icon: 'people' }
+      meta: { title: 'lable', icon: 'drag' }
     }]
   },
   {
@@ -84,32 +84,32 @@ export const constantRouterMap = [
     alwaysShow: true,
     meta: {
       title: 'goodsBack',
-      icon: 'people'
+      icon: 'form'
     },
     children: [
       {
         path: 'list',
         component: () => import('@/views/goodsBack/goodsBackList'),
         name: 'goodsBackList',
-        meta: { title: 'goodsBackList' }
+        meta: { title: 'goodsBackList', icon: 'theme' }
       },
       {
         path: 'classifyBackList',
         component: () => import('@/views/goodsBack/classifyBackList'),
         name: 'classifyBackList',
-        meta: { title: 'classifyBackList' }
+        meta: { title: 'classifyBackList', icon: 'tab' }
       },
       {
         path: 'brandBacklist',
         component: () => import('@/views/goodsBack/brandBacklist'),
         name: 'brandBacklist',
-        meta: { title: 'brandBacklist' }
+        meta: { title: 'brandBacklist', icon: 'list' }
       },
       {
         path: 'specBacklist',
         component: () => import('@/views/goodsBack/specBacklist'),
         name: 'specBacklist',
-        meta: { title: 'specBacklist', noCache: true }
+        meta: { title: 'specBacklist', noCache: true, icon: 'example' }
       },
       {
         path: 'specBackValueList',
@@ -127,14 +127,14 @@ export const constantRouterMap = [
     alwaysShow: true,
     meta: {
       title: 'orderList',
-      icon: 'people'
+      icon: 'documentation'
     },
     children: [
       {
         path: 'orderList',
         component: () => import('@/views/order/orderList'),
         name: 'orderList',
-        meta: { title: 'orderList' }
+        meta: { title: 'orderList', icon: 'documentation' }
       }]
   }
 ]
