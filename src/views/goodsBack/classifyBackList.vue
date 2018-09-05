@@ -184,6 +184,8 @@
         type: false,
         classifyId1: '',
         classifyId2: '',
+        classifyModel1: '',
+        classifyModel2: '',
         brandOptions: [],
         specOptions: [],
         classifyCascades1: !this.classify ? [] : this.classify.history.classifyCascades1,
@@ -359,7 +361,6 @@
         })
       },
       updateDataSpec(row) {
-        // this.tempSpec.specId = this.tempSpecs.id
         this.$refs['dataSpecForm'].validate((valid) => {
           if (valid) {
             this.listLoading = true
@@ -396,10 +397,13 @@
         this.temp.index = index
         if (index === '1') {
           this.temp.parentId = this.classifyId1
+          this.temp.model = this.classifyModel1
         }
         if (index === '2') {
           this.temp.parentId = this.classifyId2
+          this.temp.model = this.classifyModel2
         }
+        debugger
         this.$nextTick(() => {
           this.$refs['dataForm'].clearValidate()
         })
@@ -441,9 +445,11 @@
         this.temp.index = row.index
         if (row.index === '1') {
           this.temp.parentId = this.classifyId1
+          this.temp.model = this.classifyModel1
         }
         if (row.index === '2') {
           this.temp.parentId = this.classifyId2
+          this.temp.model = this.classifyModel2
         }
         this.$nextTick(() => {
           this.$refs['dataForm'].clearValidate()
@@ -571,15 +577,9 @@
       },
       rowClick1(row) {
         if (this.falg) {
-          // if (row.children.length > 0) {
           this.isShow2 = true
-          // } else {
-          //   this.isShow2 = false
-          //   this.isShow3 = false
-          //   this.getIndex2 = -1
-          //   this.getIndex3 = -1
-          // }
           this.classifyId1 = row.id
+          this.classifyModel1 = row.model
           this.text = row.name
           this.getIndex1 = row.index
           this.classifyCascades2 = row.children
@@ -589,14 +589,10 @@
         }
       },
       rowClick2(row) {
-        // if (row.children.length > 0) {
         if (this.falg) {
           this.isShow3 = true
-          // } else {
-          //   this.isShow3 = false
-          //   this.getIndex3 = -1
-          // }
           this.classifyId2 = row.id
+          this.classifyModel2 = row.model
           this.text = this.text.split('>')[0] + ' > ' + row.name
           this.getIndex2 = row.index
           this.classifyCascades3 = row.children
