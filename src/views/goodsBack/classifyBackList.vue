@@ -19,7 +19,7 @@
                 <el-table-column>
                   <template slot-scope="scope" v-if="scope.row.showDropDown" style="display: inline-block">
                     <el-button-group style="float: right">
-                      <el-button size="mini" type="primary" icon="el-icon-edit" @click="handleUpdate(scope.row)">编辑</el-button>
+                      <el-button size="mini" type="primary" icon="el-icon-edit" @click="handleUpdate(scope.row,'0')">编辑</el-button>
                       <el-button size="mini" type="primary" icon="el-icon-delete" @click="handleDeleteClassify(scope.row)">删除</el-button>
                     </el-button-group>
                   </template>
@@ -43,7 +43,7 @@
                 <el-table-column>
                   <template slot-scope="scope" v-if="scope.row.showDropDown" style="display: inline-block">
                     <el-button-group style="float: right">
-                      <el-button size="mini" type="primary" icon="el-icon-edit" @click="handleUpdate(scope.row)">编辑</el-button>
+                      <el-button size="mini" type="primary" icon="el-icon-edit" @click="handleUpdate(scope.row,'1')">编辑</el-button>
                       <el-button size="mini" type="primary" icon="el-icon-delete" @click="handleDeleteClassify(scope.row)">删除</el-button>
                     </el-button-group>
                   </template>
@@ -69,7 +69,7 @@
                     <el-button-group style="float: right" >
                       <el-button size="mini" type="primary" icon="el-icon-edit" @click="handleBrand(scope.row)">品牌</el-button>
                       <el-button size="mini" type="primary" icon="el-icon-edit" @click="handleSpec(scope.row)">规格</el-button>
-                      <el-button size="mini" type="primary" icon="el-icon-edit" @click="handleUpdate(scope.row)">编辑</el-button>
+                      <el-button size="mini" type="primary" icon="el-icon-edit" @click="handleUpdate(scope.row,'2')">编辑</el-button>
                       <el-button size="mini" type="primary" icon="el-icon-delete" @click="handleDeleteClassify(scope.row)">删除</el-button>
                     </el-button-group>
                   </template>
@@ -96,6 +96,14 @@
         <el-form-item label-width="110px" label="分类名称"  prop="name" class="postInfo-container-item">
           <el-input v-model="temp.name" required placeholder="请输入分类名称"></el-input>
         </el-form-item>
+        <el-form-item v-if="type" label-width="110px" label="分类属性"  prop="model" class="postInfo-container-item">
+          <el-select clearable  style="width: 100%;" class="filter-item" v-model="temp.model" required placeholder="请输入分类属性">
+            <el-option key="01" label="新机" value="01">
+            </el-option>
+            <el-option key="02" label="旧机" value="02">
+            </el-option>
+          </el-select>
+        </el-form-item>
         <el-form-item label-width="110px" label="排序号"  prop="px" class="postInfo-container-item">
           <el-input v-model="temp.px" required placeholder="请输入排序号"></el-input>
         </el-form-item>
@@ -114,7 +122,7 @@
 
     <!-- 弹出框 start -->
     <el-dialog :title="dialogBrandStatus" :visible.sync="dialogBrandFormVisible">
-      <el-form :rules="rule" ref="dataBrandForm" :model="tempBrands" label-position="left" label-width="150px"
+      <el-form :rules="ruleBrand" ref="dataBrandForm" :model="tempBrands" label-position="left" label-width="150px"
                style='width: 400px; margin-left:50px;'>
         <el-form-item label-width="110px" label="已选品牌"  prop="name" class="postInfo-container-item">
           <el-select v-model="tempBrands.name" multiple placeholder="请选择">
@@ -133,9 +141,9 @@
 
     <!-- 弹出框 start -->
     <el-dialog :title="dialogSpecStatus" :visible.sync="dialogSpecFormVisible">
-      <el-form :rules="rule" ref="dataSpecForm" :model="tempSpecs" label-position="left" label-width="70px"
+      <el-form :rules="ruleSpec" ref="dataSpecForm" :model="tempSpecs" label-position="left" label-width="70px"
                style='width: 400px; margin-left:50px;'>
-        <el-form-item label-width="110px" label="已选规格"  prop="specName" class="postInfo-container-item">
+        <el-form-item label-width="110px" label="已选规格"  prop="specId" class="postInfo-container-item">
           <el-select v-model="tempSpecs.specId" multiple placeholder="请选择">
             <el-option v-for="item in specOptions" :key="item.id" :label="item.specName" :value="item.id">
             </el-option>
@@ -173,6 +181,7 @@
         preStep: true,
         nextStep: false,
         publish: false,
+        type: false,
         classifyId1: '',
         classifyId2: '',
         brandOptions: [],
@@ -221,7 +230,15 @@
           specName: []
         },
         rule: {
-          name: [{ required: true, message: '分类名称不能为空', trigger: 'change' }]
+          name: [{ required: true, message: '分类名称不能为空', trigger: 'change' }],
+          model: [{ required: true, message: '分类属性不能为空', trigger: 'change' }],
+          px: [{ required: true, message: '排序号不能为空', trigger: 'change' }]
+        },
+        ruleBrand: {
+          name: [{ required: true, message: '已选品牌不能为空', trigger: 'change' }]
+        },
+        ruleSpec: {
+          specId: [{ required: true, message: '已选规格不能为空', trigger: 'change' }]
         }
       }
     },
@@ -292,6 +309,7 @@
           parentId: '',
           index: '',
           px: '',
+          model: '',
           name: '',
           remarks: ''
         }
@@ -368,6 +386,11 @@
       },
       handleCreate(index) {
         this.resetTemp()
+        if (index === '0') {
+          this.type = true
+        } else {
+          this.type = false
+        }
         this.dialogStatus = '新增分类'
         this.dialogFormVisible = true
         this.temp.index = index
@@ -405,7 +428,12 @@
           }
         })
       },
-      handleUpdate(row) {
+      handleUpdate(row, index) {
+        if (index === '0') {
+          this.type = true
+        } else {
+          this.type = false
+        }
         this.falg = false
         this.temp = Object.assign({}, row)
         this.dialogStatus = '编辑分类'
@@ -458,7 +486,6 @@
         this.$confirm('您确定删除吗？').then(_ => {
           this.listLoading = true
           const params = { id: row.id }
-          debugger
           deleteClassify(params).then(response => {
             if (response.code === 50001) {
               store.dispatch('GetRefreshToken').then(() => {

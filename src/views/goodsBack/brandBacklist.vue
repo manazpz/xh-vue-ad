@@ -87,7 +87,7 @@
 
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisible = false">{{$t('table.cancel')}}</el-button>
-        <el-button v-if="dialogStatus=='新增合同'" type="primary" @click="createData">{{$t('table.confirm')}}</el-button>
+        <el-button v-if="dialogStatus=='新增品牌'" type="primary" @click="createData">{{$t('table.confirm')}}</el-button>
         <el-button v-else type="primary" @click="updateData">{{$t('table.confirm')}}</el-button>
       </div>
     </el-dialog>
@@ -198,7 +198,6 @@
         this.fileList = fileList
       },
       handleAvatarSuccess(response, file, fileList) {
-        debugger
         this.imageUrl = URL.createObjectURL(file.raw)
       },
       beforeAvatarUpload(file) {
@@ -254,7 +253,7 @@
       handleCreate() {
         this.resetTemp()
         this.temp.file = []
-        this.dialogStatus = '新增合同'
+        this.dialogStatus = '新增品牌'
         this.dialogFormVisible = true
         this.$nextTick(() => {
           this.$refs['dataForm'].clearValidate()
@@ -287,7 +286,7 @@
       handleUpdate(row) {
         this.falg = false
         this.temp = Object.assign({}, row)
-        this.dialogStatus = '编辑合同'
+        this.dialogStatus = '编辑品牌'
         this.dialogFormVisible = true
         this.$nextTick(() => {
           this.$refs['dataForm'].clearValidate()
