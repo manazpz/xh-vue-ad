@@ -26,8 +26,7 @@ export default {
     webSwitch: 'web站点',
     // 商家端
     goodsManagement: '商品管理',
-    warehouseGoodsList: '仓库商品',
-    sellGoodsList: '销售商品',
+    goodsList: '商品列表',
     recycleGoodsList: '商品回收站',
     sendGoods: '发布商品',
     editGoods: '编辑商品',

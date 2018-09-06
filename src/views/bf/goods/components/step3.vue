@@ -9,7 +9,7 @@
             <router-link to="/dashboard">回首页</router-link>
           </li>
           <li class="link-type">
-            <router-link to="/bf/gm/warehouseGoodsList">进入商品仓库</router-link>
+            <router-link to="/bf/gm/goodsList">进入商品列表</router-link>
           </li>
           <li><a @click.prevent="refresh" href="#">发布新商品</a></li>
         </ul>

@@ -46,16 +46,10 @@ export const constantRouterMap = [
       icon: 'goods'
     },
     children: [{
-      path: 'warehouseGoodsList',
-      component: () => import('@/views/bf/goods/warehouseGoodsList'),
-      name: 'warehouseGoodsList',
-      meta: { title: 'warehouseGoodsList', icon: 'component', noCache: true }
-    },
-    {
-      path: 'sellGoodsList',
-      component: () => import('@/views/bf/goods/sellGoodsList'),
-      name: 'sellGoodsList',
-      meta: { title: 'sellGoodsList', icon: 'guide', noCache: true }
+      path: 'goodsList',
+      component: () => import('@/views/bf/goods/goodsList'),
+      name: 'goodsList',
+      meta: { title: 'goodsList', icon: 'component', noCache: true }
     },
     {
       path: 'recycleGoodsList',
@@ -66,7 +60,6 @@ export const constantRouterMap = [
     {
       path: 'editGoods',
       component: () => import('@/views/bf/goods/editGoods'),
-      hidden: true,
       name: 'editGoods',
       meta: { title: 'editGoods', icon: 'people' }
     },

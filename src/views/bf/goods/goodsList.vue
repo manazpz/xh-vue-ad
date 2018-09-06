@@ -91,6 +91,9 @@
           <el-button v-if="scope.row.status === '02'" size="mini" type="warning"
                      @click="handleSj(scope.row.id,'01')">{{$t('table.sj')}}
           </el-button>
+          <el-button v-if="scope.row.status === '01'" size="mini" type="info"
+                     @click="handleSj(scope.row.id,'02')">{{$t('table.xj')}}
+          </el-button>
           <el-button size="mini" type="danger"
                      @click="handleDeleteRecovery(scope.row.id)">{{$t('table.delete')}}
           </el-button>
@@ -137,7 +140,7 @@
   import store from '@/store'
 
   export default {
-    name: 'warehouseGoodsList',
+    name: 'goodsList',
     directives: {
       waves
     },

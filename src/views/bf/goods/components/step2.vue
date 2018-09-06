@@ -15,12 +15,6 @@
                   <el-form-item label="商品品类：" class="postInfo-container-item">
                     <label>{{info.classify.history.text}}</label>
                   </el-form-item>
-                  <el-form-item label="商品分类：" class="postInfo-container-item">
-                    <el-select v-model="temp.model" placeholder="请选择分组">
-                      <el-option key="01" label="新机" value="01"></el-option>
-                      <el-option key="02" label="旧机" value="02"></el-option>
-                    </el-select>
-                  </el-form-item>
                   <el-form-item label="商品品牌：" class="postInfo-container-item">
                     <el-select v-model="temp.brandId" filterable placeholder="请选择品牌">
                       <el-option
@@ -50,7 +44,7 @@
                   <el-form-item label="商品编号：" class="postInfo-container-item">
                     <el-input style="width: 200px" v-model="temp.code"></el-input>
                   </el-form-item>
-                  <el-form-item label="基准价格：" class="postInfo-container-item">
+                  <el-form-item v-if="info.classify.model == '02'" label="基准价格：" class="postInfo-container-item">
                     <el-input style="width: 200px" v-model="temp.banPrice"></el-input>
                   </el-form-item>
                   <el-form-item label="单位：" class="postInfo-container-item">
@@ -64,7 +58,7 @@
                       </el-select>
                   </el-form-item>
                   <el-form-item label="库存：" class="postInfo-container-item">
-                    <el-input style="width: 200px" :disabled="!!info.info" v-model="temp.stock"></el-input>
+                    <el-input style="width: 200px" :disabled="true" v-model="temp.stock"></el-input>
                   </el-form-item>
                   <el-form-item label="邮递类型：" class="postInfo-container-item">
                     <el-select v-model="temp.logistcs" placeholder="请选择分组">
@@ -110,13 +104,13 @@
                       <el-table-column label="参数" min-width="200">
                         <template slot-scope="scope">
                           <el-checkbox-group v-model="checkedCities" @change="handleCheckAllChange" >
-                            <el-checkbox v-for="item in scope.row.param"  :label="item" :key="item.spec_sort" >{{item.spec_value_name}}</el-checkbox>
+                            <el-checkbox v-for="item in scope.row.param" :label="item" :key="item.spec_sort" >{{item.spec_value_name}}</el-checkbox>
                           </el-checkbox-group>
                         </template>
                       </el-table-column>
                     </el-table>
                   </el-form-item>
-                  <el-form-item label="设置规格：" class="postInfo-container-item">
+                  <el-form-item v-if="info.classify.model == '02'" label="设置规格：" class="postInfo-container-item">
                     <el-input
                       style="width:97%;"
                       prepend="基准价格："
@@ -181,6 +175,45 @@
                         </el-table-column>
                     </el-table>
                   </el-form-item>
+
+                  <el-form-item v-if="info.classify.model == '01' && temp.goodsSpec.length > 0" label="商品库存：" class="postInfo-container-item">
+                    <el-button type="success" plain style="float: right;margin-right: 30px" @click="handleStandard">批量设置标准值</el-button>
+                    <el-table :key='tableKey' :data="temp.goodsSpec" border fit highlight-current-row
+                              style="width:97%;height:100%;" :header-cell-style="{background:'#c0c0c0'}">
+
+                        <el-table-column align="center" v-for="(fruit,index) in temp.goodsSpec[0].spec" :label="fruit.name" mini-width="80">
+                          <template slot-scope="scope">
+                            {{scope.row.spec[index].spec_value_name}}
+                          </template>
+                        </el-table-column>
+
+                      <el-table-column align="center" label="货号" width="100">
+                        <template slot-scope="scope">
+                          <el-input v-model="scope.row.code"></el-input>
+                        </template>
+                      </el-table-column>
+                      <el-table-column align="center" label="重量" width="100">
+                        <template slot-scope="scope">
+                          <el-input v-model="scope.row.weight"></el-input>
+                        </template>
+                      </el-table-column>
+                      <el-table-column align="center" label="库存" width="100">
+                        <template slot-scope="scope">
+                          <el-input @blur="changeStock" v-model="scope.row.stock"></el-input>
+                        </template>
+                      </el-table-column>
+                      <el-table-column align="center" label="成本价" width="100">
+                        <template slot-scope="scope">
+                          <el-input v-model="scope.row.costPrice"></el-input>
+                        </template>
+                      </el-table-column>
+                      <el-table-column align="center" label="价格（元）" width="100">
+                        <template slot-scope="scope">
+                          <el-input v-model="scope.row.price"></el-input>
+                        </template>
+                      </el-table-column>
+                    </el-table>
+                  </el-form-item>
                 </el-form>
               </div>
             </el-col>
@@ -199,6 +232,29 @@
       </el-tab-pane>
     </el-tabs>
 
+    <!-- 弹出框 start -->
+    <el-dialog title="设置标准值" :visible.sync="standardVisible">
+      <el-form ref="dataStandard" :model="standard" label-position="left" label-width="70px"
+               style='width: 400px; margin-left:50px;'>
+        <el-form-item label-width="110px" label="重量" class="postInfo-container-item">
+          <el-input v-model="standard.weight"></el-input>
+        </el-form-item>
+        <el-form-item label-width="110px" label="库存" class="postInfo-container-item">
+          <el-input v-model="standard.stock"></el-input>
+        </el-form-item>
+        <el-form-item label-width="110px" label="成本价" class="postInfo-container-item">
+          <el-input v-model="standard.costPrice"></el-input>
+        </el-form-item>
+        <el-form-item label-width="110px" label="价格（元）" class="postInfo-container-item">
+          <el-input v-model="standard.price"></el-input>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogFormVisible = false">{{$t('table.cancel')}}</el-button>
+        <el-button type="primary" @click="setStandard">{{$t('table.confirm')}}</el-button>
+      </div>
+    </el-dialog>
+    <!-- 弹出框 end -->
   </div>
 </template>
 <script>
@@ -222,6 +278,7 @@
         goodsId: '',
         listLoading: true,
         activeName: 'first',
+        standardVisible: false,
         brands: [],
         units: [],
         fileList: [],
@@ -233,15 +290,15 @@
         pos: 0,
         temp: !this.info.info ? {
           id: undefined,
-          model: '01',
           logistcs: '01',
           name: '',
-          code: '',
+          code: new Date().getTime(),
           brandId: '',
           banPrice: '',
           unit: 'UP',
           stock: '0',
           specParameter: [],
+          goodsSpec: [],
           parameter: '',
           detail: ''
         } : this.info.info,
@@ -262,6 +319,12 @@
           initialFrameWidth: null,
           initialFrameHeight: 450,
           BaseUrl: ''
+        },
+        standard: {
+          weight: 0,
+          stock: 0,
+          costPrice: 0,
+          price: 0
         }
       }
     },
@@ -318,16 +381,131 @@
                 }
               }
             }
+            if (this.info.data.goodsSpec.length > 0) {
+              var goodsSpec = this.info.data.goodsSpec
+              for (var k = 0; k < goodsSpec.length; k++) {
+                for (var l = 0; l < goodsSpec[k].spec.length; l++) {
+                  var ls = goodsSpec[k].spec[l]
+                  for (var n = 0; n < this.classifySpecs.length; n++) {
+                    var gparam = this.classifySpecs[n].param
+                    for (var m = 0; m < gparam.length; m++) {
+                      if (ls.spec_value_name === gparam[m].spec_value_name &&
+                        ls.spec_sort === gparam[m].spec_sort) {
+                        this.checkedCities.push(gparam[m])
+                      }
+                    }
+                  }
+                }
+              }
+              var hash = {}
+              this.checkedCities = this.checkedCities.reduce(function(item, next) {
+                // hash[next.spec_sort] ? '' : hash[next.spec_sort] = true && item.push(next)
+                hash[next.spec_sort] ? '' : (hash[next.spec_value_name] ? '' : hash[next.spec_value_name] = true && item.push(next))
+                return item
+              }, [])
+            }
             this.listLoading = false
           })
         }
       },
       handleCheckAllChange(val) {
-        val.sort(function(a, b) {
-          return a.px - b.px
-        })
-        this.temp.specParameter = val
-        this.getSpanArr(this.temp.specParameter)
+        if (this.info.classify.model === '01') {
+          var data = this.formatSpecList(val)
+          for (var i = 0; i < data.length; i++) {
+            data[i].code = new Date().getTime()+i
+            data[i].weight = '0'
+            data[i].stock = '0'
+            data[i].costPrice = '0'
+            data[i].price = '0'
+          }
+          this.temp.goodsSpec = data
+        }
+        if (this.info.classify.model === '02') {
+          val.sort(function(a, b) {
+            return a.px - b.px
+          })
+          this.temp.specParameter = val
+          this.getSpanArr(this.temp.specParameter)
+        }
+      },
+      // 整理spec容器
+      formatSpecList(val) {
+        // 整理数据
+        var arrs = []
+        for (var i = 0; i < val.length; i++) {
+          var flag = false
+          if (arrs.length > 0) {
+            for (var j = 0; j < arrs.length; j++) {
+              for (var k = 0; k < arrs[j].length; k++) {
+                if (arrs[j][k].id === val[i].id) {
+                  arrs[j].push(this.formatSpec(val[i]))
+                  flag = true
+                  break
+                }
+              }
+            }
+            if (!flag) {
+              var ls = []
+              ls.push(this.formatSpec(val[i]))
+              arrs.push(ls)
+            }
+          } else {
+            var lss = []
+            lss.push(this.formatSpec(val[i]))
+            arrs.push(lss)
+          }
+        }
+        // 划分数据
+        var data = []
+        if (arrs.length === 1) {
+          for (var n = 0; n < arrs[0].length; n++) {
+            var lsss = []
+            lsss.push(arrs[0][n])
+            data.push({ 'spec': lsss })
+          }
+        } else {
+          var arr = this.hbArray(arrs[0], arrs[1])
+          var index = 2
+          while (true) {
+            if (arrs[index]) {
+              arr = this.hbArray(arr, arrs[index])
+              index++
+            } else {
+              break
+            }
+          }
+          for (var l = 0; l < arr.length; l++) {
+            data.push({ 'spec': arr[l] })
+          }
+        }
+        return data
+      },
+      hbArray(arr1, arr2) {
+        var arr = []
+        for (var i = 0; i < arr1.length; i++) {
+          for (var j = 0; j < arr2.length; j++) {
+            var ls = []
+            if (arr1[i].length > 1) {
+              for (var k = 0; k < arr1[i].length; k++) {
+                ls.push(arr1[i][k])
+              }
+            } else {
+              ls.push(arr1[i])
+            }
+            ls.push(arr2[j])
+            arr.push(ls)
+          }
+        }
+        return arr
+      },
+      formatSpec(data) {
+        return {
+          id: data.id,
+          name: data.name,
+          px: data.px,
+          spec_sort: data.spec_sort,
+          spec_value_name: data.spec_value_name
+        }
       },
       getSpanArr(data) {
         this.spanArr = []
@@ -356,6 +534,39 @@
             colspan: _col
           }
         }
+      },
+      handleStandard() {
+        if (this.temp.goodsSpec.length < 1) {
+          this.$notify({
+            title: '提示',
+            message: '请先选择规格',
+            duration: 0
+          })
+        } else {
+          this.standardVisible = true
+          this.$nextTick(() => {
+            this.$refs['dataStandard'].clearValidate()
+          })
+        }
+      },
+      setStandard() {
+        var stock = 0
+        for (var i = 0; i < this.temp.goodsSpec.length; i++) {
+          this.temp.goodsSpec[i].weight = this.standard.weight
+          this.temp.goodsSpec[i].stock = this.standard.stock
+          this.temp.goodsSpec[i].costPrice = this.standard.costPrice
+          this.temp.goodsSpec[i].price = this.standard.price
+          stock = Number(stock) + Number(this.standard.stock)
+        }
+        this.temp.stock = stock
+        this.standardVisible = false
+      },
+      changeStock(val) {
+        var stock = 0
+        for (var i = 0; i < this.temp.goodsSpec.length; i++) {
+          stock = Number(stock) + Number(this.temp.goodsSpec[i].stock)
+        }
+        this.temp.stock = stock
       },
       beforeAvatarUpload(file) {
         const isJPG = file.type === 'image/jpeg' || file.type === 'image/png'

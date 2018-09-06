@@ -23,7 +23,7 @@
 
 <script>
   import { step1, step2, step3 } from './components'
-  import { pushGoods, goodsList, goodsClassifyCascade } from '@/api/goods/goods'
+  import { pushOldGoods,pushNewGoods, goodsList, goodsClassifyCascade } from '@/api/goods/goods'
   import store from '@/store'
   export default {
     name: 'editGoods',
@@ -121,22 +121,42 @@
           spinner: 'el-icon-loading',
           background: 'rgba(0, 0, 0, 0.7)'
         })
-        pushGoods(this.temp.info).then(response => {
-          if (response.code === 50001) {
-            store.dispatch('GetRefreshToken').then(() => {
-              this.handlePublish()
-            })
-          }
-          if (response.code === 200) {
-            setTimeout(() => {
-              this.loading.close()
-              this.step++
-              this.goStep(this.step)
-            }, 1.5 * 1000)
-          }
-        }).catch(() => {
-          this.loading.close()
-        })
+        if (this.temp.classify.model === '01') {
+          pushNewGoods(this.temp.info).then(response => {
+            if (response.code === 50001) {
+              store.dispatch('GetRefreshToken').then(() => {
+                this.handlePublish()
+              })
+            }
+            if (response.code === 200) {
+              setTimeout(() => {
+                this.loading.close()
+                this.step++
+                this.goStep(this.step)
+              }, 1.5 * 1000)
+            }
+          }).catch(() => {
+            this.loading.close()
+          })
+        }
+        if (this.temp.classify.model === '02') {
+          pushOldGoods(this.temp.info).then(response => {
+            if (response.code === 50001) {
+              store.dispatch('GetRefreshToken').then(() => {
+                this.handlePublish()
+              })
+            }
+            if (response.code === 200) {
+              setTimeout(() => {
+                this.loading.close()
+                this.step++
+                this.goStep(this.step)
+              }, 1.5 * 1000)
+            }
+          }).catch(() => {
+            this.loading.close()
+          })
+        }
       },
       goStep(n) {
         switch (n) {
@@ -149,7 +169,12 @@
             this.temp.info = {}
             this.temp.info.classify = this.temp.classify
             if (this.temp.detail !== undefined) {
-              this.temp.info.info = this.frmatData(this.temp.detail)
+              if (this.temp.detail.model === '01') {
+                this.temp.info.info = this.newFrmatData(this.temp.detail)
+              }
+              if (this.temp.detail.model === '02') {
+                this.temp.info.info = this.oldFrmatData(this.temp.detail)
+              }
             }
             this.preStep = true
             this.nextStep = false
@@ -162,11 +187,10 @@
             break
         }
       },
-      frmatData(data) {
+      oldFrmatData(data) {
         var dateil = {}
         var param = []
         dateil.id = data.id
-        dateil.model = data.model
         dateil.logistcs = data.logistcs
         dateil.name = data.name
         dateil.code = data.code
@@ -181,14 +205,29 @@
           var parameter = data.specParameter[i].parameter
           for (var j = 0; j < parameter.length; j++) {
             parameter[j].id = id
-            parameter[j].spec_value_name = parameter[j].name
             parameter[j].name = name
-            parameter[j].spec_sort = parameter[j].value
             parameter[j].px = px
             param.push(parameter[j])
           }
         }
         dateil.specParameter = param
+        dateil.goodsSpec = []
+        dateil.parameter = data.parameter
+        dateil.detail = data.detail
+        return dateil
+      },
+      newFrmatData(data) {
+        var dateil = {}
+        dateil.id = data.id
+        dateil.logistcs = data.logistcs
+        dateil.name = data.name
+        dateil.code = data.code
+        dateil.brandId = data.brandId
+        dateil.banPrice = data.banPrice
+        dateil.unit = data.unit
+        dateil.stock = data.stock
+        dateil.goodsSpec = data.specParameter
+        dateil.specParameter = []
         dateil.parameter = data.parameter
         dateil.detail = data.detail
         return dateil

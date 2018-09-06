@@ -1,13 +1,27 @@
 import request from '@/utils/request'
 
-export function pushGoods(params) {
+export function pushOldGoods(params) {
   if (params.classify) {
     if (params.data) {
       params.data.classifyId = params.classify.id
     }
   }
   return request({
-    url: '/bf/goods/push',
+    url: '/bf/goods/old/push',
+    method: 'post',
+    data: params.data
+  })
+}
+
+export function pushNewGoods(params) {
+  debugger
+  if (params.classify) {
+    if (params.data) {
+      params.data.classifyId = params.classify.id
+    }
+  }
+  return request({
+    url: '/bf/goods/new/push',
     method: 'post',
     data: params.data
   })

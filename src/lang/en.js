@@ -18,7 +18,7 @@ export default {
     webSwitch: 'WebSwitch',
     // 商家端
     goodsManagement: 'Goods Management',
-    warehouseGoodsList: 'Warehouse Goods List',
+    goodsList: 'Goods List',
     sellGoodsList: 'Sel Goods List',
     recycleGoodsList: 'Recycle Goods List',
     sendGoods: 'Send Goods',

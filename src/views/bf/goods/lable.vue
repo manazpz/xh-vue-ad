@@ -121,7 +121,7 @@
       goodsDialog(row) {
         this.lable = row.value
         this.btnLoading = true
-        goodsList({ status: '01', lable: ' != ' + this.lable, pageSize: 1000 }).then(response => {
+        goodsList({ lable: ' != ' + this.lable, pageSize: 1000 }).then(response => {
           if (response.code === 50001) {
             store.dispatch('GetRefreshToken').then(() => {
               this.goodsDialog()
