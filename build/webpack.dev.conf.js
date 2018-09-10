@@ -54,7 +54,7 @@ const devWebpackConfig = merge(baseWebpackConfig, {
       filename: 'index.html',
       template: 'index.html',
       inject: true,
-      title: 'vue-admin-template'
+      title: 'vue-admin-template',
       path: config.dev.assetsPublicPath + config.dev.assetsSubDirectory
     }),
   ]

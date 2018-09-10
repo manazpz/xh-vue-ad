@@ -38,6 +38,12 @@
     methods: {
       getUEContent: function() {
         return this.editor.getContent()
+      },
+      clearContent: function(content) {
+        this.editor.setContent('', false)
+      },
+      setContent: function(content) {
+        this.editor.setContent(content)
       }
     }
   }

@@ -130,3 +130,43 @@ export function updateSwitch(params) {
     data: params
   })
 }
+
+export function insertStatement(params) {
+  return request({
+    url: '/user/statement/insert',
+    method: 'POST',
+    data: params
+  })
+}
+
+export function updateStatement(params) {
+  return request({
+    url: '/user/statement/update',
+    method: 'POST',
+    data: params
+  })
+}
+
+export function queryStatements(query) {
+  return request({
+    url: '/user/statement/list',
+    method: 'get',
+    params: query
+  })
+}
+
+export function deleteStatements(params) {
+  return request({
+    url: '/user/statement/delete',
+    method: 'post',
+    data: params
+  })
+}
+
+export function deleteFile(params) {
+  return request({
+    url: '/resources/deleteFile',
+    method: 'post',
+    data: params
+  })
+}

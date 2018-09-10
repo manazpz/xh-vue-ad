@@ -412,7 +412,7 @@
         if (this.info.classify.model === '01') {
           var data = this.formatSpecList(val)
           for (var i = 0; i < data.length; i++) {
-            data[i].code = new Date().getTime()+i
+            data[i].code = new Date().getTime() + i
             data[i].weight = '0'
             data[i].stock = '0'
             data[i].costPrice = '0'

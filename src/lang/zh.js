@@ -24,6 +24,7 @@ export default {
     assignPermissions: '分配权限',
     assignRole: '分配角色',
     webSwitch: 'web站点',
+    statement: '声明列表',
     // 商家端
     goodsManagement: '商品管理',
     goodsList: '商品列表',

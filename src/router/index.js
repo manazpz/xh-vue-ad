@@ -74,7 +74,6 @@ export const constantRouterMap = [
     path: '/goodsBack',
     component: Layout,
     redirect: '/goodsBack/list',
-    alwaysShow: true,
     meta: {
       title: 'goodsBack',
       icon: 'form'
@@ -117,7 +116,6 @@ export const constantRouterMap = [
     path: '/order',
     component: Layout,
     redirect: '/order/list',
-    alwaysShow: true,
     meta: {
       title: 'orderList',
       icon: 'documentation'
@@ -128,6 +126,18 @@ export const constantRouterMap = [
         component: () => import('@/views/order/orderList'),
         name: 'orderList',
         meta: { title: 'orderList', icon: 'documentation' }
+      }]
+  },
+  {
+    path: '/statement',
+    component: Layout,
+    redirect: '/statement/list',
+    children: [
+      {
+        path: 'list',
+        component: () => import('@/views/statement/statementList'),
+        name: 'statement',
+        meta: { title: 'statement', icon: 'documentation' }
       }]
   }
 ]

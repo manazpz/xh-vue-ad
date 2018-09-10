@@ -16,6 +16,7 @@ export default {
     assignPermissions: 'Allocation permissions',
     assignRole: 'Allocation roles',
     webSwitch: 'WebSwitch',
+    statement: 'Statement',
     // 商家端
     goodsManagement: 'Goods Management',
     goodsList: 'Goods List',
