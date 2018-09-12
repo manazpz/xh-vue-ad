@@ -1,4 +1,5 @@
 import request from '@/utils/request'
+import { dataToFormData } from '@/utils/common'
 
 export function pushOldGoods(params) {
   if (params.classify) {
@@ -6,24 +7,43 @@ export function pushOldGoods(params) {
       params.data.classifyId = params.classify.id
     }
   }
+  var formData = new FormData()
+  dataToFormData(formData, params.data)
+  if (params.data.fileList) {
+    for (var i = 0; i < params.data.fileList.length; i++) {
+      formData.append('files', params.data.fileList[i].raw)
+    }
+  } else {
+    formData.append('files', null)
+  }
+  formData.append('path', 'goods')
   return request({
     url: '/bf/goods/old/push',
     method: 'post',
-    data: params.data
+    data: formData
   })
 }
 
 export function pushNewGoods(params) {
-  debugger
   if (params.classify) {
     if (params.data) {
       params.data.classifyId = params.classify.id
     }
   }
+  var formData = new FormData()
+  dataToFormData(formData, params.data)
+  if (params.data.fileList) {
+    for (var i = 0; i < params.data.fileList.length; i++) {
+      formData.append('files', params.data.fileList[i].raw)
+    }
+  } else {
+    formData.append('files', null)
+  }
+  formData.append('path', 'goods')
   return request({
     url: '/bf/goods/new/push',
     method: 'post',
-    data: params.data
+    data: formData
   })
 }
 

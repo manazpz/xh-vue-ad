@@ -69,12 +69,13 @@
                   <el-form-item label="上传商品图片：" class="postInfo-container-item">
                       <el-upload
                         multiple
-                        action="https://jsonplaceholder.typicode.com/posts/"
+                        action="https://www.baidu.com/"
                         list-type="picture-card"
-                        :before-upload="beforeAvatarUpload"
                         :file-list="fileList"
-                        :on-success="handlePictureCardSuccess"
-                        :on-remove="handleRemove">
+                        accept="image/jpeg,image/gif,image/png"
+                        :on-change="OnGoodsChange"
+                        :on-remove="OnGoodsRemove"
+                        :auto-upload="false">
                         <el-tooltip class="item" effect="light" content="请上传jpg/png格式,不大于2M的图片" placement="bottom" >
                           <i class="el-icon-plus"></i>
                         </el-tooltip>
@@ -150,8 +151,8 @@
                             <el-select v-model="scope.row.tipsType" placeholder="请选择">
                               <el-option key="01" label="不提示" value="01"></el-option>
                               <el-option key="02" label="文本" value="02"></el-option>
-                              <el-option key="03" label="图片" value="02"></el-option>
-                              <el-option key="04" label="上图下文" value="02"></el-option>
+                              <el-option key="03" label="图片" value="03"></el-option>
+                              <el-option key="04" label="上图下文" value="04"></el-option>
                             </el-select>
                           </template>
                         </el-table-column>
@@ -162,13 +163,15 @@
                         </el-table-column>
                         <el-table-column align="center" label="提示图片" width="100">
                           <template slot-scope="scope">
+                            <img v-if="scope.row.tipsImg != ''" :src=" scope.row.tipsImg " style="width: 90px;height: 50px">
                             <el-upload
-                              action="https://jsonplaceholder.typicode.com/posts/"
-                              :before-upload="beforeAvatarUpload"
-                              :on-success="handlePictureCardSuccess"
-                              :on-remove="handleRemove">
+                              action="https://www.baidu.com/"
+                              :show-file-list="false"
+                              accept="image/jpeg,image/gif,image/png"
+                              :on-change="OnTipsChange"
+                              :auto-upload="false">
                               <el-tooltip class="item" effect="light" content="请上传jpg/png格式,不大于2M的图片" placement="bottom" >
-                                <el-button size="mini" type="primary">上传图片</el-button>
+                                <el-button size="mini" type="primary" @click="onTipsImg(scope.row)">上传图片</el-button>
                               </el-tooltip>
                             </el-upload>
                           </template>
@@ -279,15 +282,16 @@
         listLoading: true,
         activeName: 'first',
         standardVisible: false,
+        fileList: this.info.info ? this.info.info.afileList : [],
         brands: [],
         units: [],
-        fileList: [],
         u1: 'u1' + new Date(),
         u2: 'u2' + new Date(),
         classifySpecs: [],
         spanArr: [],
         checkedCities: [],
         pos: 0,
+        tipsRow: undefined,
         temp: !this.info.info ? {
           id: undefined,
           logistcs: '01',
@@ -305,7 +309,7 @@
         config1: {
           autoHeightEnabled: false,
           autoFloatEnabled: true,
-          initialContent: '<table class="tm-tableAttr" width="789"><thead style="margin: 0px; padding: 0px; background-color: rgb(238, 238, 238); border-bottom: 1px solid rgb(228, 228, 228); font-weight: 700; font-size: 14px; color: rgb(153, 153, 153);"><tr style="margin: 0px; padding: 0px;" class="firstRow"><td colspan="2" style="margin: 0px; padding-right: 5px; padding-left: 20px; border-bottom-color: rgb(229, 229, 229);">[键入标题]</td></tr></thead><tbody style="margin: 0px; padding: 0px;"><tr class="tm-tableAttrSub" style="margin: 0px; padding: 0px;"><th colspan="2" style="margin: 0px; padding-right: 5px; padding-left: 20px; text-align: left; width: 763px; border-top-color: rgb(229, 229, 229); border-right-color: rgb(229, 229, 229);">[键入分组名]</th></tr><tr style="margin: 0px; padding: 0px;"><th style="margin: 0px; padding-right: 5px; padding-left: 20px; color: rgb(153, 153, 153); font-weight: 400; text-align: right; width: 147px; border-top-color: rgb(247, 247, 247); border-right-color: rgb(247, 247, 247);"><p></p><p>&nbsp; &nbsp; &nbsp;【参数名】</p></th><td style="margin: 0px; padding-right: 5px; padding-left: 5px; border-top-color: rgb(247, 247, 247);">【参数值】</td></tr></tbody></table>',
+          initialContent: this.info.info && this.info.info.parameter ? this.info.info.parameter : '<table class="tm-tableAttr" width="789"><thead style="margin: 0px; padding: 0px; background-color: rgb(238, 238, 238); border-bottom: 1px solid rgb(228, 228, 228); font-weight: 700; font-size: 14px; color: rgb(153, 153, 153);"><tr style="margin: 0px; padding: 0px;" class="firstRow"><td colspan="2" style="margin: 0px; padding-right: 5px; padding-left: 20px; border-bottom-color: rgb(229, 229, 229);">[键入标题]</td></tr></thead><tbody style="margin: 0px; padding: 0px;"><tr class="tm-tableAttrSub" style="margin: 0px; padding: 0px;"><th colspan="2" style="margin: 0px; padding-right: 5px; padding-left: 20px; text-align: left; width: 763px; border-top-color: rgb(229, 229, 229); border-right-color: rgb(229, 229, 229);">[键入分组名]</th></tr><tr style="margin: 0px; padding: 0px;"><th style="margin: 0px; padding-right: 5px; padding-left: 20px; color: rgb(153, 153, 153); font-weight: 400; text-align: right; width: 147px; border-top-color: rgb(247, 247, 247); border-right-color: rgb(247, 247, 247);"><p></p><p>&nbsp; &nbsp; &nbsp;【参数名】</p></th><td style="margin: 0px; padding-right: 5px; padding-left: 5px; border-top-color: rgb(247, 247, 247);">【参数值】</td></tr></tbody></table>',
           autoClearinitialContent: false,
           initialFrameWidth: null,
           initialFrameHeight: 450,
@@ -314,7 +318,7 @@
         config2: {
           autoHeightEnabled: false,
           autoFloatEnabled: true,
-          initialContent: '',
+          initialContent: this.info.info && this.info.info.detail ? this.info.info.detail : '',
           autoClearinitialContent: false,
           initialFrameWidth: null,
           initialFrameHeight: 450,
@@ -568,21 +572,22 @@
         }
         this.temp.stock = stock
       },
-      beforeAvatarUpload(file) {
-        const isJPG = file.type === 'image/jpeg' || file.type === 'image/png'
-        const isLt2M = file.size / 1024 / 1024 < 2
-
-        if (!isJPG) {
-          this.$message.error('上传头像图片只能是 JPG/PNG 格式!')
-        }
-        if (!isLt2M) {
-          this.$message.error('上传头像图片大小不能超过 2MB!')
-        }
-        return isJPG && isLt2M
+      OnGoodsChange(file, fileList) {
+        this.info.data.fileList = fileList
       },
-      handlePictureCardSuccess(response, file, fileList) {
+      OnGoodsRemove(file, fileList) {
+        this.info.data.fileList = fileList
       },
-      handleRemove(file, fileList) {
+      onTipsImg(val) {
+        this.tipsRow = undefined
+        this.tipsRow = val
+      },
+      OnTipsChange(file, fileList) {
+        var reader = new FileReader()
+        reader.readAsDataURL(file.raw)
+        reader.onload = (e) => {
+          this.tipsRow.tipsImg = e.target.result
+        }
       }
     }
   }

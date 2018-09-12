@@ -20,3 +20,14 @@ export function keyToValue(data) {
     return acc
   }, {})
 }
+
+export function dataToFormData(formdata, data) {
+  for (var i in data) {
+    if (Array.isArray(data[i])) {
+      formdata.append(i, JSON.stringify(data[i]))
+    } else {
+      formdata.append(i, data[i])
+    }
+  }
+  return formdata
+}

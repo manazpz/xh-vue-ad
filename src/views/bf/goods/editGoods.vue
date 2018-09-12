@@ -23,7 +23,7 @@
 
 <script>
   import { step1, step2, step3 } from './components'
-  import { pushOldGoods,pushNewGoods, goodsList, goodsClassifyCascade } from '@/api/goods/goods'
+  import { pushOldGoods, pushNewGoods, goodsList, goodsClassifyCascade } from '@/api/goods/goods'
   import store from '@/store'
   export default {
     name: 'editGoods',
@@ -210,6 +210,7 @@
             param.push(parameter[j])
           }
         }
+        dateil.afileList = data.afileList
         dateil.specParameter = param
         dateil.goodsSpec = []
         dateil.parameter = data.parameter
@@ -230,6 +231,7 @@
         dateil.specParameter = []
         dateil.parameter = data.parameter
         dateil.detail = data.detail
+        dateil.afileList = data.afileList
         return dateil
       }
     }
