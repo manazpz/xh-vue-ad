@@ -165,11 +165,12 @@
                           <template slot-scope="scope">
                             <img v-if="scope.row.tipsImg != ''" :src=" scope.row.tipsImg " style="width: 90px;height: 50px">
                             <el-upload
-                              action="https://www.baidu.com/"
+                              :action="action"
                               :show-file-list="false"
+                              :data="{path:'tips'}"
                               accept="image/jpeg,image/gif,image/png"
-                              :on-change="OnTipsChange"
-                              :auto-upload="false">
+                              :on-success="handlePictureCardSuccess"
+                              :on-error="handleError">
                               <el-tooltip class="item" effect="light" content="请上传jpg/png格式,不大于2M的图片" placement="bottom" >
                                 <el-button size="mini" type="primary" @click="onTipsImg(scope.row)">上传图片</el-button>
                               </el-tooltip>
@@ -282,6 +283,7 @@
         listLoading: true,
         activeName: 'first',
         standardVisible: false,
+        action: process.env.BASE_API + '/resources/uploadFile',
         fileList: this.info.info ? this.info.info.afileList : [],
         brands: [],
         units: [],
@@ -582,12 +584,11 @@
         this.tipsRow = undefined
         this.tipsRow = val
       },
-      OnTipsChange(file, fileList) {
-        var reader = new FileReader()
-        reader.readAsDataURL(file.raw)
-        reader.onload = (e) => {
-          this.tipsRow.tipsImg = e.target.result
-        }
+      handlePictureCardSuccess(response, file, fileList) {
+        this.tipsRow.tipsImg = response.data.file.url
+      },
+      handleError() {
+        this.$message.error('上传文件失败!')
       }
     }
   }
