@@ -83,6 +83,14 @@
               <el-radio :label="item.tipsType" v-for="item in tip_typeListOptions" >{{item.name}}</el-radio>
           </el-radio-group>
         </el-form-item>
+        <el-form-item  label-width="110px" label="是否多选"  prop="multi" class="postInfo-container-item">
+          <el-select clearable  style="width: 100%;" class="filter-item" v-model="temp.multi" required placeholder="请输入分类属性">
+            <el-option key="01" label="否" value="01">
+            </el-option>
+            <el-option key="02" label="是" value="02">
+            </el-option>
+          </el-select>
+        </el-form-item>
         <el-form-item label-width="110px" label="规格备注"  class="postInfo-container-item">
           <el-input v-model="temp.remarks" type="textarea"  :rows="5"  placeholder="请输入规格备注"></el-input>
         </el-form-item>
@@ -114,6 +122,7 @@
         tableKey: 0,
         list: null,
         total: null,
+        type: false,
         listLoading: true,
         fileList: [],
         file: [],
@@ -134,6 +143,7 @@
           specName: '',
           tipsType: '',
           px: '',
+          multi: '',
           remarks: ''
         },
         dialogStatus: '',
@@ -235,6 +245,7 @@
           specName: '',
           tipsType: '',
           px: '',
+          multi: '',
           remarks: ''
         }
       },

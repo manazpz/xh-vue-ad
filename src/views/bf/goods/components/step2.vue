@@ -509,6 +509,7 @@
           id: data.id,
           name: data.name,
           px: data.px,
+          obligate: data.obligate,
           spec_sort: data.spec_sort,
           spec_value_name: data.spec_value_name
         }

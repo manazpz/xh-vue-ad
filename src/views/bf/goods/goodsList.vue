@@ -47,7 +47,7 @@
           <span>{{scope.row.name}}</span>
         </template>
       </el-table-column>
-      <el-table-column align="center" label="价格" width="120">
+      <el-table-column align="center" label="基准价格" width="120">
         <template slot-scope="scope">
           <span>￥{{scope.row.banPrice}}</span>
         </template>

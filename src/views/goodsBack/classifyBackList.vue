@@ -212,6 +212,8 @@
           id: undefined,
           pageNum: 1,
           pageSize: 10,
+          name: '',
+          model: '',
           sort: 'lastCreateTime DESC'
         },
         temp: {
@@ -253,10 +255,6 @@
         brandList(this.listQuery).then(response => {
           if (!response.data.items) return
           this.brandOptions = response.data.items
-        })
-        specList(this.listQuery).then(response => {
-          if (!response.data.items) return
-          this.specOptions = response.data.items
         })
       },
       getClassifyCascade() {
@@ -311,6 +309,7 @@
           parentId: '',
           index: '',
           px: '',
+          obligate: '01',
           model: '',
           name: '',
           remarks: ''
@@ -596,6 +595,15 @@
           this.getIndex2 = row.index
           this.classifyCascades3 = row.children
           this.$emit('classify', '')
+          this.listQuery.name = row.name
+          this.listQuery.model = row.model
+          specList(this.listQuery).then(response => {
+            if (!response.data.items) return
+            this.specOptions = response.data.items
+            debugger
+            this.listQuery.name = ''
+            this.listQuery.model = ''
+          })
         } else {
           this.falg = true
         }

@@ -139,6 +139,7 @@
             this.loading.close()
           })
         }
+        debugger
         if (this.temp.classify.model === '02') {
           pushOldGoods(this.temp.info).then(response => {
             if (response.code === 50001) {
@@ -202,11 +203,13 @@
           var id = data.specParameter[i].id
           var name = data.specParameter[i].name
           var px = data.specParameter[i].px
+          var obligate = data.specParameter[i].obligate
           var parameter = data.specParameter[i].parameter
           for (var j = 0; j < parameter.length; j++) {
             parameter[j].id = id
             parameter[j].name = name
             parameter[j].px = px
+            parameter[j].obligate = obligate
             param.push(parameter[j])
           }
         }
