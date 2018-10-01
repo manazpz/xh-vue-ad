@@ -33,7 +33,7 @@
       </el-table-column>
       <el-table-column label="图片" width="110">
         <template slot-scope="scope">
-          <img v-if="scope.row.imgs[0] != null" :src=" scope.row.imgs[0].url " style="width: 90px;height: 50px">
+          <img v-if="scope.row.afileList[0] != null" :src=" scope.row.afileList[0].url " style="width: 90px;height: 50px">
         </template>
       </el-table-column>
       <el-table-column align="center" label="名称" min-width="110">

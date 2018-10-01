@@ -1,6 +1,7 @@
 export default {
   route: {
     ms: '管理系统',
+    sys: '系统',
     dashboard: '首页',
     logoUpload: 'LOGO上传',
     avatarUpload: '头像上传',
@@ -24,7 +25,8 @@ export default {
     assignPermissions: '分配权限',
     assignRole: '分配角色',
     webSwitch: 'web站点',
-    statement: '声明列表',
+    statementList: '声明列表',
+    resourceImgs: '图片列表',
     // 商家端
     goodsManagement: '商品管理',
     goodsList: '商品列表',

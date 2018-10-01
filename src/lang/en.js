@@ -1,6 +1,7 @@
 export default {
   route: {
     ms: 'MS',
+    sys: 'sys',
     dashboard: 'Dashboard',
     logoUpload: 'Logo Upload',
     avatarUpload: 'Avatar Upload',
@@ -16,7 +17,8 @@ export default {
     assignPermissions: 'Allocation permissions',
     assignRole: 'Allocation roles',
     webSwitch: 'WebSwitch',
-    statement: 'Statement',
+    statementList: 'statementList',
+    resourceImgs: 'resourceImgs',
     // 商家端
     goodsManagement: 'Goods Management',
     goodsList: 'Goods List',

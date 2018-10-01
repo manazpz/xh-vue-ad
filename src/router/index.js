@@ -129,15 +129,22 @@ export const constantRouterMap = [
       }]
   },
   {
-    path: '/statement',
+    path: '/sys',
     component: Layout,
-    redirect: '/statement/list',
+    meta: { title: 'sys', icon: 'documentation' },
+    redirect: '/sys/statementList',
     children: [
       {
-        path: 'list',
+        path: 'statementList',
         component: () => import('@/views/statement/statementList'),
-        name: 'statement',
-        meta: { title: 'statement', icon: 'documentation' }
+        name: 'statementList',
+        meta: { title: 'statementList' }
+      },
+      {
+        path: 'resourceImgs',
+        component: () => import('@/views/resource/imgList'),
+        name: 'resourceImgs',
+        meta: { title: 'resourceImgs' }
       }]
   }
 ]
