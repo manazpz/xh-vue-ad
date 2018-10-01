@@ -138,3 +138,27 @@ export function deleteFile(params) {
     data: params
   })
 }
+
+export function recoveryList(query) {
+  return request({
+    url: '/user/recoveryList',
+    method: 'get',
+    params: query
+  })
+}
+
+export function createRecovery(params) {
+  return request({
+    url: '/user/createRecovery',
+    method: 'post',
+    data: params
+  })
+}
+
+export function updateRecovery(params) {
+  return request({
+    url: '/user/updateRecovery',
+    method: 'post',
+    data: params
+  })
+}

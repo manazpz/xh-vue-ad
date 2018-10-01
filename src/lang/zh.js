@@ -27,6 +27,8 @@ export default {
     webSwitch: 'web站点',
     statementList: '声明列表',
     resourceImgs: '图片列表',
+    recovery: '回收方式',
+    statement: '声明列表',
     // 商家端
     goodsManagement: '商品管理',
     goodsList: '商品列表',

@@ -203,6 +203,12 @@ export const asyncRouterMap = [
       component: () => import('@/views/user/basic/webSwitch'),
       name: 'webSwitch',
       meta: { title: 'webSwitch' }
+    },
+    {
+      path: 'recovery',
+      component: () => import('@/views/user/basic/recovery'),
+      name: 'recovery',
+      meta: { title: 'recovery' }
     }]
   }
 ]
