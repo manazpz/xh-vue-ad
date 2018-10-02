@@ -141,7 +141,7 @@
           isDel: 'Y',
           status: '01',
           name: undefined,
-          model: undefined
+          model: this.$route.fullPath.split("/")[this.$route.fullPath.split("/").length-1]
         },
         tempStock: {
           id: undefined,

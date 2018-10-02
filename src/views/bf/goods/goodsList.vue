@@ -5,14 +5,14 @@
     <div class="filter-container">
       <el-button type="success" size="mini" @click="onJump" class="filter-item" round>发布商品</el-button>
       <div style="float: right;">
-        <label class="filter-item">分类：</label>
-        <el-select clearable @change='handleFilter' style="width: 140px;" class="filter-item" v-model="listQuery.model">
-          </el-option>
-          <el-option key="01" label="新机" value="01">
-          </el-option>
-          <el-option key="02" label="旧机" value="02">
-          </el-option>
-        </el-select>
+        <!--<label class="filter-item">分类：</label>-->
+        <!--<el-select clearable @change='handleFilter' style="width: 140px;" class="filter-item" v-model="listQuery.model">-->
+          <!--</el-option>-->
+          <!--<el-option key="01" label="新机" value="01">-->
+          <!--</el-option>-->
+          <!--<el-option key="02" label="旧机" value="02">-->
+          <!--</el-option>-->
+        <!--</el-select>-->
         <label class="filter-item">状态：</label>
         <el-select clearable @change='handleFilter' style="width: 140px;" class="filter-item" v-model="listQuery.status">
           </el-option>
@@ -165,7 +165,7 @@
           pageSize: 20,
           isDel: 'Y',
           status: undefined,
-          model: undefined
+          model: this.$route.fullPath.split("/")[this.$route.fullPath.split("/").length-1]
         },
         tempStock: {
           id: undefined,

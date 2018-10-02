@@ -96,14 +96,14 @@
         <el-form-item label-width="110px" label="分类名称"  prop="name" class="postInfo-container-item">
           <el-input v-model="temp.name" required placeholder="请输入分类名称"></el-input>
         </el-form-item>
-        <el-form-item v-if="type" label-width="110px" label="分类属性"  prop="model" class="postInfo-container-item">
-          <el-select clearable  style="width: 100%;" class="filter-item" v-model="temp.model" required placeholder="请输入分类属性">
-            <el-option key="01" label="新机" value="01">
-            </el-option>
-            <el-option key="02" label="旧机" value="02">
-            </el-option>
-          </el-select>
-        </el-form-item>
+        <!--<el-form-item v-if="type" label-width="110px" label="分类属性"  prop="model" class="postInfo-container-item">-->
+          <!--<el-select clearable  style="width: 100%;" class="filter-item" v-model="temp.model" required placeholder="请输入分类属性">-->
+            <!--<el-option key="01" label="新机" value="01">-->
+            <!--</el-option>-->
+            <!--<el-option key="02" label="旧机" value="02">-->
+            <!--</el-option>-->
+          <!--</el-select>-->
+        <!--</el-form-item>-->
         <el-form-item label-width="110px" label="排序号"  prop="px" class="postInfo-container-item">
           <el-input v-model="temp.px" required placeholder="请输入排序号"></el-input>
         </el-form-item>
@@ -235,7 +235,7 @@
         },
         rule: {
           name: [{ required: true, message: '分类名称不能为空', trigger: 'change' }],
-          model: [{ required: true, message: '分类属性不能为空', trigger: 'change' }],
+          // model: [{ required: true, message: '分类属性不能为空', trigger: 'change' }],
           px: [{ required: true, message: '排序号不能为空', trigger: 'change' }]
         },
         ruleBrand: {
@@ -259,7 +259,7 @@
       },
       getClassifyCascade() {
         if (this.classifyCascades1.length < 1) {
-          getClassify().then(response => {
+          getClassify({model:this.$route.fullPath.split("/")[this.$route.fullPath.split("/").length-1]}).then(response => {
             for (var i = 0; i < response.data.items.length; i++) {
               response.data.items[i].showDropDown = false
               if (response.data.items[i].children.length > 0) {
@@ -310,7 +310,7 @@
           index: '',
           px: '',
           obligate: '01',
-          model: '',
+          model: this.$route.fullPath.split("/")[this.$route.fullPath.split("/").length-1],
           name: '',
           remarks: ''
         }
@@ -396,11 +396,11 @@
         this.temp.index = index
         if (index === '1') {
           this.temp.parentId = this.classifyId1
-          this.temp.model = this.classifyModel1
+          // this.temp.model = this.classifyModel1
         }
         if (index === '2') {
           this.temp.parentId = this.classifyId2
-          this.temp.model = this.classifyModel2
+          // this.temp.model = this.classifyModel2
         }
         this.$nextTick(() => {
           this.$refs['dataForm'].clearValidate()
