@@ -38,6 +38,29 @@ export const constantRouterMap = [
   },
 
   {
+    path: '/shop',
+    component: Layout,
+    redirect: '/shop/list',
+    meta: {
+      title: 'shop',
+      icon: 'documentation'
+    },
+    children: [
+      {
+        path: 'list',
+        component: () => import('@/views/shop/shopList'),
+        name: 'shopList',
+        meta: { title: 'shopList', icon: 'documentation' }
+      },
+      {
+        path: 'reviewShop',
+        component: () => import('@/views/shop/reviewShopList'),
+        name: 'reviewShop',
+        meta: { title: 'reviewShop', icon: 'documentation' }
+      }]
+  },
+
+  {
     path: '/bf/gm',
     component: Layout,
     redirect: '/bf/gm/warehouseGoodsList',

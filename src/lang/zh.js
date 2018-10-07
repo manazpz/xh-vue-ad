@@ -31,6 +31,9 @@ export default {
     resourceImgs: '图片列表',
     recovery: '回收方式',
     statement: '声明列表',
+    shop: '店铺管理后台',
+    shopList: '店铺列表',
+    reviewShop: '审核店铺',
     // 商家端
     goodsManagement: '商品管理',
     newGoodsList: '商品列表（新）',
