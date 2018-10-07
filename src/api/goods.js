@@ -1,5 +1,29 @@
 import request from '@/utils/request'
 
+export function goodsList(query) {
+  return request({
+    url: '/goods/list',
+    method: 'get',
+    params: query
+  })
+}
+
+export function goodsDelete(params) {
+  return request({
+    url: '/goods/delete',
+    method: 'post',
+    data: params
+  })
+}
+
+export function updateGoods(params) {
+  return request({
+    url: '/goods/update',
+    method: 'post',
+    data: params
+  })
+}
+
 export function getClassify(query) {
   return request({
     url: '/goods/classifyList',

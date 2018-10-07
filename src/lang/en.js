@@ -89,7 +89,8 @@ export default {
     updateTime: 'UpdateTime',
     stock: 'Stock',
     xj: 'Lower Frame',
-    sj: 'On The Shelf'
+    sj: 'On The Shelf',
+    sh: 'Shen He'
   },
   user: {
     nickName: 'nickName',

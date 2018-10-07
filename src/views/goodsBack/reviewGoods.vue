@@ -64,6 +64,16 @@
           <span v-if="scope.row.model === '02'">旧机</span>
         </template>
       </el-table-column>
+      <el-table-column align="center" :label="$t('table.actions')" width="220" class-name="small-padding fixed-width">
+        <template slot-scope="scope">
+          <el-button size="mini" type="primary"
+                     @click="handleSh(scope.row)">{{$t('table.sh')}}
+          </el-button>
+          <el-button size="mini" type="danger"
+                     @click="handleDel(scope.row.id)">{{$t('table.delete')}}
+          </el-button>
+        </template>
+      </el-table-column>
     </el-table>
     <!-- 表格 end -->
 
@@ -79,7 +89,7 @@
 </template>
 
 <script>
-  import { goodsList } from '@/api/goods'
+  import { goodsList, goodsDelete, updateGoods } from '@/api/goods'
   import waves from '@/directive/waves' // 水波纹指令
   import store from '@/store'
 
@@ -98,7 +108,7 @@
           pageNum: 1,
           pageSize: 20,
           isDel: 'Y',
-          obligate1: 'Y'
+          obligate1: 'N'
         }
       }
     },
@@ -136,6 +146,49 @@
       handleCurrentChange(val) {
         this.listQuery.pageNum = val
         this.getList()
+      },
+      handleDel(id) {
+        this.$confirm('下架商品, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(_ => {
+          goodsDelete({ 'id': id }).then(response => {
+            if (response.code === 50001) {
+              store.dispatch('GetRefreshToken').then(() => {
+                this.handleDel(id)
+              })
+            }
+            if (response.code === 200) {
+              this.$message({
+                message: '操作成功',
+                type: 'success'
+              })
+              this.getList()
+            }
+          }).catch(() => {
+            this.listLoading = false
+          })
+          return true
+        })
+      },
+      handleSh(row) {
+        updateGoods({ id: row.id, obligate1: 'Y' }).then(response => {
+          if (response.code === 50001) {
+            store.dispatch('GetRefreshToken').then(() => {
+              this.handleSh(row)
+            })
+          }
+          if (response.code === 200) {
+            this.$message({
+              message: '操作成功',
+              type: 'success'
+            })
+            this.getList()
+          }
+        }).catch(() => {
+          this.listLoading = false
+        })
       }
     }
   }

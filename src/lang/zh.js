@@ -13,8 +13,8 @@ export default {
     userManagement: '用户管理',
     user: '用户管理',
     goodsBack: '商品后台管理',
-    newGoodsBackList: '商品列表（新）',
-    oldGoodsBackList: '商品列表（旧）',
+    GoodsBackList: '审核通过商品',
+    reviewGoods: '审核商品',
     newClassifyBackList: '商品分类（新）',
     oldClassifyBackList: '商品分类（旧）',
     brandBacklist: '商品品牌',
@@ -37,7 +37,7 @@ export default {
     oldGoodsList: '商品列表（旧）',
     recycleGoodsList: '商品回收站',
     sendGoods: '发布商品',
-    editGoods: '编辑商品',
+    editGoods: '商品发布',
     lable: '标签'
     // 商家端
   },
@@ -117,7 +117,8 @@ export default {
     updateTime: '修改时间',
     stock: '库存',
     xj: '下架',
-    sj: '上架'
+    sj: '上架',
+    sh: '审核'
   },
   errorLog: {
     tips: '请点击右上角bug小图标',

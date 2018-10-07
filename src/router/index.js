@@ -79,24 +79,23 @@ export const constantRouterMap = [
   {
     path: '/goodsBack',
     component: Layout,
-    redirect: '/goodsBack/list',
     meta: {
       title: 'goodsBack',
       icon: 'form'
     },
     children: [
-      // {
-      //   path: 'list/01',
-      //   component: () => import('@/views/goodsBack/goodsBackList'),
-      //   name: 'newGoodsBackList',
-      //   meta: { title: 'newGoodsBackList', icon: 'theme' }
-      // },
-      // {
-      //   path: 'list/02',
-      //   component: () => import('@/views/goodsBack/goodsBackList'),
-      //   name: 'oldGoodsBackList',
-      //   meta: { title: 'oldGoodsBackList', icon: 'theme' }
-      // },
+      {
+        path: 'list',
+        component: () => import('@/views/goodsBack/goodsBackList'),
+        name: 'GoodsBackList',
+        meta: { title: 'GoodsBackList', icon: 'theme' }
+      },
+      {
+        path: 'reviewGoods',
+        component: () => import('@/views/goodsBack/reviewGoods'),
+        name: 'reviewGoods',
+        meta: { title: 'reviewGoods', icon: 'theme' }
+      },
       {
         path: 'classifyBackList/01',
         component: () => import('@/views/goodsBack/classifyBackList'),
