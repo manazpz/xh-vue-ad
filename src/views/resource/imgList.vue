@@ -258,6 +258,7 @@
         this.$message.error('图片上传限制1个，请先删除以后的图片!')
       },
       resetTemp() {
+        this.fileList = []
         this.temp = {
           id: undefined,
           name: '',
