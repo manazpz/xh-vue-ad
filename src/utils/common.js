@@ -20,7 +20,6 @@ export function keyToValue(data) {
     return acc
   }, {})
 }
-
 export function dataToFormData(formdata, data) {
   for (var i in data) {
     if (Array.isArray(data[i])) {
@@ -31,3 +30,4 @@ export function dataToFormData(formdata, data) {
   }
   return formdata
 }
+
