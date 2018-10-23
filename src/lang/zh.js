@@ -22,7 +22,9 @@ export default {
     brandBacklist: '商品品牌',
     specBacklist: '商品规格',
     specBackValueList: '商品规格值',
+    order: '订单',
     orderList: '订单列表',
+    orderDetail: '订单详情',
     changePwd: '修改密码',
     userList: '用户列表',
     permissionList: '权限列表',
@@ -36,6 +38,7 @@ export default {
     shop: '店铺管理后台',
     shopList: '店铺列表',
     reviewShop: '审核店铺',
+    smsList: '短信网关',
     // 商家端
     goodsManagement: '商品管理',
     newGoodsList: '商品列表（新）',

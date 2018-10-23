@@ -600,7 +600,6 @@
           specList(this.listQuery).then(response => {
             if (!response.data.items) return
             this.specOptions = response.data.items
-            debugger
             this.listQuery.name = ''
             this.listQuery.model = ''
           })

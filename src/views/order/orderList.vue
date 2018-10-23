@@ -34,25 +34,40 @@
 
     <!-- 表格 start -->
     <el-table :key='tableKey' :data="list" v-loading="listLoading" stripe border fit highlight-current-row
-              style="width: 100%;min-height:100%;">
-      <el-table-column align="center" :label="$t('table.no')" width="60">
+              @row-click="rowClick" style="width: 100%;min-height:100%;">
+      <el-table-column align="center" :label="$t('table.no')" min-width="60">
         <template slot-scope="scope">
           <span>{{scope.$index+1}}</span>
         </template>
       </el-table-column>
-      <el-table-column align="center" label="图片" width="110">
-        <template slot-scope="scope">
-          <!--<img v-if="scope.row.imgs[0] != null" :src=" scope.row.imgs[0].url " style="width: 90px;height: 50px">-->
-        </template>
-      </el-table-column>
-      <el-table-column align="center" label="订单编号" min-width="110">
+      <el-table-column align="center" label="订单编号" min-width="90">
         <template slot-scope="scope">
           <span>{{scope.row.number}}</span>
         </template>
       </el-table-column>
+      <el-table-column align="center" label="商品" min-width="90">
+        <template slot-scope="scope">
+          <span>{{scope.row.goodsName}}</span>
+        </template>
+      </el-table-column>
+      <el-table-column align="center" label="订单性质" min-width="90">
+        <template slot-scope="scope">
+          <span>{{scope.row.model}}</span>
+        </template>
+      </el-table-column>
+      <el-table-column align="center" label="购买人" min-width="90">
+        <template slot-scope="scope">
+          <span>{{scope.row.buyer}}</span>
+        </template>
+      </el-table-column>
       <el-table-column align="center" label="价格" min-width="90">
         <template slot-scope="scope">
-          <span>￥{{scope.row.price}}</span>
+          <span>￥{{scope.row.sum}}</span>
+        </template>
+      </el-table-column>
+      <el-table-column align="center" label="回收方式" min-width="90">
+        <template slot-scope="scope">
+          <span>{{scope.row.recovery}}</span>
         </template>
       </el-table-column>
       <el-table-column align="center" label="付款状态" min-width="90">
@@ -70,7 +85,7 @@
           <span>{{scope.row.deliveryStatus}}</span>
         </template>
       </el-table-column>
-      <el-table-column align="center" label="创建时间" min-min-width="110">
+      <el-table-column align="center" label="创建时间" min-width="110">
         <template slot-scope="scope">
           <span>{{scope.row.createTime}}</span>
         </template>
@@ -104,6 +119,7 @@
         tableKey: 0,
         list: null,
         total: null,
+        model: '',
         listLoading: true,
         btnLoading: false,
         dialogStockVisible: false,
@@ -168,6 +184,15 @@
                   k.deliveryStatus = '已收货'
                   break
               }
+              if (k.oldOrder.item.length !== 0 && k.newOrder !== 0) {
+                k.model = '新旧换购'
+              }
+              if (k.oldOrder.item.length !== 0 && k.newOrder.item.length === 0) {
+                k.model = '旧机回收'
+              }
+              if (k.oldOrder.item.length === 0 && k.newOrder.item.length !== 0) {
+                k.model = '购买新机'
+              }
             })
             setTimeout(() => {
               this.listLoading = false
@@ -189,7 +214,8 @@
         this.listQuery.pageNum = val
         this.getList()
       },
-      handleUpdate(val) {
+      rowClick(row) {
+        this.$router.push({ path: 'orderDetail', query: { id: row.id }})
       }
     }
   }

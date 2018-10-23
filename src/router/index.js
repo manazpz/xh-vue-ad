@@ -155,9 +155,8 @@ export const constantRouterMap = [
   {
     path: '/order',
     component: Layout,
-    redirect: '/order/list',
     meta: {
-      title: 'orderList',
+      title: 'order',
       icon: 'documentation'
     },
     children: [
@@ -165,7 +164,14 @@ export const constantRouterMap = [
         path: 'orderList',
         component: () => import('@/views/order/orderList'),
         name: 'orderList',
-        meta: { title: 'orderList', icon: 'documentation' }
+        meta: { title: 'orderList', icon: 'theme' }
+      },
+      {
+        path: 'orderDetail',
+        component: () => import('@/views/order/orderDetail'),
+        name: 'orderDetail',
+        hidden: true,
+        meta: { title: 'orderDetail' }
       }]
   }
 ]
@@ -274,6 +280,12 @@ export const asyncRouterMap = [
         component: () => import('@/views/user/basic/recovery'),
         name: 'recovery',
         meta: { title: 'recovery' }
+      },
+      {
+        path: 'smsList',
+        component: () => import('@/views/sms/smsList'),
+        name: 'smsList',
+        meta: { title: 'smsList' }
       }]
   }
 ]

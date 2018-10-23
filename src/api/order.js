@@ -15,3 +15,12 @@ export function createClassify(params) {
     data: params
   })
 }
+
+export function orderDetail(query) {
+  return request({
+    url: '/order/orderDetail',
+    method: 'get',
+    params: query
+  })
+}
+
