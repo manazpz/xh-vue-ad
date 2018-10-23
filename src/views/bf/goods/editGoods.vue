@@ -139,7 +139,6 @@
             this.loading.close()
           })
         }
-        debugger
         if (this.temp.classify.model === '02') {
           pushOldGoods(this.temp.info).then(response => {
             if (response.code === 50001) {

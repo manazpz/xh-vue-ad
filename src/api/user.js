@@ -162,3 +162,19 @@ export function updateRecovery(params) {
     data: params
   })
 }
+
+export function customerList(query) {
+  return request({
+    url: '/user/customerList',
+    method: 'get',
+    params: query
+  })
+}
+
+export function updateCustomer(params) {
+  return request({
+    url: '/user/updateCustomer',
+    method: 'post',
+    data: params
+  })
+}

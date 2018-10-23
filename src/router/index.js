@@ -167,25 +167,6 @@ export const constantRouterMap = [
         name: 'orderList',
         meta: { title: 'orderList', icon: 'documentation' }
       }]
-  },
-  {
-    path: '/sys',
-    component: Layout,
-    meta: { title: 'sys', icon: 'documentation' },
-    redirect: '/sys/statementList',
-    children: [
-      {
-        path: 'statementList',
-        component: () => import('@/views/statement/statementList'),
-        name: 'statementList',
-        meta: { title: 'statementList' }
-      },
-      {
-        path: 'resourceImgs',
-        component: () => import('@/views/resource/imgList'),
-        name: 'resourceImgs',
-        meta: { title: 'resourceImgs' }
-      }]
   }
 ]
 
@@ -213,6 +194,19 @@ export const asyncRouterMap = [
       meta: { title: 'userList' }
     },
     {
+      path: 'customerList',
+      component: () => import('@/views/user/basic/customerList'),
+      name: 'customerList',
+      meta: { title: '会员列表' }
+    },
+    {
+      path: 'customerDetail',
+      component: () => import('@/views/user/basic/customerDetail'),
+      name: 'customerDetail',
+      hidden: true,
+      meta: { title: '会员详情' }
+    },
+    {
       path: 'permissionList',
       component: () => import('@/views/user/permission/permissionList'),
       name: 'permissionList',
@@ -231,25 +225,56 @@ export const asyncRouterMap = [
       hidden: true,
       name: 'changePwd',
       meta: { title: 'changePwd' }
-    },
-    {
-      path: 'logoUpload',
-      component: () => import('@/views/user/basic/logoUpload'),
-      name: 'logoUpload',
-      meta: { title: 'logoUpload' }
-    },
-    {
-      path: 'webSwitch',
-      component: () => import('@/views/user/basic/webSwitch'),
-      name: 'webSwitch',
-      meta: { title: 'webSwitch' }
-    },
-    {
-      path: 'recovery',
-      component: () => import('@/views/user/basic/recovery'),
-      name: 'recovery',
-      meta: { title: 'recovery' }
     }]
+  },
+  {
+    path: '/sys',
+    component: Layout,
+    meta: { title: 'sys', icon: 'documentation' },
+    redirect: '/sys/statementList',
+    children: [
+      {
+        path: 'configuration',
+        component: () => import('@/views/config/configuration'),
+        name: 'configuration',
+        meta: { title: '配置表' }
+      },
+      {
+        path: 'thirdParty',
+        component: () => import('@/views/config/thirdParty'),
+        name: 'thirdParty',
+        meta: { title: '第三方平台配置' }
+      },
+      {
+        path: 'statementList',
+        component: () => import('@/views/statement/statementList'),
+        name: 'statementList',
+        meta: { title: 'statementList' }
+      },
+      {
+        path: 'resourceImgs',
+        component: () => import('@/views/resource/imgList'),
+        name: 'resourceImgs',
+        meta: { title: 'resourceImgs' }
+      },
+      {
+        path: 'logoUpload',
+        component: () => import('@/views/user/basic/logoUpload'),
+        name: 'logoUpload',
+        meta: { title: 'logoUpload' }
+      },
+      {
+        path: 'webSwitch',
+        component: () => import('@/views/user/basic/webSwitch'),
+        name: 'webSwitch',
+        meta: { title: 'webSwitch' }
+      },
+      {
+        path: 'recovery',
+        component: () => import('@/views/user/basic/recovery'),
+        name: 'recovery',
+        meta: { title: 'recovery' }
+      }]
   }
 ]
 

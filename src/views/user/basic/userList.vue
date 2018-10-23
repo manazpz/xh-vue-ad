@@ -12,12 +12,12 @@
       <el-input @keyup.enter.native="handleFilter" style="width: 200px;" class="filter-item"
                 :placeholder="$t('user.phone')" v-model="listQuery.phone">
       </el-input>
-      <el-select clearable class="filter-item" style="width: 130px" v-model="listQuery.status"
-                 :placeholder="$t('user.statusName')">
-        <el-option v-for="item in  calendarTypeOptions" :key="item.keyWord" :label="item.name"
-                   :value="item.keyWord">
-        </el-option>
-      </el-select>
+      <!--<el-select clearable class="filter-item" style="width: 130px" v-model="listQuery.status"-->
+                 <!--:placeholder="$t('user.statusName')">-->
+        <!--<el-option v-for="item in  calendarTypeOptions" :key="item.keyWord" :label="item.name"-->
+                   <!--:value="item.keyWord">-->
+        <!--</el-option>-->
+      <!--</el-select>-->
       <el-select @change='handleFilter' style="width: 140px" class="filter-item" v-model="listQuery.sort">
         <el-option v-for="item in sortOptions" :key="item.key" :label="item.label" :value="item.key">
         </el-option>
@@ -180,7 +180,7 @@
           status: undefined,
           sort: 'updateTime DESC'
         },
-        type: { type: '\'CUSTOMER\', \'ADMIN\'' },
+        type: { type: '\'ADMIN\'' },
         calendarTypeOptions: [],
         sortOptions: [{ label: '时间正序', key: 'updateTime ASC' }, { label: '时间倒序', key: 'updateTime DESC' }],
         temp: {
