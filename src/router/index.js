@@ -63,7 +63,7 @@ export const constantRouterMap = [
   {
     path: '/bf/gm',
     component: Layout,
-    redirect: '/bf/gm/warehouseGoodsList',
+    redirect: '/bf/gm/goodsList/01',
     meta: {
       title: 'goodsManagement',
       icon: 'goods'
@@ -99,6 +99,7 @@ export const constantRouterMap = [
       meta: { title: 'lable', icon: 'drag' }
     }]
   },
+
   {
     path: '/goodsBack',
     component: Layout,
@@ -152,6 +153,39 @@ export const constantRouterMap = [
       }
     ]
   },
+
+  {
+    path: '/bf/cm',
+    component: Layout,
+    redirect: '/bf/cm/couponList',
+    meta: {
+      title: '优惠券管理',
+      icon: 'goods'
+    },
+    children: [{
+      path: 'couponList',
+      component: () => import('@/views/bf/coupon/couponList'),
+      name: 'couponList',
+      meta: { title: '优惠券管理', icon: 'component', noCache: true }
+    }]
+  },
+
+  {
+    path: '/coupon',
+    component: Layout,
+    redirect: '/coupon/list',
+    meta: {
+      title: '优惠券管理（后台）',
+      icon: 'goods'
+    },
+    children: [{
+      path: 'list',
+      component: () => import('@/views/coupon/couponList'),
+      name: 'list',
+      meta: { title: '优惠券管理（后台）', icon: 'component', noCache: true }
+    }]
+  },
+
   {
     path: '/order',
     component: Layout,

@@ -71,3 +71,12 @@ export function orderType(status) {
       return '换机订单'
   }
 }
+
+export function sxStatus(status) {
+  switch (status) {
+    case '01' :
+      return '上架'
+    case '02' :
+      return '下架'
+  }
+}
