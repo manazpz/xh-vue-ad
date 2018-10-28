@@ -4,8 +4,11 @@
     <!-- 过滤条件 start -->
     <div class="filter-container">
       <div style="float: right;">
-        <label class="filter-item">商品名：</label>
-        <el-input clearable v-model="listQuery.name" style="width: 140px;" @change='handleFilter' class="filter-item" placeholder="请输入商品名"></el-input>
+        <label class="filter-item">标签：</label>
+        <el-select clearable @change='handleFilter' style="width: 140px;" class="filter-item" v-model="listQuery.lableValue">
+            <el-option v-for="item in lableOption" :key="item.value" :label="item.name" :value="item.value">
+            </el-option>
+        </el-select>
         <el-button class="filter-item" type="primary" v-waves icon="el-icon-search" size="mini" @click="handleFilter">
           {{$t('table.search')}}
         </el-button>
@@ -32,12 +35,17 @@
           <span>{{scope.row.name}}</span>
         </template>
       </el-table-column>
-      <el-table-column align="center" label="价格" width="120">
+      <el-table-column align="center" label="基准价格" width="120">
         <template slot-scope="scope">
           <span>￥{{scope.row.banPrice}}</span>
         </template>
       </el-table-column>
-      <el-table-column align="center" label="库存" width="90">
+      <el-table-column align="center" label="标签" width="120">
+        <template slot-scope="scope">
+          <span>{{scope.row.lableName}}</span>
+        </template>
+      </el-table-column>
+      <el-table-column align="center" label="当前库存" width="90">
         <template slot-scope="scope">
           <span>{{scope.row.currentStock}}</span>
         </template>
@@ -57,13 +65,16 @@
           <span>{{scope.row.lastCreateTime}}</span>
         </template>
       </el-table-column>
-      <el-table-column align="center" :label="$t('table.actions')" width="220" class-name="small-padding fixed-width">
+      <el-table-column width="70" align="center" :label="$t('table.status')">
         <template slot-scope="scope">
-          <el-button size="mini" type="success"
-                     @click="handleDeleteRecovery(scope.row.id)">{{$t('table.recovery')}}
-          </el-button>
+          <span v-if="scope.row.status === '01'">上架</span>
+          <span v-if="scope.row.status === '02'">下架</span>
+        </template>
+      </el-table-column>
+      <el-table-column align="center" :label="$t('table.actions')" width="100" class-name="small-padding fixed-width">
+        <template slot-scope="scope">
           <el-button size="mini" type="danger"
-                     @click="handleDelete(scope.row.id)">{{$t('table.delete')}}
+                     @click="handleCancel(scope.row)">取消
           </el-button>
         </template>
       </el-table-column>
@@ -82,12 +93,12 @@
 </template>
 
 <script>
-  import { goodsList, warehouseGoodsDeleteRecovery, goodsDelete } from '@/api/goods/goods'
+  import { goodsList, lables, deleteGoodsLable } from '@/api/goods/goods'
   import waves from '@/directive/waves' // 水波纹指令
   import store from '@/store'
 
   export default {
-    name: 'sellGoodsList',
+    name: 'lableGoods',
     directives: {
       waves
     },
@@ -97,19 +108,33 @@
         list: null,
         total: null,
         listLoading: true,
+        lableOption: [],
         listQuery: {
           pageNum: 1,
           pageSize: 20,
-          isDel: 'Y',
-          name: undefined,
-          model: undefined
+          yesLable: 'yes',
+          lableValue: ''
         }
       }
     },
     created() {
+      this.getLable()
       this.getList()
     },
     methods: {
+      getLable() {
+        lables({ pageSize: 100 }).then(response => {
+          if (response.code === 50001) {
+            store.dispatch('GetRefreshToken').then(() => {
+              this.getLable()
+            })
+          }
+          if (response.code === 200) {
+            this.lableOption = response.data.items
+          }
+        }).catch(() => {
+        })
+      },
       getList() {
         this.listLoading = true
         goodsList(this.listQuery).then(response => {
@@ -141,17 +166,16 @@
         this.listQuery.pageNum = val
         this.getList()
       },
-      handleDeleteRecovery(id) {
-        this.$confirm('恢复商品, 是否继续?', '提示', {
+      handleCancel(row) {
+        this.$confirm('取消标签, 是否继续?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
         }).then(_ => {
-          const temp = { 'id': id, 'isDelete': 'Y' }
-          warehouseGoodsDeleteRecovery(temp).then(response => {
+          deleteGoodsLable({ goodsId: row.id, lableId: row.lableId }).then(response => {
             if (response.code === 50001) {
               store.dispatch('GetRefreshToken').then(() => {
-                this.handleDeleteRecovery(id)
+                this.handleCancel(row)
               })
             }
             if (response.code === 200) {
@@ -162,33 +186,6 @@
               this.getList()
             }
           }).catch(() => {
-            this.listLoading = false
-          })
-          return true
-        })
-      },
-      handleDelete(id) {
-        this.$confirm('此删除商品数据将会丢失, 是否继续?', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(_ => {
-          const temp = { 'id': id }
-          goodsDelete(temp).then(response => {
-            if (response.code === 50001) {
-              store.dispatch('GetRefreshToken').then(() => {
-                this.handleDelete(id)
-              })
-            }
-            if (response.code === 200) {
-              this.$message({
-                message: '操作成功',
-                type: 'success'
-              })
-              this.getList()
-            }
-          }).catch(() => {
-            this.listLoading = false
           })
           return true
         })

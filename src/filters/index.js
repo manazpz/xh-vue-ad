@@ -80,3 +80,12 @@ export function sxStatus(status) {
       return '下架'
   }
 }
+
+export function jcStatus(status) {
+  switch (status) {
+    case '01' :
+      return '未检测'
+    case '02' :
+      return '检测'
+  }
+}

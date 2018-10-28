@@ -37,28 +37,28 @@ export const constantRouterMap = [
     }]
   },
 
-  {
-    path: '/shop',
-    component: Layout,
-    redirect: '/shop/list',
-    meta: {
-      title: 'shop',
-      icon: 'documentation'
-    },
-    children: [
-      {
-        path: 'list',
-        component: () => import('@/views/shop/shopList'),
-        name: 'shopList',
-        meta: { title: 'shopList', icon: 'documentation' }
-      },
-      {
-        path: 'reviewShop',
-        component: () => import('@/views/shop/reviewShopList'),
-        name: 'reviewShop',
-        meta: { title: 'reviewShop', icon: 'documentation' }
-      }]
-  },
+  // {
+  //   path: '/shop',
+  //   component: Layout,
+  //   redirect: '/shop/list',
+  //   meta: {
+  //     title: 'shop',
+  //     icon: 'documentation'
+  //   },
+  //   children: [
+  //     {
+  //       path: 'shopList',
+  //       component: () => import('@/views/shop/shopList'),
+  //       name: 'shopList',
+  //       meta: { title: 'shopList', icon: 'documentation' }
+  //     },
+  //     {
+  //       path: 'reviewShop',
+  //       component: () => import('@/views/shop/reviewShopList'),
+  //       name: 'reviewShop',
+  //       meta: { title: 'reviewShop', icon: 'documentation' }
+  //     }]
+  // },
 
   {
     path: '/bf/gm',
@@ -93,6 +93,12 @@ export const constantRouterMap = [
       meta: { title: 'editGoods', icon: 'people' }
     },
     {
+      path: 'lableGoods',
+      component: () => import('@/views/bf/goods/lableGoods'),
+      name: 'lableGoods',
+      meta: { title: '标签商品', icon: 'drag' }
+    },
+    {
       path: 'lable',
       component: () => import('@/views/bf/goods/lable'),
       name: 'lable',
@@ -100,59 +106,59 @@ export const constantRouterMap = [
     }]
   },
 
-  {
-    path: '/goodsBack',
-    component: Layout,
-    meta: {
-      title: 'goodsBack',
-      icon: 'form'
-    },
-    children: [
-      {
-        path: 'list',
-        component: () => import('@/views/goodsBack/goodsBackList'),
-        name: 'GoodsBackList',
-        meta: { title: 'GoodsBackList', icon: 'theme' }
-      },
-      {
-        path: 'reviewGoods',
-        component: () => import('@/views/goodsBack/reviewGoods'),
-        name: 'reviewGoods',
-        meta: { title: 'reviewGoods', icon: 'theme' }
-      },
-      {
-        path: 'classifyBackList/01',
-        component: () => import('@/views/goodsBack/classifyBackList'),
-        name: 'newClassifyBackList',
-        meta: { title: 'newClassifyBackList', icon: 'tab' }
-      },
-      {
-        path: 'classifyBackList/02',
-        component: () => import('@/views/goodsBack/classifyBackList'),
-        name: 'oldClassifyBackList',
-        meta: { title: 'oldClassifyBackList', icon: 'tab' }
-      },
-      {
-        path: 'brandBacklist',
-        component: () => import('@/views/goodsBack/brandBacklist'),
-        name: 'brandBacklist',
-        meta: { title: 'brandBacklist', icon: 'list' }
-      },
-      {
-        path: 'specBacklist',
-        component: () => import('@/views/goodsBack/specBacklist'),
-        name: 'specBacklist',
-        meta: { title: 'specBacklist', noCache: true, icon: 'example' }
-      },
-      {
-        path: 'specBackValueList',
-        component: () => import('@/views/goodsBack/specBackValueList'),
-        name: 'specBackValueList',
-        hidden: true,
-        meta: { title: 'specBackValueList', noCache: true }
-      }
-    ]
-  },
+  // {
+  //   path: '/goodsBack',
+  //   component: Layout,
+  //   meta: {
+  //     title: 'goodsBack',
+  //     icon: 'form'
+  //   },
+  //   children: [
+  //     {
+  //       path: 'GoodsBackList',
+  //       component: () => import('@/views/goodsBack/goodsBackList'),
+  //       name: 'GoodsBackList',
+  //       meta: { title: 'GoodsBackList', icon: 'theme' }
+  //     },
+  //     {
+  //       path: 'reviewGoods',
+  //       component: () => import('@/views/goodsBack/reviewGoods'),
+  //       name: 'reviewGoods',
+  //       meta: { title: 'reviewGoods', icon: 'theme' }
+  //     },
+  //     {
+  //       path: 'classifyBackList/01',
+  //       component: () => import('@/views/goodsBack/classifyBackList'),
+  //       name: 'newClassifyBackList',
+  //       meta: { title: 'newClassifyBackList', icon: 'tab' }
+  //     },
+  //     {
+  //       path: 'classifyBackList/02',
+  //       component: () => import('@/views/goodsBack/classifyBackList'),
+  //       name: 'oldClassifyBackList',
+  //       meta: { title: 'oldClassifyBackList', icon: 'tab' }
+  //     },
+  //     {
+  //       path: 'brandBacklist',
+  //       component: () => import('@/views/goodsBack/brandBacklist'),
+  //       name: 'brandBacklist',
+  //       meta: { title: 'brandBacklist', icon: 'list' }
+  //     },
+  //     {
+  //       path: 'specBacklist',
+  //       component: () => import('@/views/goodsBack/specBacklist'),
+  //       name: 'specBacklist',
+  //       meta: { title: 'specBacklist', noCache: true, icon: 'example' }
+  //     },
+  //     {
+  //       path: 'specBackValueList',
+  //       component: () => import('@/views/goodsBack/specBackValueList'),
+  //       name: 'specBackValueList',
+  //       hidden: true,
+  //       meta: { title: 'specBackValueList', noCache: true }
+  //     }
+  //   ]
+  // },
 
   {
     path: '/bf/cm',
@@ -163,51 +169,74 @@ export const constantRouterMap = [
       icon: 'goods'
     },
     children: [{
-      path: 'couponList',
+      path: 'couponBfList',
       component: () => import('@/views/bf/coupon/couponList'),
-      name: 'couponList',
+      name: 'couponBfList',
       meta: { title: '优惠券管理', icon: 'component', noCache: true }
     }]
   },
 
-  {
-    path: '/coupon',
-    component: Layout,
-    redirect: '/coupon/list',
-    meta: {
-      title: '优惠券管理（后台）',
-      icon: 'goods'
-    },
-    children: [{
-      path: 'list',
-      component: () => import('@/views/coupon/couponList'),
-      name: 'list',
-      meta: { title: '优惠券管理（后台）', icon: 'component', noCache: true }
-    }]
-  },
+  // {
+  //   path: '/coupon',
+  //   component: Layout,
+  //   meta: {
+  //     title: '优惠券管理（后台）',
+  //     icon: 'goods'
+  //   },
+  //   children: [{
+  //     path: 'couponList',
+  //     component: () => import('@/views/coupon/couponList'),
+  //     name: 'couponList',
+  //     meta: { title: '优惠券管理（后台）', icon: 'component', noCache: true }
+  //   }]
+  // },
 
   {
-    path: '/order',
+    path: '/bf/od',
     component: Layout,
+    redirect: '/bf/od/list',
     meta: {
       title: 'order',
       icon: 'documentation'
     },
     children: [
       {
-        path: 'orderList',
-        component: () => import('@/views/order/orderList'),
-        name: 'orderList',
+        path: 'orderBfList',
+        component: () => import('@/views/bf/order/orderList'),
+        name: 'orderBfList',
         meta: { title: 'orderList', icon: 'theme' }
       },
       {
-        path: 'orderDetail',
-        component: () => import('@/views/order/orderDetail'),
-        name: 'orderDetail',
+        path: 'orderBfDetail',
+        component: () => import('@/views/bf/order/orderDetail'),
+        name: 'orderBfDetail',
         hidden: true,
         meta: { title: 'orderDetail' }
       }]
-  }
+  },
+
+  // {
+  //   path: '/order',
+  //   component: Layout,
+  //   meta: {
+  //     title: '订单管理（后台）',
+  //     icon: 'documentation'
+  //   },
+  //   children: [
+  //     {
+  //       path: 'orderList',
+  //       component: () => import('@/views/order/orderList'),
+  //       name: 'orderList',
+  //       meta: { title: '订单管理（后台）', icon: 'theme' }
+  //     },
+  //     {
+  //       path: 'orderDetail',
+  //       component: () => import('@/views/order/orderDetail'),
+  //       name: 'orderDetail',
+  //       hidden: true,
+  //       meta: { title: 'orderDetail' }
+  //     }]
+  // }
 ]
 
 export default new Router({

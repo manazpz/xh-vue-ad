@@ -19,9 +19,19 @@
           <span>{{scope.row.name}}</span>
         </template>
       </el-table-column>
+      <el-table-column label="图片" width="110">
+        <template slot-scope="scope">
+          <img v-if="scope.row.imgUrl != null" :src=" scope.row.imgUrl " style="width: 90px;height: 50px">
+        </template>
+      </el-table-column>
       <el-table-column align="center" label="店主" min-width="110">
         <template slot-scope="scope">
           <span>{{scope.row.nickName}}</span>
+        </template>
+      </el-table-column>
+      <el-table-column align="center" label="地址" min-width="110">
+        <template slot-scope="scope">
+          <span>{{scope.row.address}}</span>
         </template>
       </el-table-column>
       <el-table-column align="center" label="评分" min-width="110">

@@ -60,6 +60,7 @@
       }
     },
     created() {
+      debugger
       if (this.$route.path === '/bf/gm/editGoods') {
         if (this.$route.query.goodsId !== this.goodsId) {
           this.goodsId = this.$route.query.goodsId

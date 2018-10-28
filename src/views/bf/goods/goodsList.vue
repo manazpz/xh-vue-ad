@@ -52,11 +52,6 @@
           <span>￥{{scope.row.banPrice}}</span>
         </template>
       </el-table-column>
-      <el-table-column align="center" label="标签" width="120">
-        <template slot-scope="scope">
-          <span>{{scope.row.lable | lableFormat}}</span>
-        </template>
-      </el-table-column>
       <el-table-column align="center" label="当前库存" width="90">
         <template slot-scope="scope">
           <span>{{scope.row.currentStock}}</span>
@@ -163,7 +158,7 @@
         listQuery: {
           pageNum: 1,
           pageSize: 20,
-          isDel: 'Y',
+          isDel: 'N',
           status: undefined,
           model: this.$route.fullPath.split("/")[this.$route.fullPath.split("/").length-1]
         },
@@ -218,7 +213,7 @@
           cancelButtonText: '取消',
           type: 'warning'
         }).then(_ => {
-          const temp = { 'id': id, 'isDelete': 'N', 'status': '02' }
+          const temp = { 'id': id, 'isDelete': 'Y', 'status': '02' }
           warehouseGoodsDeleteRecovery(temp).then(response => {
             if (response.code === 50001) {
               store.dispatch('GetRefreshToken').then(() => {
@@ -297,7 +292,7 @@
         })
       },
       onJump() {
-        this.$router.push('editGoods')
+        this.$router.push('/bf/gm/editGoods')
       }
     }
   }

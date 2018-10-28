@@ -111,20 +111,30 @@ export function classifySpecParam(params) {
 export function brands(params) {
   return request({
     url: '/bf/goods/brands',
-    method: 'get'
+    method: 'get',
+    params: params
   })
 }
 
 export function lables(params) {
   return request({
     url: '/bf/goods/lables',
-    method: 'get'
+    method: 'get',
+    params: params
   })
 }
 
-export function batchUpdateGoods(params) {
+export function addGoodsLable(params) {
   return request({
-    url: '/bf/goods/batchUpdate',
+    url: '/bf/goods/addGoodsLable',
+    method: 'post',
+    data: params
+  })
+}
+
+export function deleteGoodsLable(params) {
+  return request({
+    url: '/bf/goods/deleteGoodsLable',
     method: 'post',
     data: params
   })

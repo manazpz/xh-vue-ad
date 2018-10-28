@@ -41,6 +41,7 @@
       <el-transfer
         v-model="goodss"
         filterable
+        :titles="['未选商品', '已选商品']"
         :filter-method="filterMethod"
         :props="{
           key: 'id',
@@ -50,7 +51,7 @@
       </el-transfer>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisible = false">{{$t('table.cancel')}}</el-button>
-        <el-button type="primary" v-loading="btnLoading" @click="addGoods">{{$t('table.confirm')}}</el-button>
+        <el-button type="primary" v-loading="btnLoading" @click="addGoodsLable">{{$t('table.confirm')}}</el-button>
       </div>
     </el-dialog>
     <!-- 编辑弹出框 end -->
@@ -58,12 +59,12 @@
 </template>
 
 <script>
-  import { lables, goodsList, batchUpdateGoods } from '@/api/goods/goods'
+  import { lables, goodsList, addGoodsLable } from '@/api/goods/goods'
   import waves from '@/directive/waves' // 水波纹指令
   import store from '@/store'
 
   export default {
-    name: 'sellGoodsList',
+    name: 'lable',
     directives: {
       waves
     },
@@ -75,7 +76,7 @@
         listLoading: true,
         btnLoading: false,
         dialogFormVisible: false,
-        lable: '',
+        lableId: '',
         listQuery: {
           pageNum: 1,
           pageSize: 20
@@ -119,9 +120,9 @@
         return item.name.indexOf(query) > -1
       },
       goodsDialog(row) {
-        this.lable = row.value
+        this.lableId = row.id
         this.btnLoading = true
-        goodsList({ lable: ' != ' + this.lable, pageSize: 1000 }).then(response => {
+        goodsList({ noLable: this.lableId, pageSize: 1000 }).then(response => {
           if (response.code === 50001) {
             store.dispatch('GetRefreshToken').then(() => {
               this.goodsDialog()
@@ -129,6 +130,14 @@
           }
           if (response.code === 200) {
             this.goods = response.data.items
+            this.goods.forEach(obj => {
+              if (obj.model === '01') {
+                obj.name = obj.name + '（新品）'
+              }
+              if (obj.model === '02') {
+                obj.name = obj.name + '（旧品）'
+              }
+            })
             this.btnLoading = false
             this.dialogFormVisible = true
           }
@@ -136,9 +145,9 @@
           this.btnLoading = false
         })
       },
-      addGoods() {
+      addGoodsLable() {
         this.btnLoading = true
-        batchUpdateGoods({ 'ids': this.goodss, 'lable': this.lable }).then(response => {
+        addGoodsLable({ 'goodsIds': this.goodss, 'lableId': this.lableId }).then(response => {
           if (response.code === 50001) {
             store.dispatch('GetRefreshToken').then(() => {
               this.batchUpdateGoods()
