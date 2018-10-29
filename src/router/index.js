@@ -212,8 +212,26 @@ export const constantRouterMap = [
         name: 'orderBfDetail',
         hidden: true,
         meta: { title: 'orderDetail' }
+      },
+      {
+        path: 'invoiceBf',
+        component: () => import('@/views/bf/order/invoice'),
+        name: 'invoiceBf',
+        meta: { title: '发票', icon: 'theme' }
       }]
   },
+
+  {
+    path: '/bf/shop',
+    component: Layout,
+    redirect: '/bf/shop/setting',
+    children: [{
+      path: 'bfSetting',
+      component: () => import('@/views/bf/shop/setting'),
+      name: 'bfSetting',
+      meta: { title: '店铺设置', icon: 'theme' }
+    }]
+  }
 
   // {
   //   path: '/order',

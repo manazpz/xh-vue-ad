@@ -16,3 +16,11 @@ export function orderDetail(query) {
   })
 }
 
+export function updateOrder(params) {
+  return request({
+    url: '/bf/order/update',
+    method: 'POST',
+    data: params
+  })
+}
+

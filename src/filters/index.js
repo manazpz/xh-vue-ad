@@ -72,6 +72,19 @@ export function orderType(status) {
   }
 }
 
+export function orderStatus(status) {
+  switch (status) {
+    case '01' :
+      return '已完成'
+    case '02' :
+      return '已取消'
+    case '03' :
+      return '进行中'
+    case '04' :
+      return '售后中'
+  }
+}
+
 export function sxStatus(status) {
   switch (status) {
     case '01' :
@@ -86,6 +99,15 @@ export function jcStatus(status) {
     case '01' :
       return '未检测'
     case '02' :
-      return '检测'
+      return '已检测'
+  }
+}
+
+export function invoiceType(type) {
+  switch (type) {
+    case '01' :
+      return '个人'
+    case '02' :
+      return '公司'
   }
 }
