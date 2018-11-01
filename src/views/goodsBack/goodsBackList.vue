@@ -97,7 +97,7 @@
         listQuery: {
           pageNum: 1,
           pageSize: 20,
-          isDel: 'Y',
+          isDel: 'N',
           obligate1: 'Y'
         }
       }

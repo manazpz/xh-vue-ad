@@ -21,7 +21,7 @@
       </el-table-column>
       <el-table-column label="图片" width="110">
         <template slot-scope="scope">
-          <img v-if="scope.row.imgUrl != null" :src=" scope.row.imgUrl " style="width: 90px;height: 50px">
+          <img v-if="scope.row.img != null" :src=" scope.row.img " style="width: 90px;height: 50px">
         </template>
       </el-table-column>
       <el-table-column align="center" label="店主" min-width="110">
@@ -147,7 +147,7 @@
         })
       },
       handleSh(row) {
-        shopUpdate({ id: row.id, status: '01' }).then(response => {
+        shopUpdate({ shop: { id: row.id, status: '01', isOnOff: 'ON' }, user: { id: row.userId, status: 'SD' }}).then(response => {
           if (response.code === 50001) {
             store.dispatch('GetRefreshToken').then(() => {
               this.handleSh(row)

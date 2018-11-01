@@ -31,3 +31,10 @@ export function dataToFormData(formdata, data) {
   return formdata
 }
 
+export function dataToFormData1(formdata, data) {
+  for (var i in data) {
+    formdata.append(i, JSON.stringify(data[i]))
+  }
+  return formdata
+}
+

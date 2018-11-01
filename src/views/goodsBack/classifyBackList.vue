@@ -3,7 +3,7 @@
     <el-form :model="temp" ref="dataForm" label-width="100px" class="from-content bg-from">
       <div class="step1">
         <el-row :gutter="24">
-          <el-col :span="8">
+          <el-col :span="6">
             <el-card>
               <div slot="header" class="clearfix">
                 <span>一级分类</span>
@@ -11,12 +11,12 @@
               </div>
               <el-table :key='0' :data="classifyCascades1" :row-class-name="tableRowClassName" :show-header="false"
                         :row-style="selectedHighlight1" @row-click="rowClick1" :header-cell-style="selectHeadStyle" @cell-mouse-enter="showOper" @cell-mouse-leave="displayOper">
-                <el-table-column>
+                <el-table-column min-width="50">
                   <template slot-scope="scope">
                     <span>{{scope.row.name}}</span>
                   </template>
                 </el-table-column>
-                <el-table-column>
+                <el-table-column min-width="150">
                   <template slot-scope="scope" v-if="scope.row.showDropDown" style="display: inline-block">
                     <el-button-group style="float: right">
                       <el-button size="mini" type="primary" icon="el-icon-edit" @click="handleUpdate(scope.row,'0')">编辑</el-button>
@@ -27,7 +27,7 @@
               </el-table>
             </el-card>
           </el-col>
-          <el-col v-if="isShow2" :span="8">
+          <el-col :span="8">
             <el-card>
               <div slot="header" class="clearfix">
                 <span>二级分类</span>
@@ -51,7 +51,7 @@
               </el-table>
             </el-card>
           </el-col>
-          <el-col v-if="isShow3" :span="8">
+          <el-col :span="10">
             <el-card>
               <div slot="header" class="clearfix">
                 <span>三级分类</span>
@@ -59,12 +59,12 @@
               </div>
               <el-table :data="classifyCascades3" :row-class-name="tableRowClassName" :show-header="false"
                         :row-style="selectedHighlight3" @row-click="rowClick3" :header-cell-style="selectHeadStyle" @cell-mouse-enter="showOper" @cell-mouse-leave="displayOper">
-                <el-table-column min-width="100">
+                <el-table-column min-width="50">
                   <template slot-scope="scope">
                     <span>{{scope.row.name}}</span>
                   </template>
                 </el-table-column>
-                <el-table-column min-width="310">
+                <el-table-column min-width="200">
                   <template slot-scope="scope" v-if="scope.row.showDropDown" style="display: inline-block">
                     <el-button-group style="float: right" >
                       <el-button size="mini" type="primary" icon="el-icon-edit" @click="handleBrand(scope.row)">品牌</el-button>
@@ -77,12 +77,6 @@
               </el-table>
             </el-card>
           </el-col>
-        </el-row>
-
-        <el-row>
-          <el-col :span="24"><div style="background: #FFF8DC;padding: 10px">
-            <span>您当前选择的分类是： {{text}}</span>
-          </div></el-col>
         </el-row>
 
       </div>
@@ -274,6 +268,12 @@
               }
             }
             this.classifyCascades1 = response.data.items
+            if (this.classifyCascades1.length > 0) {
+              this.classifyCascades2 = this.classifyCascades1[0].children
+              if (this.classifyCascades2.length > 0) {
+                this.classifyCascades3 = this.classifyCascades2[0].children
+              }
+            }
           })
         }
       },

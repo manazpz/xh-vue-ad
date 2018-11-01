@@ -9,60 +9,50 @@
           <span>{{scope.$index+1}}</span>
         </template>
       </el-table-column>
-      <el-table-column align="center" label="编号" min-width="110">
+      <el-table-column align="center" label="店铺名" min-width="110">
         <template slot-scope="scope">
-          <span>{{scope.row.no}}</span>
+          <span>{{scope.row.shopName}}</span>
         </template>
       </el-table-column>
-      <el-table-column align="center" label="店名" min-width="110">
+      <el-table-column align="center" label="预估价" min-width="110">
         <template slot-scope="scope">
-          <span>{{scope.row.name}}</span>
+          <span>￥{{scope.row.estimatePrice}}</span>
         </template>
       </el-table-column>
-      <el-table-column label="图片" align="center" width="110">
+      <el-table-column align="center" label="结算价" min-width="110">
         <template slot-scope="scope">
-          <img v-if="scope.row.img != null" :src=" scope.row.img " style="width: 90px;height: 50px">
+          <span>￥{{scope.row.settlementPrice}}</span>
         </template>
       </el-table-column>
-      <el-table-column align="center" label="店主" min-width="110">
+      <el-table-column align="center" label="订单数" min-width="110">
         <template slot-scope="scope">
-          <span>{{scope.row.nickName}}</span>
+          <span>{{scope.row.num}}</span>
         </template>
       </el-table-column>
-      <el-table-column align="center" label="地址" min-width="110">
+      <el-table-column align="center" label="月份" min-width="110">
         <template slot-scope="scope">
-          <span>{{scope.row.address}}</span>
+          <span>{{scope.row.moon}}</span>
         </template>
       </el-table-column>
-      <el-table-column align="center" label="评分" min-width="110">
+      <el-table-column align="center" label="状态" min-width="100">
         <template slot-scope="scope">
-          <el-rate
-            v-model="scope.row.credit"
-            disabled
-            text-color="#ff9900">
-          </el-rate>
+          <span>{{scope.row.flag | settlementStatus}}</span>
         </template>
       </el-table-column>
-      <el-table-column align="center" label="创建时间" min-width="110">
+      <el-table-column align="center" label="修改时间" min-width="110">
         <template slot-scope="scope">
-          <span>{{scope.row.createTime}}</span>
+          <span>{{scope.row.updateTime}}</span>
         </template>
       </el-table-column>
-      <el-table-column align="center" label="更新时间" min-width="110">
+      <el-table-column align="center" label="操作人" min-width="110">
         <template slot-scope="scope">
-          <span>{{scope.row.lastCreateTime}}</span>
+          <span>{{scope.row.userName}}</span>
         </template>
       </el-table-column>
-      <el-table-column align="center" :label="$t('table.actions')" width="150" class-name="small-padding fixed-width">
+      <el-table-column align="center" :label="$t('table.actions')" width="100" class-name="small-padding fixed-width">
         <template slot-scope="scope">
-          <el-button size="mini" type="success"
-                     @click="handleDetail(scope.row.id)">{{$t('table.edit')}}
-          </el-button>
-          <el-button v-if="scope.row.isOnOff === 'ON'" size="mini" type="danger"
-                     @click="handleOnOff(scope.row.id,'OFF')">{{$t('table.off')}}
-          </el-button>
-          <el-button v-if="scope.row.isOnOff === 'OFF'" size="mini" type="danger"
-                     @click="handleOnOff(scope.row.id,'ON')">{{$t('table.on')}}
+          <el-button size="mini" type="success" v-if="scope.row.flag === 'N'"
+                     @click="openSettlement(scope.row.id)">结算
           </el-button>
         </template>
       </el-table-column>
@@ -77,16 +67,17 @@
       </el-pagination>
     </div>
     <!-- 分页组件 end -->
+
   </div>
 </template>
 
 <script>
-  import { shopList, shopUpdate } from '@/api/shop'
+  import { settlementList } from '@/api/shop/shop'
   import waves from '@/directive/waves' // 水波纹指令
   import store from '@/store'
 
   export default {
-    name: 'shopList',
+    name: 'settlementList',
     directives: {
       waves
     },
@@ -99,14 +90,7 @@
         listQuery: {
           pageNum: 1,
           pageSize: 20,
-          status: '01'
-        }
-      }
-    },
-    watch: {
-      $route(to, from) {
-        if (to.path === '/shop/shopList') {
-          this.getList()
+          flag: 'Y'
         }
       }
     },
@@ -116,7 +100,7 @@
     methods: {
       getList() {
         this.listLoading = true
-        shopList(this.listQuery).then(response => {
+        settlementList(this.listQuery).then(response => {
           if (response.code === 50001) {
             store.dispatch('GetRefreshToken').then(() => {
               this.getList()
@@ -144,26 +128,6 @@
       handleCurrentChange(val) {
         this.listQuery.pageNum = val
         this.getList()
-      },
-      handleOnOff(id, status) {
-        shopUpdate({ shop: { id: id, isOnOff: status }}).then(response => {
-          if (response.code === 50001) {
-            store.dispatch('GetRefreshToken').then(() => {
-              this.handleOnOff(id, status)
-            })
-          }
-          if (response.code === 200) {
-            this.$message({
-              message: '操作成功',
-              type: 'success'
-            })
-            this.getList()
-          }
-        }).catch(() => {
-        })
-      },
-      handleDetail(id) {
-        this.$router.push({ path: 'shopEdit', query: { shopId: id }})
       }
     }
   }

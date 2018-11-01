@@ -26,3 +26,11 @@ export function updateShop(params, fileList) {
     data: formData
   })
 }
+
+export function settlementList(query) {
+  return request({
+    url: '/bf/shop/settlementList',
+    method: 'get',
+    params: query
+  })
+}

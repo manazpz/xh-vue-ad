@@ -111,3 +111,12 @@ export function invoiceType(type) {
       return '公司'
   }
 }
+
+export function settlementStatus(status) {
+  switch (status) {
+    case 'Y' :
+      return '已结算'
+    case 'N' :
+      return '未结算'
+  }
+}

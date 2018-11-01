@@ -14,7 +14,7 @@ export default {
     user: '用户管理',
     GoodsBackList: '审核通过商品',
     reviewGoods: '审核商品',
-    goodsBack: '商品管理（后台）',
+    goodsBack: '商品管理后台',
     newGoodsBackList: '商品列表（新）',
     oldGoodsBackList: '商品列表（旧）',
     newClassifyBackList: '商品分类（新）',
