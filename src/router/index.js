@@ -165,6 +165,18 @@ export const constantRouterMap = [
   },
 
   {
+    path: '/bf',
+    component: Layout,
+    redirect: '/bf/bfdashboard',
+    children: [{
+      path: 'bfdashboard',
+      component: () => import('@/views/bf/dashboard/index'),
+      name: 'bfdashboard',
+      meta: { title: 'dashboard', img: process.env.RESOURCE_URL + '/favicon.jpg', noCache: true }
+    }]
+  },
+
+  {
     path: '/bf/gm',
     component: Layout,
     redirect: '/bf/gm/goodsList/01',

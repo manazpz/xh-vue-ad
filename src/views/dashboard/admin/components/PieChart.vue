@@ -3,9 +3,11 @@
 </template>
 
 <script>
+import { statisticsOrderTypeInfo } from '@/api/statistics'
 import echarts from 'echarts'
 require('echarts/theme/macarons') // echarts theme
 import { debounce } from '@/utils'
+import store from '@/store'
 
 export default {
   props: {
@@ -47,36 +49,39 @@ export default {
   methods: {
     initChart() {
       this.chart = echarts.init(this.$el, 'macarons')
-
-      this.chart.setOption({
-        tooltip: {
-          trigger: 'item',
-          formatter: '{a} <br/>{b} : {c} ({d}%)'
-        },
-        legend: {
-          left: 'center',
-          bottom: '10',
-          data: ['Industries', 'Technology', 'Forex', 'Gold', 'Forecasts']
-        },
-        calculable: true,
-        series: [
-          {
-            name: 'WEEKLY WRITE ARTICLES',
-            type: 'pie',
-            roseType: 'radius',
-            radius: [15, 95],
-            center: ['50%', '38%'],
-            data: [
-              { value: 320, name: 'Industries' },
-              { value: 240, name: 'Technology' },
-              { value: 149, name: 'Forex' },
-              { value: 100, name: 'Gold' },
-              { value: 59, name: 'Forecasts' }
-            ],
-            animationEasing: 'cubicInOut',
-            animationDuration: 2600
-          }
-        ]
+      statisticsOrderTypeInfo().then(response => {
+        if (response.code === 50001) {
+          store.dispatch('GetRefreshToken').then(() => {
+            this.initChart()
+          })
+        }
+        if (response.code === 200) {
+          this.chart.setOption({
+            tooltip: {
+              trigger: 'item',
+              formatter: '{a} <br/>{b} : {c} ({d}%)'
+            },
+            legend: {
+              left: 'center',
+              bottom: '10',
+              data: ['新机', '新机换购', '旧机']
+            },
+            calculable: true,
+            series: [
+              {
+                name: '类型统计',
+                type: 'pie',
+                roseType: 'radius',
+                radius: [15, 95],
+                center: ['50%', '38%'],
+                data: response.data.items,
+                animationEasing: 'cubicInOut',
+                animationDuration: 2600
+              }
+            ]
+          })
+        }
+      }).catch(() => {
       })
     }
   }
