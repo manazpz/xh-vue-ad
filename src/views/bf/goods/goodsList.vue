@@ -160,7 +160,7 @@
           pageSize: 20,
           isDel: 'N',
           status: undefined,
-          model: this.$route.fullPath.split("/")[this.$route.fullPath.split("/").length-1]
+          model: this.$route.fullPath.split('/')[this.$route.fullPath.split('/').length - 1]
         },
         tempStock: {
           id: undefined,

@@ -253,7 +253,7 @@
       },
       getClassifyCascade() {
         if (this.classifyCascades1.length < 1) {
-          getClassify({model:this.$route.fullPath.split("/")[this.$route.fullPath.split("/").length-1]}).then(response => {
+          getClassify({model: this.$route.fullPath.split('/')[this.$route.fullPath.split('/').length - 1] }).then(response => {
             for (var i = 0; i < response.data.items.length; i++) {
               response.data.items[i].showDropDown = false
               if (response.data.items[i].children.length > 0) {
@@ -310,7 +310,7 @@
           index: '',
           px: '',
           obligate: '01',
-          model: this.$route.fullPath.split("/")[this.$route.fullPath.split("/").length-1],
+          model: this.$route.fullPath.split('/')[this.$route.fullPath.split('/').length - 1],
           name: '',
           remarks: ''
         }
