@@ -1,9 +1,9 @@
 <template>
   <el-row style="padding-bottom: 5px">
-    <el-col :span="2">
+    <el-col :span="3">
       <img v-if="info.img != null" :src=" info.img " style="width: 100px;height: 100px">
     </el-col>
-    <el-col :span="19">
+    <el-col :span="18">
       <p>no.{{info.no}}</p>
       <p>{{info.name}}</p>
       <p>{{info.address}}</p>

@@ -27,7 +27,11 @@
         </span>
       </el-form-item>
 
-      <el-button type="primary" style="width:100%;margin-bottom:30px;" :loading="loading" @click.native.prevent="handleLogin">{{$t('login.logIn')}}</el-button>
+      <span @click="onRegister" style="color: red;float: right">
+        商家注册
+      </span>
+
+      <el-button type="primary" style="width:100%;margin-top: 10px;margin-bottom:30px;" :loading="loading" @click.native.prevent="handleLogin">{{$t('login.logIn')}}</el-button>
 
 
     </el-form>
@@ -76,6 +80,9 @@
             return false
           }
         })
+      },
+      onRegister() {
+        this.$router.push({ path: '/register' })
       }
     },
     created() {

@@ -180,7 +180,7 @@
           status: undefined,
           sort: 'updateTime DESC'
         },
-        type: { type: '\'ADMIN\'' },
+        type: { type: '\'DIGNITY\'' },
         calendarTypeOptions: [],
         sortOptions: [{ label: '时间正序', key: 'updateTime ASC' }, { label: '时间倒序', key: 'updateTime DESC' }],
         temp: {

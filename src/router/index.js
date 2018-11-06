@@ -25,10 +25,23 @@ export const constantRouterMap = [
 
   { path: '/404', component: () => import('@/views/errorPage/404'), hidden: true },
 
+  { path: '/register', component: () => import('@/views/register/register'), hidden: true }
+]
+
+export default new Router({
+  // mode: 'history', //后端支持可开
+  scrollBehavior: () => ({ y: 0 }),
+  routes: constantRouterMap
+})
+
+export const asyncRouterMap = [
   {
     path: '/',
     component: Layout,
     redirect: '/dashboard',
+    meta: {
+      roles: ['AD']
+    },
     children: [{
       path: 'dashboard',
       component: () => import('@/views/dashboard/index'),
@@ -43,7 +56,8 @@ export const constantRouterMap = [
     redirect: '/shop/list',
     meta: {
       title: 'shop',
-      icon: 'documentation'
+      icon: 'documentation',
+      roles: ['AD']
     },
     children: [
       {
@@ -77,7 +91,8 @@ export const constantRouterMap = [
     component: Layout,
     meta: {
       title: 'goodsBack',
-      icon: 'form'
+      icon: 'form',
+      roles: ['AD']
     },
     children: [
       {
@@ -131,7 +146,8 @@ export const constantRouterMap = [
     component: Layout,
     meta: {
       title: '订单管理后台',
-      icon: 'documentation'
+      icon: 'documentation',
+      roles: ['AD']
     },
     children: [
       {
@@ -154,7 +170,8 @@ export const constantRouterMap = [
     component: Layout,
     meta: {
       title: '优惠券后台',
-      icon: 'goods'
+      icon: 'goods',
+      roles: ['AD']
     },
     children: [{
       path: 'couponList',
@@ -165,9 +182,12 @@ export const constantRouterMap = [
   },
 
   {
-    path: '/bf',
+    path: '',
     component: Layout,
-    redirect: '/bf/bfdashboard',
+    redirect: '/bfdashboard',
+    meta: {
+      roles: ['SD']
+    },
     children: [{
       path: 'bfdashboard',
       component: () => import('@/views/bf/dashboard/index'),
@@ -182,7 +202,8 @@ export const constantRouterMap = [
     redirect: '/bf/gm/goodsList/01',
     meta: {
       title: 'goodsManagement',
-      icon: 'goods'
+      icon: 'goods',
+      roles: ['SD']
     },
     children: [{
       path: 'goodsList/01',
@@ -228,7 +249,8 @@ export const constantRouterMap = [
     redirect: '/bf/cm/couponList',
     meta: {
       title: '优惠券管理',
-      icon: 'goods'
+      icon: 'goods',
+      roles: ['SM']
     },
     children: [{
       path: 'couponBfList',
@@ -244,7 +266,8 @@ export const constantRouterMap = [
     redirect: '/bf/od/list',
     meta: {
       title: 'order',
-      icon: 'documentation'
+      icon: 'documentation',
+      roles: ['SD']
     },
     children: [
       {
@@ -272,7 +295,7 @@ export const constantRouterMap = [
     path: '/bf/shop',
     component: Layout,
     redirect: '/bf/shop/setting',
-    meta: { title: '店铺管理', icon: 'theme' },
+    meta: { title: '店铺管理', icon: 'theme', roles: ['SD'] },
     children: [{
       path: 'bfSetting',
       component: () => import('@/views/bf/shop/setting'),
@@ -285,16 +308,8 @@ export const constantRouterMap = [
       name: 'bfSettlementList',
       meta: { title: '结算账单', icon: 'theme' }
     }]
-  }
-]
+  },
 
-export default new Router({
-  // mode: 'history', //后端支持可开
-  scrollBehavior: () => ({ y: 0 }),
-  routes: constantRouterMap
-})
-
-export const asyncRouterMap = [
   {
     path: '/um',
     component: Layout,
@@ -303,7 +318,7 @@ export const asyncRouterMap = [
     meta: {
       title: 'userManagement',
       icon: 'people',
-      roles: ['AM', 'UM']
+      roles: ['AD']
     },
     children: [{
       path: 'userList',
@@ -345,10 +360,11 @@ export const asyncRouterMap = [
       meta: { title: 'changePwd' }
     }]
   },
+
   {
     path: '/sys',
     component: Layout,
-    meta: { title: 'sys', icon: 'documentation' },
+    meta: { title: 'sys', icon: 'documentation', roles: ['AD'] },
     redirect: '/sys/statementList',
     children: [
       {

@@ -42,7 +42,7 @@
       <el-table-column align="center" :label="$t('table.actions')" width="220" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button size="mini" type="primary"
-                     @click="handleSh(scope.row)">{{$t('table.sh')}}
+                     @click="openSh(scope.row)">{{$t('table.sh')}}
           </el-button>
           <el-button size="mini" type="danger"
                      @click="handleDel(scope.row.id)">{{$t('table.delete')}}
@@ -60,6 +60,22 @@
       </el-pagination>
     </div>
     <!-- 分页组件 end -->
+
+    <!-- 弹出框 start -->
+    <el-dialog title="审核" :visible.sync="dialogFormVisible">
+      <el-form :rules="rule" ref="dataForm" :model="temp" label-position="left" label-width="70px"
+               style='width: 400px; margin-left:50px;'>
+        <el-form-item label-width="110px" label="比例"  prop="name" class="postInfo-container-item">
+          <el-input v-model="temp.shop.ratio" required placeholder="请输入比例，10=10%"></el-input>
+          <span>比例，10=10%</span>
+        </el-form-item>
+      </el-form>
+
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogFormVisible = false">{{$t('table.cancel')}}</el-button>
+        <el-button type="primary" @click="handSh">{{$t('table.confirm')}}</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -79,10 +95,16 @@
         list: null,
         total: null,
         listLoading: true,
+        dialogFormVisible: false,
         listQuery: {
           pageNum: 1,
           pageSize: 20,
           status: '02'
+        },
+        temp: {
+          shop: {
+            ratio: undefined
+          }
         }
       }
     },
@@ -146,11 +168,18 @@
           return true
         })
       },
-      handleSh(row) {
-        shopUpdate({ shop: { id: row.id, status: '01', isOnOff: 'ON' }, user: { id: row.userId, status: 'SD' }}).then(response => {
+      openSh(row) {
+        this.temp = { shop: { id: row.id, status: '01', isOnOff: 'ON', ratio: '0' }, user: { id: row.userId, status: 'SD' }}
+        this.dialogFormVisible = true
+        this.$nextTick(() => {
+          this.$refs['dataForm'].clearValidate()
+        })
+      },
+      handSh() {
+        shopUpdate(this.temp).then(response => {
           if (response.code === 50001) {
             store.dispatch('GetRefreshToken').then(() => {
-              this.handleSh(row)
+              this.handSh()
             })
           }
           if (response.code === 200) {
@@ -158,6 +187,7 @@
               message: '操作成功',
               type: 'success'
             })
+            this.dialogFormVisible = false
             this.getList()
           }
         }).catch(() => {

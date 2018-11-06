@@ -165,7 +165,7 @@
           name: '',
           depict: '',
           type: 'ACTION',
-          module: 'UM',
+          module: 'AM',
           extend: '',
           isEnable: false,
           isEdit: false
@@ -254,7 +254,7 @@
           name: '',
           depict: '',
           type: 'ACTION',
-          module: 'UM',
+          module: 'AM',
           extend: '',
           isEnable: false,
           isEdit: false
