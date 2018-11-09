@@ -309,7 +309,24 @@ export const asyncRouterMap = [
       meta: { title: '结算账单', icon: 'theme' }
     }]
   },
-
+  {
+    path: '/bf/news',
+    component: Layout,
+    redirect: '/bf/news/imNews',
+    meta: { title: '消息管理', icon: 'theme' },
+    children: [{
+      path: 'bfImNews',
+      component: () => import('@/views/bf/news/imNews'),
+      name: 'bfImNews',
+      meta: { title: 'IM消息', icon: 'theme' }
+    },
+    {
+      path: 'bfComment',
+      component: () => import('@/views/bf/news/comment'),
+      name: 'bfComment',
+      meta: { title: '评论', icon: 'theme' }
+    }]
+  },
   {
     path: '/um',
     component: Layout,
