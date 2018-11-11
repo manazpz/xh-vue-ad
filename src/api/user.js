@@ -178,3 +178,11 @@ export function updateCustomer(params) {
     data: params
   })
 }
+
+export function suggestionList(query) {
+  return request({
+    url: '/user/querySuggestion',
+    method: 'get',
+    params: query
+  })
+}

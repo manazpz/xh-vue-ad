@@ -313,7 +313,7 @@ export const asyncRouterMap = [
     path: '/bf/news',
     component: Layout,
     redirect: '/bf/news/imNews',
-    meta: { title: '消息管理', icon: 'theme' },
+    meta: { title: '消息管理', icon: 'theme', roles: ['SD'] },
     children: [{
       path: 'bfImNews',
       component: () => import('@/views/bf/news/imNews'),
@@ -375,6 +375,12 @@ export const asyncRouterMap = [
       hidden: true,
       name: 'changePwd',
       meta: { title: 'changePwd' }
+    },
+    {
+      path: 'suggestionList',
+      component: () => import('@/views/user/basic/suggestionList'),
+      name: 'suggestionList',
+      meta: { title: 'suggestionList' }
     }]
   },
 
