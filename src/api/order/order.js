@@ -24,3 +24,11 @@ export function updateOrder(params) {
   })
 }
 
+export function insertLogistics(params) {
+  return request({
+    url: '/bf/order/insertLogistics',
+    method: 'POST',
+    data: params
+  })
+}
+

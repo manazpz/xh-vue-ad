@@ -38,7 +38,7 @@
           </el-main>
           <el-footer style="padding: 0;height:auto">
             <el-row style="background: #F3F3F3;padding: 10px">
-              <el-col :span="24">其他信息（发票）</el-col>
+              <el-col :span="24">其他信息</el-col>
             </el-row>
             <el-row style="padding: 10px 0 10px 20px;font-size: 10px">
               <el-col :span="24">送货时间：任意时间</el-col>
@@ -68,7 +68,7 @@
 
     <el-table :key='tableKey' :data="data.goods"  stripe border fit highlight-current-row
               style="width: 100%;min-height:100%;">
-      <el-table-column align="center" label="订单编号" width="100">
+      <el-table-column align="center" label="商品名称" min-width="60">
         <template slot-scope="prop">
           <span>{{prop.row.goodsName}}</span>
         </template>
@@ -78,7 +78,7 @@
           <img v-if="prop.row.imgs[0] != null" :src=" prop.row.imgs[0].url " style="width: 90px;height: 50px">
         </template>
       </el-table-column>
-      <el-table-column align="center" label="规格" min-width="150" :show-overflow-tooltip="true">
+      <el-table-column align="center" label="规格" min-width="120" :show-overflow-tooltip="true">
         <template slot-scope="prop">
           <span>{{prop.row.parameterStr}}</span>
         </template>
@@ -93,17 +93,42 @@
           <span>x1</span>
         </template>
       </el-table-column>
-      <el-table-column align="center" label="状态" width="70" :show-overflow-tooltip="true">
+      <el-table-column align="center" label="状态" min-width="50" :show-overflow-tooltip="true">
         <template slot-scope="prop">
           <span>{{prop.row.checkStatus | jcStatus}}</span>
         </template>
       </el-table-column>
+      <el-table-column align="center" :label="$t('table.actions')" min-width="50" class-name="small-padding fixed-width">
+        <template slot-scope="scope">
+          <el-button type="success" @click="logistics(scope.row.id)">新增物流信息</el-button>
+        </template>
+      </el-table-column>
     </el-table>
+
+    <!-- 弹出框 -->
+    <el-dialog :title="dialogStatus" :visible.sync="dialogFormVisible">
+      <el-form :rules="rules" ref="dataForm" :model="temp" label-position="left" label-width="70px"
+               style='width: 400px; margin-left:50px;'>
+        <el-form-item label-width="110px" label="快递公司名称：" prop="title" class="postInfo-container-item">
+          <el-input v-model="temp.name" required placeholder="请输入物流公司名称"></el-input>
+        </el-form-item>
+        <el-form-item label-width="110px" label="公司编码：" prop="duty" class="postInfo-container-item">
+          <el-input v-model="temp.com_code" required placeholder="请输入公司编码"></el-input>
+        </el-form-item>
+        <el-form-item label-width="110px" label="物流单号：" prop="duty" class="postInfo-container-item">
+          <el-input v-model="temp.code" required placeholder="请输入物流单号"></el-input>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogFormVisible = false">{{$t('table.cancel')}}</el-button>
+        <el-button type="primary" v-loading="btnLoading" @click="createLogistisc">{{$t('table.confirm')}}</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
 <script>
-  import { orderDetail } from '@/api/order/order'
+  import { orderDetail, insertLogistics } from '@/api/order/order'
   import waves from '@/directive/waves' // 水波纹指令
   import store from '@/store'
 
@@ -120,6 +145,14 @@
         },
         listQuery: {
           id: this.$route.query.id
+        },
+        dialogFormVisible: false,
+        btnLoading: false,
+        dialogStatus: '',
+        temp: {
+          name: '',
+          com_code: '',
+          code: ''
         }
       }
     },
@@ -136,6 +169,34 @@
           }
           if (response.code === 200) {
             this.data = response.data.items[0]
+          }
+        }).catch(() => {
+        })
+      },
+      logistics(item) {
+        this.dialogFormVisible = true
+        this.dialogStatus = '填写物流信息'
+        this.$nextTick(() => {
+          this.$refs['dataForm'].clearValidate()
+        })
+      },
+      createLogistisc() {
+        this.btnLoading = true
+        this.temp.id = this.data.id
+        insertLogistics(this.temp).then(response => {
+          if (response.code === 50001) {
+            store.dispatch('GetRefreshToken').then(() => {
+              this.createLogistisc()
+            })
+          }
+          if (response.code === 200) {
+            this.$message({
+              message: '操作成功',
+              type: 'success'
+            })
+            this.btnLoading = false
+            this.dialogFormVisible = false
+            this.getList()
           }
         }).catch(() => {
         })

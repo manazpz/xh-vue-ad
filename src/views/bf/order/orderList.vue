@@ -230,6 +230,7 @@
       getList() {
         this.listLoading = true
         orderList(this.listQuery).then(response => {
+          debugger
           if (response.code === 50001) {
             store.dispatch('GetRefreshToken').then(() => {
               this.getList()
