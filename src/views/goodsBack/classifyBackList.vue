@@ -182,6 +182,7 @@
         classifyModel2: '',
         brandOptions: [],
         specOptions: [],
+        classifyCascades: [],
         classifyCascades1: !this.classify ? [] : this.classify.history.classifyCascades1,
         classifyCascades2: !this.classify ? [] : this.classify.history.classifyCascades2,
         classifyCascades3: !this.classify ? [] : this.classify.history.classifyCascades3,
@@ -253,7 +254,7 @@
       },
       getClassifyCascade() {
         if (this.classifyCascades1.length < 1) {
-          getClassify({model: this.$route.fullPath.split('/')[this.$route.fullPath.split('/').length - 1] }).then(response => {
+          getClassify({ model: this.$route.fullPath.split('/')[this.$route.fullPath.split('/').length - 1] }).then(response => {
             for (var i = 0; i < response.data.items.length; i++) {
               response.data.items[i].showDropDown = false
               if (response.data.items[i].children.length > 0) {
@@ -391,15 +392,37 @@
         } else {
           this.type = false
         }
-        this.dialogStatus = '新增分类'
-        this.dialogFormVisible = true
         this.temp.index = index
         if (index === '1') {
-          this.temp.parentId = this.classifyId1
+          if (this.classifyId1.length === 0) {
+            this.$notify({
+              title: '警告',
+              message: '请选择上级分类',
+              type: 'success',
+              duration: 2000
+            })
+            return
+          } else {
+            this.dialogStatus = '新增分类'
+            this.dialogFormVisible = true
+            this.temp.parentId = this.classifyId1
+          }
           // this.temp.model = this.classifyModel1
         }
         if (index === '2') {
-          this.temp.parentId = this.classifyId2
+          if (this.classifyId2.length === 0) {
+            this.$notify({
+              title: '警告',
+              message: '请选择上级分类',
+              type: 'success',
+              duration: 2000
+            })
+            return
+          } else {
+            this.dialogStatus = '新增分类'
+            this.dialogFormVisible = true
+            this.temp.parentId = this.classifyId2
+          }
           // this.temp.model = this.classifyModel2
         }
         this.$nextTick(() => {
@@ -441,14 +464,6 @@
         this.dialogStatus = '编辑分类'
         this.dialogFormVisible = true
         this.temp.index = row.index
-        if (row.index === '1') {
-          this.temp.parentId = this.classifyId1
-          this.temp.model = this.classifyModel1
-        }
-        if (row.index === '2') {
-          this.temp.parentId = this.classifyId2
-          this.temp.model = this.classifyModel2
-        }
         this.$nextTick(() => {
           this.$refs['dataForm'].clearValidate()
         })
@@ -464,14 +479,6 @@
                 })
               }
               if (response.code === 200) {
-                this.reload()
-                for (const v of this.list) {
-                  if (v.id === this.temp.id) {
-                    const index = this.list.indexOf(v)
-                    this.list.splice(index, 1, this.temp)
-                    break
-                  }
-                }
                 this.listLoading = false
                 this.dialogFormVisible = false
                 this.$notify({
@@ -480,6 +487,7 @@
                   type: 'success',
                   duration: 2000
                 })
+                this.reload()
               }
             })
           }
@@ -582,6 +590,11 @@
           this.getIndex1 = row.index
           this.classifyCascades2 = row.children
           this.$emit('classify', '')
+          if (this.classifyCascades2.length > 0) {
+            this.rowClick2(row.children[0])
+          } else {
+            this.classifyCascades3 = []
+          }
         } else {
           this.falg = true
         }
@@ -625,6 +638,15 @@
         this.getIndex3 = row.index
         this.sendHistoryData(row)
         this.$emit('classify', row)
+        this.listQuery.name = row.name
+        this.listQuery.model = row.model
+        specList(this.listQuery).then(response => {
+          debugger
+          if (!response.data.items) return
+          this.specOptions = response.data.items
+          this.listQuery.name = ''
+          this.listQuery.model = ''
+        })
       }
     }
   }

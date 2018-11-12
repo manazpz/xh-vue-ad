@@ -6,6 +6,12 @@
       <el-input @keyup.enter.native="handleFilter" style="width: 200px;" class="filter-item"
                 placeholder="分组名称" v-model="listQuery.name" clearable>
       </el-input>
+      <el-input @keyup.enter.native="handleFilter" style="width: 200px;" class="filter-item"
+                placeholder="规格组名称" v-model="listQuery.specName" clearable>
+      </el-input>
+      <el-input @keyup.enter.native="handleFilter" style="width: 200px;" class="filter-item"
+                placeholder="排序号" v-model="listQuery.px" clearable>
+      </el-input>
       <el-button class="filter-item" type="primary" v-waves icon="el-icon-search" @click="handleFilter">
         {{$t('table.search')}}
       </el-button>
@@ -132,8 +138,12 @@
         listQuery: {
           id: undefined,
           name: '',
+          px: '',
+          grouName: '',
+          specName: '',
           pageNum: 1,
           pageSize: 10,
+          model: '',
           sort: 'lastCreateTime DESC'
         },
         sortOptions: [{ label: '时间正序', key: 'lastCreateTime ASC' }, { label: '时间倒序', key: 'lastCreateTime DESC' }],
@@ -164,6 +174,7 @@
     methods: {
       getList() {
         this.listLoading = true
+        this.listQuery.model = this.$route.fullPath.split('/')[this.$route.fullPath.split('/').length - 1]
         specList(this.listQuery).then(response => {
           if (response.code === 50001) {
             store.dispatch('GetRefreshToken').then(() => {
@@ -204,7 +215,7 @@
       },
       handdle(row) {
         if (this.falg) {
-          this.$router.push({ path: 'specBackValueList', query: { id: row.id }})
+          this.$router.push({ path: '/goodsBack/specBackValueList', query: { id: row.id }})
         } else {
           this.falg = true
         }
@@ -241,6 +252,7 @@
       resetTemp() {
         this.temp = {
           id: undefined,
+          model: this.$route.fullPath.split('/')[this.$route.fullPath.split('/').length - 1],
           grouName: '',
           specName: '',
           tipsType: '',

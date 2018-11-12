@@ -12,6 +12,7 @@
       <el-button class="filter-item" style="margin-left: 10px;" @click="handleCreate" type="primary"
                  icon="el-icon-edit">{{$t('table.add')}}
       </el-button>
+      <span style="padding-left: 10rem; color:#F00; font-family:'微软雅黑','黑体','宋体';font-size:15px;height:36px;">规格名称：{{specName}}</span>
     </div>
     <!-- 过滤条件 end -->
 
@@ -94,6 +95,7 @@
         list: null,
         total: null,
         id: '',
+        specName: '',
         showtext: false,
         showimg: false,
         listLoading: true,
@@ -145,6 +147,7 @@
             })
           }
           if (response.code === 200) {
+            this.specName = response.data.groupName + '/' + response.data.specName
             for (var i = 0; i < response.data.items.length; i++) {
               response.data.items[i].isEdit = false
               response.data.items[i].id = this.id
