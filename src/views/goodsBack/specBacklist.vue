@@ -75,8 +75,11 @@
     <el-dialog :title="dialogStatus" :visible.sync="dialogFormVisible">
       <el-form :rules="rule" ref="dataForm" :model="temp" label-position="left" label-width="70px"
                style='width: 400px; margin-left:50px;'>
-        <el-form-item label-width="110px" label="分组名称"  prop="grouName" class="postInfo-container-item">
-          <el-input v-model="temp.grouName" required placeholder="请输入分组名称"></el-input>
+        <el-form-item label-width="110px" label="分组名称" prop="grouName" class="postInfo-container-item">
+          <el-select clearable v-model="temp.grouName" >
+            <el-option v-for="item in typeOptions" :key="item.id" :label="item.name" :value="item.id" >
+            </el-option>
+          </el-select>
         </el-form-item>
         <el-form-item label-width="110px" label="规格组名称"  prop="specName" class="postInfo-container-item">
           <el-input  v-model="temp.specName"  required placeholder="请输入规格组名称"></el-input>
@@ -114,7 +117,7 @@
 </template>
 
 <script>
-  import { specList, createSpec, updateSpec, deleteSpec } from '@/api/goods'
+  import { specList, createSpec, updateSpec, deleteSpec, getClassify } from '@/api/goods'
   import waves from '@/directive/waves' // 水波纹指令
   import store from '@/store'
   export default {
@@ -156,6 +159,12 @@
           multi: '',
           remarks: ''
         },
+        typeOptions: [],
+        types: {
+          model: this.$route.fullPath.split('/')[this.$route.fullPath.split('/').length - 1],
+          obligate1: '2',
+          cascade: 'N'
+        },
         dialogStatus: '',
         dialogFormVisible: false,
         textMap: {
@@ -169,9 +178,27 @@
       }
     },
     created() {
+      this.getType()
       this.getList()
     },
     methods: {
+      getType() {
+        getClassify(this.types).then(response => {
+          if (response.code === 50001) {
+            store.dispatch('GetRefreshToken').then(() => {
+              this.getType()
+            })
+          }
+          if (response.code === 200) {
+            this.typeOptions = response.data.items
+            setTimeout(() => {
+              this.listLoading = false
+            }, 1.5 * 1000)
+          }
+        }).catch(() => {
+          this.listLoading = false
+        })
+      },
       getList() {
         this.listLoading = true
         this.listQuery.model = this.$route.fullPath.split('/')[this.$route.fullPath.split('/').length - 1]

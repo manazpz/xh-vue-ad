@@ -207,8 +207,8 @@
           id: undefined,
           pageNum: 1,
           pageSize: 10,
-          name: '',
           model: '',
+          parentId: '',
           sort: 'lastCreateTime DESC'
         },
         temp: {
@@ -310,7 +310,6 @@
           parentId: '',
           index: '',
           px: '',
-          obligate: '01',
           model: this.$route.fullPath.split('/')[this.$route.fullPath.split('/').length - 1],
           name: '',
           remarks: ''
@@ -388,6 +387,8 @@
       handleCreate(index) {
         this.resetTemp()
         if (index === '0') {
+          this.dialogStatus = '新增分类'
+          this.dialogFormVisible = true
           this.type = true
         } else {
           this.type = false
@@ -608,12 +609,12 @@
           this.getIndex2 = row.index
           this.classifyCascades3 = row.children
           this.$emit('classify', '')
-          this.listQuery.name = row.name
+          this.listQuery.parentId = row.parentId
           this.listQuery.model = row.model
           specList(this.listQuery).then(response => {
             if (!response.data.items) return
             this.specOptions = response.data.items
-            this.listQuery.name = ''
+            this.listQuery.parentId = ''
             this.listQuery.model = ''
           })
         } else {
@@ -638,13 +639,12 @@
         this.getIndex3 = row.index
         this.sendHistoryData(row)
         this.$emit('classify', row)
-        this.listQuery.name = row.name
+        this.listQuery.parentId = row.parentId
         this.listQuery.model = row.model
         specList(this.listQuery).then(response => {
-          debugger
           if (!response.data.items) return
           this.specOptions = response.data.items
-          this.listQuery.name = ''
+          this.listQuery.parentId = ''
           this.listQuery.model = ''
         })
       }
