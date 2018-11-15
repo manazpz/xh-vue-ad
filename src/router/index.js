@@ -128,13 +128,13 @@ export const asyncRouterMap = [
       {
         path: 'specBacklist/01',
         component: () => import('@/views/goodsBack/specBacklist'),
-        name: 'specBacklist',
+        name: 'newSpecBacklist',
         meta: { title: 'newSpecBacklist', noCache: true, icon: 'example' }
       },
       {
         path: 'specBacklist/02',
         component: () => import('@/views/goodsBack/specBacklist'),
-        name: 'specBacklist',
+        name: 'oldSpecBacklist',
         meta: { title: 'oldSpecBacklist', noCache: true, icon: 'example' }
       },
       {

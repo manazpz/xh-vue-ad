@@ -32,6 +32,14 @@ export function getClassify(query) {
   })
 }
 
+export function getClassifyTree(query) {
+  return request({
+    url: '/goods/classifyTreeList',
+    method: 'get',
+    params: query
+  })
+}
+
 export function createClassify(params) {
   return request({
     url: '/goods/insertClassify',

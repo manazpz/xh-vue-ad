@@ -184,7 +184,7 @@
 </template>
 
 <script>
-  import { orderList } from '@/api/order'
+  import { orderList, updateOrder } from '@/api/order'
   import { insertOrder } from '@/api/invoice/invoice'
   import waves from '@/directive/waves' // 水波纹指令
   import store from '@/store'

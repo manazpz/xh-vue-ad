@@ -155,6 +155,7 @@
         listLoading: true,
         btnLoading: false,
         dialogStockVisible: false,
+        msg: '',
         listQuery: {
           pageNum: 1,
           pageSize: 20,
@@ -266,7 +267,12 @@
         })
       },
       handleSj(id, val) {
-        this.$confirm('上架商品, 是否继续?', '提示', {
+        if (val === '01') {
+          this.msg = '上架商品, 是否继续?'
+        } else {
+          this.msg = '下架商品, 是否继续?'
+        }
+        this.$confirm(this.msg, '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
@@ -279,9 +285,11 @@
               })
             }
             if (response.code === 200) {
-              this.$message({
-                message: '操作成功',
-                type: 'success'
+              this.$notify({
+                title: '成功',
+                message: '操作成功！',
+                type: 'success',
+                duration: 2000
               })
               this.getList()
             }

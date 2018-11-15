@@ -76,10 +76,8 @@
       <el-form :rules="rule" ref="dataForm" :model="temp" label-position="left" label-width="70px"
                style='width: 400px; margin-left:50px;'>
         <el-form-item label-width="110px" label="分组名称" prop="grouName" class="postInfo-container-item">
-          <el-select clearable v-model="temp.grouName" >
-            <el-option v-for="item in typeOptions" :key="item.id" :label="item.name" :value="item.id" >
-            </el-option>
-          </el-select>
+          <select-tree v-model="temp.grouName" :options="options" :props="defaultProps" >
+          </select-tree>
         </el-form-item>
         <el-form-item label-width="110px" label="规格组名称"  prop="specName" class="postInfo-container-item">
           <el-input  v-model="temp.specName"  required placeholder="请输入规格组名称"></el-input>
@@ -117,7 +115,8 @@
 </template>
 
 <script>
-  import { specList, createSpec, updateSpec, deleteSpec, getClassify } from '@/api/goods'
+  import { specList, createSpec, updateSpec, deleteSpec, getClassifyTree } from '@/api/goods'
+  import SelectTree from '@/components/widget/SelectTree.vue'
   import waves from '@/directive/waves' // 水波纹指令
   import store from '@/store'
   export default {
@@ -125,6 +124,9 @@
     inject: ['reload'],
     directives: {
       waves
+    },
+    components: {
+      SelectTree
     },
     data() {
       return {
@@ -161,9 +163,7 @@
         },
         typeOptions: [],
         types: {
-          model: this.$route.fullPath.split('/')[this.$route.fullPath.split('/').length - 1],
-          obligate1: '2',
-          cascade: 'N'
+          model: this.$route.fullPath.split('/')[this.$route.fullPath.split('/').length - 1]
         },
         dialogStatus: '',
         dialogFormVisible: false,
@@ -174,7 +174,22 @@
         rule: {
           name: [{ required: true, message: '品牌名称不能为空', trigger: 'change' }],
           official: [{ required: true, message: '品牌网址不能为空', trigger: 'change' }]
-        }
+        },
+        // 默认选中值
+        selected: 'A',
+        // 数据默认字段
+        defaultProps: {
+          // 父级唯一标识
+          parent: 'parentId',
+          // 唯一标识
+          value: 'id',
+          // 标签显示
+          label: 'label',
+          // 子级
+          children: 'children'
+        },
+        // 数据列表
+        options: []
       }
     },
     created() {
@@ -183,14 +198,15 @@
     },
     methods: {
       getType() {
-        getClassify(this.types).then(response => {
+        getClassifyTree(this.types).then(response => {
           if (response.code === 50001) {
             store.dispatch('GetRefreshToken').then(() => {
               this.getType()
             })
           }
           if (response.code === 200) {
-            this.typeOptions = response.data.items
+            debugger
+            this.options = response.data.items
             setTimeout(() => {
               this.listLoading = false
             }, 1.5 * 1000)
@@ -300,6 +316,7 @@
         this.$refs['dataForm'].validate((valid) => {
           if (valid) {
             this.listLoading = true
+            debugger
             createSpec(this.temp).then(response => {
               if (response.code === 50001) {
                 store.dispatch('GetRefreshToken').then(() => {

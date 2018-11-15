@@ -18,7 +18,6 @@
     },
     methods: {
       getList() {
-        var tar = this
         this.$nextTick(function() {
           layui.use('layim', function() {
             // 建立WebSocket通讯
