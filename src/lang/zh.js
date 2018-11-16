@@ -26,6 +26,7 @@ export default {
     order: '订单',
     orderList: '订单列表',
     orderDetail: '订单详情',
+    orderReturnList: '订单退货列表',
     changePwd: '修改密码',
     suggestionList: '用户反馈',
     userList: '用户列表',

@@ -185,7 +185,7 @@
 
 <script>
   import { orderList, updateOrder } from '@/api/order/order'
-  import { insertOrder } from '@/api/invoice/invoice'
+  import { insertInvoice } from '@/api/invoice/invoice'
   import waves from '@/directive/waves' // 水波纹指令
   import store from '@/store'
 
@@ -354,7 +354,7 @@
       },
       createInvoice() {
         this.btnLoading = true
-        insertOrder(this.temp).then(response => {
+        insertInvoice(this.temp).then(response => {
           if (response.code === 50001) {
             store.dispatch('GetRefreshToken').then(() => {
               this.createInvoice()

@@ -283,6 +283,12 @@ export const asyncRouterMap = [
         meta: { title: 'orderList', icon: 'theme' }
       },
       {
+        path: 'orderBfReturnList',
+        component: () => import('@/views/bf/order/orderReturnList'),
+        name: 'orderBfReturnList',
+        meta: { title: 'orderReturnList', icon: 'theme' }
+      },
+      {
         path: 'orderBfDetail',
         component: () => import('@/views/bf/order/orderDetail'),
         name: 'orderBfDetail',
