@@ -73,7 +73,8 @@
         getIndex2: !this.classify ? -1 : this.classify.history.getIndex2,
         getIndex3: !this.classify ? -1 : this.classify.history.getIndex3,
         step: 1,
-        text: !this.classify ? '' : this.classify.history.text
+        text: !this.classify ? '' : this.classify.history.text,
+        model: this.$route.fullPath.split('/')[this.$route.fullPath.split('/').length - 1]
       }
     },
     created() {
@@ -82,7 +83,7 @@
     methods: {
       getClassifyCascade() {
         if (this.classifyCascades1.length < 1) {
-          classifyCascade().then(response => {
+          classifyCascade({ model: this.model }).then(response => {
             this.classifyCascades1 = response.data.items
           })
         }

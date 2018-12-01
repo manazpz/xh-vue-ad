@@ -173,21 +173,25 @@
         })
       },
       handleSh(row) {
-        updateGoods({ id: row.id, obligate1: 'Y' }).then(response => {
-          if (response.code === 50001) {
-            store.dispatch('GetRefreshToken').then(() => {
-              this.handleSh(row)
-            })
-          }
-          if (response.code === 200) {
-            this.$message({
-              message: '操作成功',
-              type: 'success'
-            })
-            this.getList()
-          }
-        }).catch(() => {
-          this.listLoading = false
+        this.$confirm('您确定删除吗？').then(_ => {
+          updateGoods({ id: row.id, obligate1: 'Y' }).then(response => {
+            if (response.code === 50001) {
+              store.dispatch('GetRefreshToken').then(() => {
+                this.handleSh(row)
+              })
+            }
+            if (response.code === 200) {
+              this.$message({
+                message: '操作成功',
+                type: 'success'
+              })
+              this.getList()
+            }
+          }).catch(() => {
+            this.listLoading = false
+          })
+        }).catch(_ => {
+          return
         })
       }
     }

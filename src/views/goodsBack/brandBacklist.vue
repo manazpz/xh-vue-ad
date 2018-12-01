@@ -3,9 +3,7 @@
 
     <!-- 过滤条件 start -->
     <div class="filter-container">
-      <el-input @keyup.enter.native="handleFilter" style="width: 200px;" class="filter-item"
-                placeholder="品牌名称" v-model="listQuery.name">
-      </el-input>
+      <select-tree  class="filter-item" :options="options" v-model="brandId" :props="defaultProps"/>
       <el-button class="filter-item" type="primary" v-waves icon="el-icon-search" @click="handleFilter">
         {{$t('table.search')}}
       </el-button>
@@ -23,6 +21,12 @@
           <span>{{scope.$index+1}}</span>
         </template>
       </el-table-column>
+      <el-table-column align="center" label="品牌图片" min-width="140">
+        <template slot-scope="scope">
+          <!--<img :src="scope.row.scope" >-->
+          <img v-if="scope.row.imgUrl != null" :src=" scope.row.imgUrl " style="width: 90px;height: 50px">
+        </template>
+      </el-table-column>
       <el-table-column align="center" label="品牌名称" min-width="140">
         <template slot-scope="scope">
           <span>{{scope.row.name}}</span>
@@ -30,7 +34,7 @@
       </el-table-column>
       <el-table-column align="center" label="品牌网址" min-width="140">
         <template slot-scope="scope">
-          <span>{{scope.row.official}}</span>
+          <span>{{scope.row.officialWebsite}}</span>
         </template>
       </el-table-column>
       <el-table-column align="center" label="摘要" min-width="140">
@@ -62,24 +66,28 @@
     <!-- 弹出框 start -->
     <el-dialog :title="dialogStatus" :visible.sync="dialogFormVisible">
       <el-form :rules="rule" ref="dataForm" :model="temp" label-position="left" label-width="70px"
-               style='width: 400px; margin-left:50px;'>
+               style='width: 500px; margin-left:50px;'>
         <el-form-item label-width="110px" label="品牌名称"  prop="name" class="postInfo-container-item">
           <el-input v-model="temp.name" required placeholder="请输入品牌名称"></el-input>
         </el-form-item>
-        <el-form-item label-width="110px" label="品牌网址"  prop="official" class="postInfo-container-item">
-          <el-input  v-model="temp.official"  required placeholder="请输入品牌网址"></el-input>
+        <el-form-item label-width="110px" label="所属分类" class="postInfo-container-item">
+          <el-checkbox-group v-model="temp.checkList">
+            <el-checkbox v-for="item in classOptions" :label="item.id" :key="item.id">{{item.label}}</el-checkbox>
+          </el-checkbox-group>
+        </el-form-item>
+        <el-form-item label-width="110px" label="品牌网址"  prop="officialWebsite" class="postInfo-container-item">
+          <el-input  v-model="temp.officialWebsite"  required placeholder="请输入品牌网址"></el-input>
         </el-form-item>
         <el-form-item label-width="110px" label="摘要"  class="postInfo-container-item">
           <el-input v-model="temp.remarks" type="textarea"  :rows="5"  placeholder="请摘要内容"></el-input>
         </el-form-item>
         <el-upload
           class="avatar-uploader"
-          action="uploadUrl"
-          :show-file-list="true"
-          accept="image/jpeg,image/jpg,image/png"
-          :on-success="handleAvatarSuccess"
-          :before-upload="beforeAvatarUpload">
-          <el-button type="primary" size="mini">上传图片</el-button>
+          :action="action"
+          :show-file-list="false"
+          :on-success="handlePictureCardSuccess"
+          :before-upload="beforeAvatarUpload"
+          :on-error="handleError">
           <img v-if="imageUrl" :src="imageUrl" class="avatar">
           <i v-else class="el-icon-plus avatar-uploader-icon"></i>
         </el-upload>
@@ -97,8 +105,9 @@
 </template>
 
 <script>
-  import { brandList, createBrand, updateBrand, deleteBrand } from '@/api/goods'
+  import { brandList, createBrand, updateBrand, deleteBrand, brandClassList, getBrandTree } from '@/api/goods'
   import waves from '@/directive/waves' // 水波纹指令
+  import SelectTree from '@/components/widget/SelectTree.vue'
   import store from '@/store'
   export default {
     name: 'brandBacklist',
@@ -106,18 +115,23 @@
     directives: {
       waves
     },
+    components: {
+      SelectTree
+    },
     data() {
       return {
-        uploadUrl: process.env.BASE_API + '/ueditor/uploadImage',
         tableKey: 0,
-        list: null,
+        list: [],
         total: null,
         listLoading: true,
-        imageUrl: 'http://img.mukewang.com/52da54ed0001ecfa04120172.jpg',
+        action: process.env.BASE_API + '/resources/uploadFile',
         fileList: [],
         file: [],
         falg: true,
+        brandId: '',
         params: null,
+        imageUrl: undefined,
+        classOptions: null,
         listQuery: {
           id: undefined,
           name: '',
@@ -129,7 +143,8 @@
         temp: {
           id: undefined,
           name: '',
-          official: '',
+          officialWebsite: '',
+          checkList: [],
           imageUrl: '',
           remarks: ''
         },
@@ -143,12 +158,30 @@
         },
         rule: {
           name: [{ required: true, message: '品牌名称不能为空', trigger: 'change' }],
-          official: [{ required: true, message: '品牌网址不能为空', trigger: 'change' }]
-        }
+          officialWebsite: [{ required: true, message: '品牌网址不能为空', trigger: 'change' }],
+          checkList: [{ required: true, message: '品牌分类不能为空', trigger: 'change' }]
+        },
+        // 默认选中值
+        selected: 'A',
+        // 数据默认字段
+        defaultProps: {
+          // 父级唯一标识
+          parent: 'parentId',
+          // 唯一标识
+          value: 'id',
+          // 标签显示
+          label: 'label',
+          // 子级
+          children: 'children'
+        },
+        // 数据列表
+        options: []
       }
     },
     created() {
       this.getList()
+      this.getClass()
+      this.getType()
     },
     methods: {
       getList() {
@@ -160,8 +193,20 @@
             })
           }
           if (response.code === 200) {
-            this.list = response.data.items
             this.total = response.data.total
+            response.data.items.forEach((value,index) => {
+              var lists = []
+              if (value.checkList.length > 0) {
+                value.checkList.forEach((values,index) => {
+                  lists.push(values.parentId)
+                })
+                value.checkList = lists
+              } else {
+                value.checkList = []
+              }
+            })
+            this.list = response.data.items
+            debugger
             setTimeout(() => {
               this.listLoading = false
             }, 1.5 * 1000)
@@ -170,8 +215,39 @@
           this.listLoading = false
         })
       },
+      getType() {
+        getBrandTree(this.types).then(response => {
+          if (response.code === 50001) {
+            store.dispatch('GetRefreshToken').then(() => {
+              this.getType()
+            })
+          }
+          if (response.code === 200) {
+            this.options = response.data.items
+            setTimeout(() => {
+              this.listLoading = false
+            }, 1.5 * 1000)
+          }
+        }).catch(() => {
+          this.listLoading = false
+        })
+      },
+      getClass() {
+        brandClassList(this.listQuery).then(response => {
+          if (response.code === 200) {
+            this.classOptions = response.data.items
+          }
+        }).catch(() => {
+          this.listLoading = false
+        })
+      },
       handleFilter() {
         this.listQuery.pageNum = 1
+        if (this.brandId !== '') {
+          this.listQuery.id = this.brandId
+        } else {
+          this.listQuery.id = undefined
+        }
         this.getList()
       },
       handleSizeChange(val) {
@@ -194,11 +270,12 @@
           return true
         })
       },
-      OnChange(file, fileList) {
-        this.fileList = fileList
+      handlePictureCardSuccess(response, file, fileList) {
+        this.imageUrl = response.data.file.url
+        this.file = response.data.file
       },
-      handleAvatarSuccess(response, file, fileList) {
-        this.imageUrl = URL.createObjectURL(file.raw)
+      handleError() {
+        this.$message.error('上传文件失败!')
       },
       beforeAvatarUpload(file) {
         const isJPG = file.type === 'image/jpeg'
@@ -245,7 +322,10 @@
         this.temp = {
           id: undefined,
           name: '',
-          official: '',
+          file: [],
+          classId: [],
+          checkList: [],
+          officialWebsite: '',
           imageUrl: '',
           remarks: ''
         }
@@ -253,6 +333,8 @@
       handleCreate() {
         this.resetTemp()
         this.temp.file = []
+        this.imageUrl = undefined
+        this.temp.checkList = []
         this.dialogStatus = '新增品牌'
         this.dialogFormVisible = true
         this.$nextTick(() => {
@@ -263,6 +345,8 @@
         this.$refs['dataForm'].validate((valid) => {
           if (valid) {
             this.listLoading = true
+            this.temp.file = this.file
+            this.temp.classId = this.temp.checkList
             createBrand(this.temp).then(response => {
               if (response.code === 50001) {
                 store.dispatch('GetRefreshToken').then(() => {
@@ -286,6 +370,8 @@
       handleUpdate(row) {
         this.falg = false
         this.temp = Object.assign({}, row)
+        debugger
+        this.imageUrl = this.temp.imgUrl
         this.dialogStatus = '编辑品牌'
         this.dialogFormVisible = true
         this.$nextTick(() => {
@@ -296,6 +382,8 @@
         this.$refs['dataForm'].validate((valid) => {
           if (valid) {
             this.listLoading = true
+            this.temp.file = this.file
+            this.temp.classId = this.temp.checkList
             updateBrand(this.temp).then((response) => {
               if (response.code === 50001) {
                 store.dispatch('GetRefreshToken').then(() => {

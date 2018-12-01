@@ -241,28 +241,32 @@
       <el-form ref="dataStandard" :model="standard" label-position="left" label-width="70px"
                style='width: 400px; margin-left:50px;'>
         <el-form-item label-width="110px" label="重量" class="postInfo-container-item">
-          <el-input v-model="standard.weight"></el-input>
+          <el-input style="width: 200px" v-model="standard.weight"></el-input>
+          <el-button type="primary" @click="setStandard('weight')">{{$t('table.confirm')}}</el-button>
         </el-form-item>
         <el-form-item label-width="110px" label="库存" class="postInfo-container-item">
-          <el-input v-model="standard.stock"></el-input>
+          <el-input style="width: 200px" v-model="standard.stock"></el-input>
+          <el-button type="primary" @click="setStandard('stock')">{{$t('table.confirm')}}</el-button>
         </el-form-item>
         <el-form-item label-width="110px" label="成本价" class="postInfo-container-item">
-          <el-input v-model="standard.costPrice"></el-input>
+          <el-input style="width: 200px" v-model="standard.costPrice"></el-input>
+          <el-button type="primary" @click="setStandard('costPrice')">{{$t('table.confirm')}}</el-button>
         </el-form-item>
         <el-form-item label-width="110px" label="价格（元）" class="postInfo-container-item">
-          <el-input v-model="standard.price"></el-input>
+          <el-input style="width: 200px" v-model="standard.price"></el-input>
+          <el-button type="primary" @click="setStandard('price')">{{$t('table.confirm')}}</el-button>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button @click="dialogFormVisible = false">{{$t('table.cancel')}}</el-button>
-        <el-button type="primary" @click="setStandard">{{$t('table.confirm')}}</el-button>
+        <el-button @click="standardVisible = false">{{$t('table.cancel')}}</el-button>
+        <el-button type="primary" @click="setStandard('ALL')">{{$t('table.confirm')}}</el-button>
       </div>
     </el-dialog>
     <!-- 弹出框 end -->
   </div>
 </template>
 <script>
-  import { brands, classifySpecParam } from '@/api/goods/goods'
+  import { classifyBrandParam, classifySpecParam } from '@/api/goods/goods'
   import { getConfig } from '@/api/user'
   import Ueditor from '@/components/Ueditor'
 
@@ -357,7 +361,7 @@
     methods: {
       getBrands() {
         if (this.brands.length < 1) {
-          brands().then(response => {
+          classifyBrandParam(this.info.classify.id).then(response => {
             this.brands = response.data.items
           })
         }
@@ -556,13 +560,29 @@
           })
         }
       },
-      setStandard() {
+      setStandard(obj) {
         var stock = 0
         for (var i = 0; i < this.temp.goodsSpec.length; i++) {
-          this.temp.goodsSpec[i].weight = this.standard.weight
-          this.temp.goodsSpec[i].stock = this.standard.stock
-          this.temp.goodsSpec[i].costPrice = this.standard.costPrice
-          this.temp.goodsSpec[i].price = this.standard.price
+          switch (obj) {
+            case 'weight' :
+              this.temp.goodsSpec[i].weight = this.standard.weight
+              break
+            case 'stock' :
+              this.temp.goodsSpec[i].stock = this.standard.stock
+              break
+            case 'costPrice' :
+              this.temp.goodsSpec[i].stock = this.standard.costPrice
+              break
+            case 'price' :
+              this.temp.goodsSpec[i].stock = this.standard.price
+              break
+            case 'ALL' :
+              this.temp.goodsSpec[i].weight = this.standard.weight
+              this.temp.goodsSpec[i].stock = this.standard.stock
+              this.temp.goodsSpec[i].costPrice = this.standard.costPrice
+              this.temp.goodsSpec[i].price = this.standard.price
+              break
+          }
           stock = Number(stock) + Number(this.standard.stock)
         }
         this.temp.stock = stock

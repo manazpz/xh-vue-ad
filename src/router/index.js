@@ -126,6 +126,12 @@ export const asyncRouterMap = [
         meta: { title: 'brandBacklist', icon: 'list' }
       },
       {
+        path: 'brandBackClasslist',
+        component: () => import('@/views/goodsBack/brandBackClasslist'),
+        name: 'brandBackClasslist',
+        meta: { title: 'brandBackClasslist', icon: 'list' }
+      },
+      {
         path: 'specBacklist/01',
         component: () => import('@/views/goodsBack/specBacklist'),
         name: 'newSpecBacklist',
@@ -230,10 +236,16 @@ export const asyncRouterMap = [
       meta: { title: 'recycleGoodsList', icon: 'nested', noCache: true }
     },
     {
-      path: 'editGoods',
+      path: 'editGoods/01',
       component: () => import('@/views/bf/goods/editGoods'),
-      name: 'editGoods',
-      meta: { title: 'editGoods', icon: 'people' }
+      name: 'editNewGoods',
+      meta: { title: 'editNewGoods', icon: 'people' }
+    },
+    {
+      path: 'editGoods/02',
+      component: () => import('@/views/bf/goods/editGoods'),
+      name: 'editOldGoods',
+      meta: { title: 'editOldGoods', icon: 'people' }
     },
     {
       path: 'lableGoods',

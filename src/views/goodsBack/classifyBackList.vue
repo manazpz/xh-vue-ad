@@ -119,7 +119,7 @@
       <el-form :rules="ruleBrand" ref="dataBrandForm" :model="tempBrands" label-position="left" label-width="150px"
                style='width: 400px; margin-left:50px;'>
         <el-form-item label-width="110px" label="已选品牌"  prop="name" class="postInfo-container-item">
-          <el-select v-model="tempBrands.name" multiple placeholder="请选择">
+          <el-select v-model="tempBrands.name" multiple filterable placeholder="请选择">
             <el-option v-for="item in brandOptions" :key="item.id" :label="item.name" :value="item.id">
             </el-option>
           </el-select>

@@ -90,7 +90,8 @@ export function upper_lower_goods(params) {
 export function classifyCascade(params) {
   return request({
     url: '/bf/goods/classify/cascade',
-    method: 'get'
+    method: 'get',
+    params: params
   })
 }
 
@@ -104,6 +105,13 @@ export function goodsClassifyCascade(params) {
 export function classifySpecParam(params) {
   return request({
     url: '/bf/goods/classify/specs/param/' + params,
+    method: 'get'
+  })
+}
+
+export function classifyBrandParam(params) {
+  return request({
+    url: '/bf/goods/classify/brand/param/' + params,
     method: 'get'
   })
 }

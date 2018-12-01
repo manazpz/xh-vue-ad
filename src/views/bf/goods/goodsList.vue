@@ -81,7 +81,7 @@
       <el-table-column align="center" :label="$t('table.actions')" width="300" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button size="mini" type="success"
-                      @click="handleUpdate(scope.row.id)">{{$t('table.edit')}}
+                      @click="handleUpdate(scope.row)">{{$t('table.edit')}}
           </el-button>
           <el-button v-if="scope.row.status === '02'" size="mini" type="warning"
                      @click="handleSj(scope.row.id,'01')">{{$t('table.sj')}}
@@ -206,7 +206,7 @@
         this.getList()
       },
       handleUpdate(val) {
-        this.$router.push('/bf/gm/editGoods?goodsId=' + val)
+        this.$router.push('/bf/gm/editGoods/' + val.model + '?goodsId=' + val.id)
       },
       handleDeleteRecovery(id) {
         this.$confirm('删除商品, 是否继续?', '提示', {
@@ -300,7 +300,7 @@
         })
       },
       onJump() {
-        this.$router.push('/bf/gm/editGoods')
+        this.$router.push('/bf/gm/editGoods/' + this.$route.fullPath.split('/')[this.$route.fullPath.split('/').length - 1])
       }
     }
   }

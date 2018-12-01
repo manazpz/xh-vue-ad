@@ -64,9 +64,41 @@ export function brandList(query) {
   })
 }
 
+export function getBrandTree(query) {
+  return request({
+    url: '/goods/getBrandTree',
+    method: 'get',
+    params: query
+  })
+}
+
 export function createBrand(params) {
   return request({
     url: '/goods/insertBrand',
+    method: 'POST',
+    data: params
+  })
+}
+
+export function createBrandClass(params) {
+  return request({
+    url: '/goods/insertBrandClass',
+    method: 'POST',
+    data: params
+  })
+}
+
+export function brandClassList(query) {
+  return request({
+    url: '/goods/brandClassList',
+    method: 'get',
+    params: query
+  })
+}
+
+export function deleteBrandClass(params) {
+  return request({
+    url: '/goods/deleteBrandClass',
     method: 'POST',
     data: params
   })
@@ -83,6 +115,14 @@ export function updateBrand(params) {
 export function deleteBrand(params) {
   return request({
     url: '/goods/deleteBrand',
+    method: 'POST',
+    data: params
+  })
+}
+
+export function updateBrandClass(params) {
+  return request({
+    url: '/goods/updateBrandClass',
     method: 'POST',
     data: params
   })

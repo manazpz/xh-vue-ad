@@ -3,15 +3,8 @@
 
     <!-- 过滤条件 start -->
     <div class="filter-container">
-      <!--<el-input @keyup.enter.native="handleFilter" style="width: 200px;" class="filter-item"-->
-                <!--placeholder="分组名称" v-model="listQuery.name" clearable>-->
-      <!--</el-input>-->
-      <select-tree  style="width: 200px;" class="filter-item" :options="options" v-model="parentId" :props="defaultProps"/>
       <el-input @keyup.enter.native="handleFilter" style="width: 200px;" class="filter-item"
-                placeholder="规格组名称" v-model="listQuery.specName" clearable>
-      </el-input>
-      <el-input @keyup.enter.native="handleFilter" style="width: 200px;" class="filter-item"
-                placeholder="排序号" v-model="listQuery.px" clearable>
+                placeholder="品牌名称" v-model="listQuery.label">
       </el-input>
       <el-button class="filter-item" type="primary" v-waves icon="el-icon-search" @click="handleFilter">
         {{$t('table.search')}}
@@ -24,39 +17,28 @@
 
     <!-- 表格 start -->
     <el-table :key='tableKey' :data="list" v-loading="listLoading" border fit highlight-current-row
-              style="width: 100%;min-height:100%;" @selection-change="handleSelectionChange" @row-click="handdle">
-      <el-table-column type="selection" width="55">
-      </el-table-column>
+              style="width: 100%;min-height:100%;">
       <el-table-column align="center" label="序号" width="60">
         <template slot-scope="scope">
           <span>{{scope.$index+1}}</span>
         </template>
       </el-table-column>
-      <el-table-column align="center" label="分组名称" min-width="140">
+      <el-table-column align="center" label="分类名称" min-width="140">
         <template slot-scope="scope">
-          <span>{{scope.row.grouName}}</span>
+          <span>{{scope.row.label}}</span>
         </template>
       </el-table-column>
-      <el-table-column align="center" label="规格组名称" min-width="140">
+      <el-table-column align="center" label="创建时间" min-width="140">
         <template slot-scope="scope">
-          <span>{{scope.row.specName}}</span>
+          <span>{{scope.row.createTime}}</span>
         </template>
       </el-table-column>
-      <el-table-column align="center" label="规格排序" min-width="140">
+      <el-table-column align="center" label="操作" width="150" class-name="small-padding fixed-width">
         <template slot-scope="scope">
-          <span>{{scope.row.px}}</span>
-        </template>
-      </el-table-column>
-      <el-table-column align="center" label="提示类型" min-width="140">
-        <template slot-scope="scope">
-          <span>{{scope.row.tipsType}}</span>
-        </template>
-      </el-table-column>
-
-      <el-table-column align="center" label="操作" min-width="120" class-name="small-padding fixed-width">
-        <template slot-scope="scope">
-          <el-button type="primary" plain @click="handleUpdateSpec(scope.row)">修改规格</el-button>
-          <el-button  type="danger" plain @click="handleDeleteSpec(scope.row)">删除</el-button>
+          <el-button type="primary" size="mini" @click="handleUpdate(scope.row)">{{$t('table.edit')}}</el-button>
+          <el-button size="mini" type="danger"
+                     @click="handleModifyStatus(scope.row, 'Y')">{{$t('table.delete')}}
+          </el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -76,37 +58,14 @@
     <el-dialog :title="dialogStatus" :visible.sync="dialogFormVisible">
       <el-form :rules="rule" ref="dataForm" :model="temp" label-position="left" label-width="70px"
                style='width: 400px; margin-left:50px;'>
-        <el-form-item label-width="110px" label="分组名称" prop="grouName" class="postInfo-container-item">
-          <select-tree v-model="temp.grouName" :options="options" :props="defaultProps" >
-          </select-tree>
-        </el-form-item>
-        <el-form-item label-width="110px" label="规格组名称"  prop="specName" class="postInfo-container-item">
-          <el-input  v-model="temp.specName"  required placeholder="请输入规格组名称"></el-input>
-        </el-form-item>
-        <el-form-item label-width="110px" label="规格排序"  prop="px" class="postInfo-container-item">
-          <el-input  v-model="temp.px"  required placeholder="请输入规格排序"></el-input>
-        </el-form-item>
-        <el-form-item label-width="110px" label="提示类型"  prop="tipsType" class="postInfo-container-item">
-          <el-radio-group v-model="temp.tipsType">
-              <el-radio :label="item.tipsType" v-for="item in tip_typeListOptions" >{{item.name}}</el-radio>
-          </el-radio-group>
-        </el-form-item>
-        <el-form-item  label-width="110px" label="是否多选"  prop="multi" class="postInfo-container-item">
-          <el-select clearable  style="width: 100%;" class="filter-item" v-model="temp.multi" required placeholder="请输入分类属性">
-            <el-option key="01" label="否" value="01">
-            </el-option>
-            <el-option key="02" label="是" value="02">
-            </el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label-width="110px" label="规格备注"  class="postInfo-container-item">
-          <el-input v-model="temp.remarks" type="textarea"  :rows="5"  placeholder="请输入规格备注"></el-input>
+        <el-form-item label-width="110px" label="分类名称"  prop="name" class="postInfo-container-item">
+          <el-input v-model="temp.label" required placeholder="请输入分类名称"></el-input>
         </el-form-item>
       </el-form>
 
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisible = false">{{$t('table.cancel')}}</el-button>
-        <el-button v-if="dialogStatus=='新增规格'" type="primary" @click="createData">{{$t('table.confirm')}}</el-button>
+        <el-button v-if="dialogStatus=='新增品牌分类'" type="primary" @click="createData">{{$t('table.confirm')}}</el-button>
         <el-button v-else type="primary" @click="updateData">{{$t('table.confirm')}}</el-button>
       </div>
     </el-dialog>
@@ -116,111 +75,51 @@
 </template>
 
 <script>
-  import { specList, createSpec, updateSpec, deleteSpec, getClassifyTree } from '@/api/goods'
-  import SelectTree from '@/components/widget/SelectTree.vue'
+  import { createBrandClass, brandClassList, deleteBrandClass, updateBrandClass } from '@/api/goods'
   import waves from '@/directive/waves' // 水波纹指令
   import store from '@/store'
   export default {
-    name: 'brandBacklist',
+    name: 'brandBackClasslist',
     inject: ['reload'],
     directives: {
       waves
-    },
-    components: {
-      SelectTree
     },
     data() {
       return {
         tableKey: 0,
         list: null,
         total: null,
-        type: false,
         listLoading: true,
-        fileList: [],
-        file: [],
-        parentId: '',
-        tip_typeListOptions: [{ tipsType: '01', name: '文字' }, { tipsType: '02', name: '图片' }],
-        falg: true,
-        params: null,
         listQuery: {
           id: undefined,
-          name: '',
-          px: '',
-          grouName: '',
-          parentId: '',
-          specName: '',
+          label: '',
           pageNum: 1,
           pageSize: 10,
-          model: '',
           sort: 'lastCreateTime DESC'
         },
         sortOptions: [{ label: '时间正序', key: 'lastCreateTime ASC' }, { label: '时间倒序', key: 'lastCreateTime DESC' }],
         temp: {
           id: undefined,
-          grouName: '',
-          specName: '',
-          tipsType: '',
-          px: '',
-          multi: '',
-          remarks: ''
+          label: ''
         },
-        typeOptions: [],
-        types: {
-          model: this.$route.fullPath.split('/')[this.$route.fullPath.split('/').length - 1]
-        },
-        dialogStatus: '',
         dialogFormVisible: false,
+        dialogStatus: '',
         textMap: {
           update: 'Edit',
           create: 'Create'
         },
         rule: {
-          name: [{ required: true, message: '品牌名称不能为空', trigger: 'change' }],
-          official: [{ required: true, message: '品牌网址不能为空', trigger: 'change' }]
-        },
-        // 默认选中值
-        selected: 'A',
-        // 数据默认字段
-        defaultProps: {
-          // 父级唯一标识
-          parent: 'parentId',
-          // 唯一标识
-          value: 'id',
-          // 标签显示
-          label: 'label',
-          // 子级
-          children: 'children'
-        },
-        // 数据列表
-        options: []
+          label: [{ required: true, message: '品牌分类名称不能为空', trigger: 'change' }]
+        }
       }
     },
     created() {
-      this.getType()
       this.getList()
     },
     methods: {
-      getType() {
-        getClassifyTree(this.types).then(response => {
-          if (response.code === 50001) {
-            store.dispatch('GetRefreshToken').then(() => {
-              this.getType()
-            })
-          }
-          if (response.code === 200) {
-            this.options = response.data.items
-            setTimeout(() => {
-              this.listLoading = false
-            }, 1.5 * 1000)
-          }
-        }).catch(() => {
-          this.listLoading = false
-        })
-      },
       getList() {
         this.listLoading = true
-        this.listQuery.model = this.$route.fullPath.split('/')[this.$route.fullPath.split('/').length - 1]
-        specList(this.listQuery).then(response => {
+        brandClassList(this.listQuery).then(response => {
           if (response.code === 50001) {
             store.dispatch('GetRefreshToken').then(() => {
               this.getList()
@@ -229,13 +128,6 @@
           if (response.code === 200) {
             this.list = response.data.items
             this.total = response.data.total
-            this.list.forEach((k) => {
-              if (k.tipsType === '01') {
-                k.tipsType = '文字'
-              } else {
-                k.tipsType = '图片'
-              }
-            })
             setTimeout(() => {
               this.listLoading = false
             }, 1.5 * 1000)
@@ -244,15 +136,8 @@
           this.listLoading = false
         })
       },
-      handleSelectionChange() {
-      },
       handleFilter() {
         this.listQuery.pageNum = 1
-        if (this.brandId !== '') {
-          this.listQuery.parentId = this.parentId
-        } else {
-          this.listQuery.parentId = undefined
-        }
         this.getList()
       },
       handleSizeChange(val) {
@@ -263,19 +148,12 @@
         this.listQuery.pageNum = val
         this.getList()
       },
-      handdle(row) {
-        if (this.falg) {
-          this.$router.push({ path: '/goodsBack/specBackValueList', query: { id: row.id }})
-        } else {
-          this.falg = true
-        }
-      },
-      handleDeleteSpec(row, isValid) {
+      handleModifyStatus(row, isValid) {
         this.falg = false
         this.$confirm('您确定删除吗？').then(_ => {
           this.listLoading = true
           const params = { id: row.id }
-          deleteSpec(params).then(response => {
+          deleteBrandClass(params).then(response => {
             if (response.code === 50001) {
               store.dispatch('GetRefreshToken').then(() => {
                 this.handleModifyStatus(row, isValid)
@@ -299,21 +177,15 @@
           return
         })
       },
-      resetTemp() {
+      classTemp() {
         this.temp = {
           id: undefined,
-          model: this.$route.fullPath.split('/')[this.$route.fullPath.split('/').length - 1],
-          grouName: '',
-          specName: '',
-          tipsType: '',
-          px: '',
-          multi: '',
-          remarks: ''
+          name: ''
         }
       },
       handleCreate() {
-        this.resetTemp()
-        this.dialogStatus = '新增规格'
+        this.classTemp()
+        this.dialogStatus = '新增品牌分类'
         this.dialogFormVisible = true
         this.$nextTick(() => {
           this.$refs['dataForm'].clearValidate()
@@ -323,7 +195,7 @@
         this.$refs['dataForm'].validate((valid) => {
           if (valid) {
             this.listLoading = true
-            createSpec(this.temp).then(response => {
+            createBrandClass(this.temp).then(response => {
               if (response.code === 50001) {
                 store.dispatch('GetRefreshToken').then(() => {
                   this.createData()
@@ -343,15 +215,10 @@
           }
         })
       },
-      handleUpdateSpec(row) {
+      handleUpdate(row) {
         this.falg = false
-        if (row.tipsType === '文字') {
-          row.tipsType = '01'
-        } else {
-          row.tipsType = '02'
-        }
         this.temp = Object.assign({}, row)
-        this.dialogStatus = '编辑规格'
+        this.dialogStatus = '编辑品牌分类'
         this.dialogFormVisible = true
         this.$nextTick(() => {
           this.$refs['dataForm'].clearValidate()
@@ -361,7 +228,7 @@
         this.$refs['dataForm'].validate((valid) => {
           if (valid) {
             this.listLoading = true
-            updateSpec(this.temp).then((response) => {
+            updateBrandClass(this.temp).then((response) => {
               if (response.code === 50001) {
                 store.dispatch('GetRefreshToken').then(() => {
                   this.updateData()

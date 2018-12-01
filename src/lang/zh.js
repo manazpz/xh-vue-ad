@@ -20,6 +20,7 @@ export default {
     newClassifyBackList: '商品分类（新）',
     oldClassifyBackList: '商品分类（旧）',
     brandBacklist: '商品品牌',
+    brandBackClasslist: '品牌分类',
     newSpecBacklist: '商品规格（新）',
     oldSpecBacklist: '商品规格（旧）',
     specBackValueList: '商品规格值',
@@ -48,7 +49,8 @@ export default {
     oldGoodsList: '商品列表（旧）',
     recycleGoodsList: '商品回收站',
     sendGoods: '发布商品',
-    editGoods: '商品发布',
+    editNewGoods: '商品发布（新）',
+    editOldGoods: '商品发布（旧）',
     lable: '标签'
     // 商家端
   },
