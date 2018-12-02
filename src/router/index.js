@@ -394,6 +394,12 @@ export const asyncRouterMap = [
       meta: { title: 'assignPermissions' }
     },
     {
+      path: 'roleList',
+      component: () => import('@/views/user/role/roleList'),
+      name: 'roleList',
+      meta: { title: '角色列表' }
+    },
+    {
       path: 'changePwd',
       component: () => import('@/views/user/basic/changePwd'),
       hidden: true,
@@ -461,6 +467,12 @@ export const asyncRouterMap = [
         component: () => import('@/views/sms/smsList'),
         name: 'smsList',
         meta: { title: 'smsList' }
+      },
+      {
+        path: 'dataBase',
+        component: () => import('@/views/dataBase/index'),
+        name: 'dataBase',
+        meta: { title: '数据库' }
       }]
   }
 ]

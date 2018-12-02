@@ -47,7 +47,7 @@ function getUserInfo(next, to) {
   store.dispatch('GetInfo').then(res => { // 拉取用户信息
     if (res.code === 50001) {
       store.dispatch('GetRefreshToken').then(() => {
-        getUserInfo(next)
+        getUserInfo(next, to)
       })
     }
     if (res.code === 200) {

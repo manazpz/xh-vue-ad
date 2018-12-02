@@ -11,7 +11,7 @@
         <screenfull class="screenfull right-menu-item"></screenfull>
       </el-tooltip>
 
-      <lang-select class="international right-menu-item"></lang-select>
+      <!--<lang-select class="international right-menu-item"></lang-select>-->
 
       <el-tooltip effect="dark" :content="$t('navbar.theme')" placement="bottom">
         <theme-picker class="theme-switch right-menu-item"></theme-picker>
@@ -143,20 +143,22 @@
     margin: 0 8px;
   }
   .screenfull {
-    height: 20px;
+    margin-top: 14px;
+    vertical-align: top;
   }
   .international{
     vertical-align: top;
   }
   .theme-switch {
-    vertical-align: 15px;
+    margin-top: 7px;
+    vertical-align: top;
   }
   .avatar-container {
-    height: 50px;
+    vertical-align: top;
     margin-right: 30px;
   .avatar-wrapper {
     cursor: pointer;
-    margin-top: 5px;
+    /*margin-top: 5px;*/
     position: relative;
   .user-avatar {
     width: 40px;

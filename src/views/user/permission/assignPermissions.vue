@@ -3,6 +3,7 @@
 
     <!-- 悬浮框 start -->
     <sticky :className="'sub-navbar '+status">
+      <span style="float: left;padding-left: 10px">{{!res.nickName?res.name:res.nickName}}</span>
       <el-button v-loading="loading" style="margin-left: 10px;" type="success" @click="submitForm">发布
       </el-button>
     </sticky>
@@ -33,7 +34,7 @@
 
 <script>
   import Sticky from '@/components/Sticky' // 粘性header组件
-  import { userPermission, allotUserPermission } from '@/api/user'
+  import { userPermission, allotUserPermission, rolePermission, allotRolePermission } from '@/api/user'
   import waves from '@/directive/waves' // 水波纹指令
   import store from '@/store'
   export default {
@@ -50,12 +51,13 @@
         listLoading: true,
         loading: false,
         isAm: false,
-        checkedCities: []
+        checkedCities: [],
+        res: { name: '' }
       }
     },
     watch: {
       $route(to, from) {
-        if (to.path === '/user/assignPermissions') {
+        if (to.path === '/um/assignPermissions') {
           this.getList()
         }
       }
@@ -65,52 +67,89 @@
     },
     methods: {
       setLocalStorage() {
-        window.localStorage.setItem('user', JSON.stringify(this.$route.params.id))
+        debugger
+        window.localStorage.setItem('mark', JSON.stringify(this.$route.params))
       },
       getList() {
-        var res = null
         if (!this.$route.params.id) {
-          res = JSON.parse(window.localStorage.getItem('user'))
+          this.res = JSON.parse(window.localStorage.getItem('mark'))
         } else {
-          res = this.$route.params.id
+          this.res = this.$route.params
           this.setLocalStorage()
         }
-        if (res) {
+        if (this.res) {
           this.listLoading = true
-          userPermission(res).then(response => {
-            if (response.code === 50001) {
-              store.dispatch('GetRefreshToken').then(() => {
-                this.getList()
-              })
-            }
-            if (response.code === 200) {
-              this.list = response.data.items
-              this.checkedCities = response.data.checkedCities
-              this.isAm = false
-              for (var i = 0; i <= this.list.length; i++) {
-                var key = this.list[i].key
-                if (key === 'AM') {
-                  for (var j = 0; j <= this.checkedCities.length; j++) {
-                    var str1 = this.checkedCities[j]
-                    var str2 = this.list[i].desc[0].id
-                    if (str1 === str2) {
-                      this.isAm = true
-                      break
-                    }
-                  }
-                  break
-                }
-              }
-              setTimeout(() => {
-                this.listLoading = false
-              }, 1.5 * 1000)
-            }
-          }).catch(() => {
-            this.listLoading = false
-          })
+          if (this.res.mark === 'user') this.getUserPermisson(this.res.id)
+          if (this.res.mark === 'role') this.getRolePermisson(this.res.id)
         } else {
           this.listLoading = false
         }
+      },
+      getUserPermisson(id) {
+        userPermission(id).then(response => {
+          if (response.code === 50001) {
+            store.dispatch('GetRefreshToken').then(() => {
+              this.getUserPermisson(id)
+            })
+          }
+          if (response.code === 200) {
+            this.list = response.data.items
+            this.checkedCities = response.data.checkedCities
+            this.isAm = false
+            for (var i = 0; i <= this.list.length; i++) {
+              var key = this.list[i].key
+              if (key === 'AM') {
+                for (var j = 0; j <= this.checkedCities.length; j++) {
+                  var str1 = this.checkedCities[j]
+                  var str2 = this.list[i].desc[0].id
+                  if (str1 === str2) {
+                    this.isAm = true
+                    break
+                  }
+                }
+                break
+              }
+            }
+            setTimeout(() => {
+              this.listLoading = false
+            }, 1.5 * 1000)
+          }
+        }).catch(() => {
+          this.listLoading = false
+        })
+      },
+      getRolePermisson(id) {
+        rolePermission(id).then(response => {
+          if (response.code === 50001) {
+            store.dispatch('GetRefreshToken').then(() => {
+              this.getRolePermisson(id)
+            })
+          }
+          if (response.code === 200) {
+            this.list = response.data.items
+            this.checkedCities = response.data.checkedCities
+            this.isAm = false
+            for (var i = 0; i <= this.list.length; i++) {
+              var key = this.list[i].key
+              if (key === 'AM') {
+                for (var j = 0; j <= this.checkedCities.length; j++) {
+                  var str1 = this.checkedCities[j]
+                  var str2 = this.list[i].desc[0].id
+                  if (str1 === str2) {
+                    this.isAm = true
+                    break
+                  }
+                }
+                break
+              }
+            }
+            setTimeout(() => {
+              this.listLoading = false
+            }, 1.5 * 1000)
+          }
+        }).catch(() => {
+          this.listLoading = false
+        })
       },
       handleCheckAllChange(val) {
         if (val === 'AM') {
@@ -119,11 +158,36 @@
       },
       submitForm() {
         this.loading = true
-        var params = { userId: JSON.parse(window.localStorage.getItem('user')), permissions: this.checkedCities }
+        if (JSON.parse(window.localStorage.getItem('mark')).mark === 'user') this.submitUser()
+        if (JSON.parse(window.localStorage.getItem('mark')).mark === 'role') this.submitRole()
+      },
+      submitUser() {
+        var params = { userId: JSON.parse(window.localStorage.getItem('mark')).id, permissions: this.checkedCities }
         allotUserPermission(params).then(response => {
           if (response.code === 50001) {
             store.dispatch('GetRefreshToken').then(() => {
-              this.submitForm()
+              this.submitUser()
+            })
+          }
+          if (response.code === 200) {
+            this.$notify({
+              title: '成功',
+              message: '更新成功',
+              type: 'success',
+              duration: 2000
+            })
+            this.loading = false
+          }
+        }).catch(() => {
+          this.loading = false
+        })
+      },
+      submitRole() {
+        var params = { roleId: JSON.parse(window.localStorage.getItem('mark')).id, permissions: this.checkedCities }
+        allotRolePermission(params).then(response => {
+          if (response.code === 50001) {
+            store.dispatch('GetRefreshToken').then(() => {
+              this.submitRole()
             })
           }
           if (response.code === 200) {

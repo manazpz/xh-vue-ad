@@ -85,14 +85,14 @@ export function updatePermission(params) {
 export function userPermission(query) {
   if (!query) return null
   return request({
-    url: '/user/permissions/' + query,
+    url: '/user/userPermissions/' + query,
     method: 'get'
   })
 }
 
 export function allotUserPermission(params) {
   return request({
-    url: '/user/permission/allot',
+    url: '/user/permission/userAllot',
     method: 'POST',
     data: params
   })
@@ -184,5 +184,61 @@ export function suggestionList(query) {
     url: '/user/querySuggestion',
     method: 'get',
     params: query
+  })
+}
+
+export function insertRole(params) {
+  return request({
+    url: '/user/insertRole',
+    method: 'post',
+    data: params
+  })
+}
+
+export function updateRole(params) {
+  return request({
+    url: '/user/updateRole',
+    method: 'post',
+    data: params
+  })
+}
+
+export function roleList(query) {
+  return request({
+    url: '/user/roles',
+    method: 'get',
+    params: query
+  })
+}
+
+export function userRoleList(query) {
+  return request({
+    url: '/user/userRoles',
+    method: 'get',
+    params: query
+  })
+}
+
+export function rolePermission(query) {
+  if (!query) return null
+  return request({
+    url: '/user/rolePermission/' + query,
+    method: 'get'
+  })
+}
+
+export function allotRolePermission(params) {
+  return request({
+    url: '/user/permission/roleAllot',
+    method: 'POST',
+    data: params
+  })
+}
+
+export function allotUserRole(params) {
+  return request({
+    url: '/user/role/allot',
+    method: 'POST',
+    data: params
   })
 }

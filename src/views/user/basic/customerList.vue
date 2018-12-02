@@ -9,11 +9,6 @@
       <el-input @keyup.enter.native="handleFilter" style="width: 200px;" class="filter-item"
                 :placeholder="$t('user.phone')" v-model="listQuery.phone">
       </el-input>
-      <el-select clearable class="filter-item" style="width: 130px" v-model="listQuery.status"
-                 :placeholder="$t('user.statusName')">
-        <el-option v-for="item in statusOptions" :key="item.key" :label="item.label" :value="item.key">
-        </el-option>
-      </el-select>
       <el-button class="filter-item" type="primary" v-waves icon="el-icon-search" size="mini" @click="handleFilter">
         {{$t('table.search')}}
       </el-button>
@@ -60,11 +55,8 @@
       </el-table-column>
       <el-table-column align="center" :label="$t('table.actions')" width="200" class-name="small-padding fixed-width">
         <template slot-scope="scope">
-          <el-button v-if="scope.row.status === '01'" type="success"
-                     @click="handleStatus(scope.row,'02')">升级工作人员
-          </el-button>
-          <el-button  v-else type="warning"
-                      @click="handleStatus(scope.row,'01')">降级普通客户
+          <el-button type="success"
+                     @click="handleRole(scope.row.id)">分配角色
           </el-button>
         </template>
       </el-table-column>
@@ -80,11 +72,34 @@
     </div>
     <!-- 分页组件 end -->
 
+    <!-- 编辑弹出框 start -->
+    <el-dialog title="分配角色" :visible.sync="dialogFormVisible">
+      <el-form :model="temp" label-position="left" label-width="70px"
+               style='width: 500px; margin-left:50px;'>
+        <el-transfer
+          v-model="temp.roles"
+          filterable
+          :titles="['未设权限', '已设权限']"
+          :filter-method="filterMethod"
+          :props="{
+          key: 'id',
+          label: 'name'
+        }"
+          :data="allRole">
+        </el-transfer>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogFormVisible = false">{{$t('table.cancel')}}</el-button>
+        <el-button vtype="primary" v-loading="btnLoading" @click="submitRole">{{$t('table.confirm')}}</el-button>
+      </div>
+    </el-dialog>
+    <!-- 编辑弹出框 end -->
+
   </div>
 </template>
 
 <script>
-  import { customerList, updateCustomer } from '@/api/user'
+  import { customerList, roleList, userRoleList, allotUserRole } from '@/api/user'
   import waves from '@/directive/waves' // 水波纹指令
   import store from '@/store'
 
@@ -99,6 +114,8 @@
         list: null,
         total: null,
         listLoading: true,
+        btnLoading: false,
+        dialogFormVisible: false,
         listQuery: {
           pageNum: 1,
           pageSize: 20,
@@ -106,12 +123,18 @@
           status: '',
           phone: ''
         },
+        allRole: [],
+        temp: {
+          id: undefined,
+          roles: []
+        },
         statusOptions: [{ label: '普通客户', key: '01' }, { label: '工作人员', key: '02' }],
         rules: {
         }
       }
     },
     created() {
+      this.getRoles()
       this.getList()
     },
     methods: {
@@ -134,6 +157,19 @@
           this.listLoading = false
         })
       },
+      getRoles() {
+        roleList().then(response => {
+          if (response.code === 50001) {
+            store.dispatch('GetRefreshToken').then(() => {
+              this.getRoles()
+            })
+          }
+          if (response.code === 200) {
+            this.allRole = response.data.items
+          }
+        }).catch(() => {
+        })
+      },
       handleFilter() {
         this.listQuery.pageNum = 1
         this.getList()
@@ -146,22 +182,47 @@
         this.listQuery.pageNum = val
         this.getList()
       },
-      handleStatus(item, status) {
-        updateCustomer({ id: item.id, 'status': status }).then(response => {
+      filterMethod(query, item) {
+        return item.name.indexOf(query) > -1
+      },
+      handleRole(id) {
+        userRoleList({ userId: id }).then(response => {
           if (response.code === 50001) {
             store.dispatch('GetRefreshToken').then(() => {
-              this.handleStatus(item, status)
+              this.handleRole(id)
             })
           }
           if (response.code === 200) {
-            this.getList()
+            this.temp.id = id
+            this.temp.roles = response.data.items
+            this.dialogFormVisible = true
           }
         }).catch(() => {
-          this.listLoading = false
+        })
+      },
+      submitRole() {
+        this.btnLoading = true
+        allotUserRole(this.temp).then(response => {
+          if (response.code === 50001) {
+            store.dispatch('GetRefreshToken').then(() => {
+              this.submitRole()
+            })
+          }
+          if (response.code === 200) {
+            this.$message({
+              message: '操作成功',
+              type: 'success'
+            })
+            this.dialogFormVisible = false
+            this.btnLoading = false
+          }
+        }).catch(() => {
+          this.btnLoading = false
         })
       },
       rowClick(row, event, column) {
-        this.$router.push({ name: 'customerDetail', query: { id: row.id }})
+        if (column.label !== '操作')
+          this.$router.push({ name: 'customerDetail', query: { id: row.id }})
       }
     }
   }

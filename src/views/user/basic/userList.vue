@@ -361,6 +361,7 @@
         })
       },
       permissions(row) {
+        row.mark = 'user'
         this.$router.push({ name: 'assignPermissions', params: row })
       },
       resetPwd(row) {
