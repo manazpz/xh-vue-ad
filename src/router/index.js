@@ -433,6 +433,12 @@ export const asyncRouterMap = [
         meta: { title: '第三方平台配置' }
       },
       {
+        path: 'homeLabel',
+        component: () => import('@/views/config/homeLabel'),
+        name: 'homeLabel',
+        meta: { title: '首页标签配置' }
+      },
+      {
         path: 'statementList',
         component: () => import('@/views/statement/statementList'),
         name: 'statementList',

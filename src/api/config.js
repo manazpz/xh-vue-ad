@@ -63,3 +63,36 @@ export function tppConfigDelete(params) {
     data: params
   })
 }
+
+export function homeLabelInsert(params) {
+  return request({
+    url: '/config/insertHomeLabel',
+    method: 'post',
+    data: params
+  })
+}
+
+export function homeLabelList(query) {
+  return request({
+    url: '/config/homeLabels',
+    method: 'get',
+    params: query
+  })
+}
+
+export function homeLabelUpdate(params) {
+  return request({
+    url: '/config/updateHomeLabel',
+    method: 'post',
+    data: params
+  })
+}
+
+export function homeLabelDelete(params) {
+  return request({
+    url: '/config/deleteHomeLabel',
+    method: 'post',
+    data: params
+  })
+}
+

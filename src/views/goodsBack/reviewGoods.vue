@@ -148,7 +148,7 @@
         this.getList()
       },
       handleDel(id) {
-        this.$confirm('下架商品, 是否继续?', '提示', {
+        this.$confirm('删除审核, 是否继续?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
@@ -173,7 +173,7 @@
         })
       },
       handleSh(row) {
-        this.$confirm('您确定删除吗？').then(_ => {
+        this.$confirm('审核商品，是否通过？').then(_ => {
           updateGoods({ id: row.id, obligate1: 'Y' }).then(response => {
             if (response.code === 50001) {
               store.dispatch('GetRefreshToken').then(() => {

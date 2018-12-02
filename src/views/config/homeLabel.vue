@@ -2,7 +2,7 @@
   <div class="app-container">
 
     <div class="filter-container">
-      <el-button type="success" size="mini" @click="handleCreate" class="filter-item" round>新增第三方配置</el-button>
+      <el-button type="success" size="mini" @click="handleCreate" class="filter-item" round>新增标签</el-button>
     </div>
 
     <!-- 表格 start -->
@@ -13,61 +13,28 @@
           <span>{{scope.$index+1}}</span>
         </template>
       </el-table-column>
-      <el-table-column align="center" label="名称" width="100">
+      <el-table-column align="center" label="标题" min-width="100">
         <template slot-scope="scope">
-          <span>{{scope.row.name}}</span>
+          <span>{{scope.row.title}}</span>
         </template>
       </el-table-column>
-      <el-table-column align="center" label="平台标识" width="90">
+      <el-table-column align="center" label="排序码" min-width="100">
         <template slot-scope="scope">
-          <span>{{scope.row.platform}}</span>
+          <span>{{scope.row.no}}</span>
         </template>
       </el-table-column>
-      <el-table-column align="center" label="accessKeyId" width="100" :show-overflow-tooltip="true">
+      <el-table-column align="center" label="使能" width="150" :show-overflow-tooltip="true">
         <template slot-scope="scope">
-          <span>{{scope.row.accessKeyId}}</span>
+          <el-switch
+            @change="handEnable(scope.row)"
+            v-model="scope.row.isEnable"
+            active-value="Y"
+            inactive-value="N"
+            active-color="#13ce66"
+            inactive-color="#ff4949">
+          </el-switch>
         </template>
       </el-table-column>
-      <el-table-column align="center" label="accessKeySecret" width="100" :show-overflow-tooltip="true">
-        <template slot-scope="scope">
-          <span>{{scope.row.accessKeySecret}}</span>
-        </template>
-      </el-table-column>
-      <el-table-column align="center" label="mchid" width="90" :show-overflow-tooltip="true">
-        <template slot-scope="scope">
-          <span>{{scope.row.mchid}}</span>
-        </template>
-      </el-table-column>
-      <el-table-column align="center" label="key" width="100" :show-overflow-tooltip="true">
-        <template slot-scope="scope">
-          <span>{{scope.row.keyword}}</span>
-        </template>
-      </el-table-column>
-      <el-table-column align="center" label="endpoint" width="100" :show-overflow-tooltip="true">
-        <template slot-scope="scope">
-          <span>{{scope.row.endpoint}}</span>
-        </template>
-      </el-table-column>
-      <el-table-column align="center" label="backetName" width="100">
-        <template slot-scope="scope">
-          <span>{{scope.row.backetName}}</span>
-        </template>
-      </el-table-column>
-      <el-table-column align="center" label="二级路径" width="100" :show-overflow-tooltip="true">
-        <template slot-scope="scope">
-          <span>{{scope.row.towPath}}</span>
-        </template>
-      </el-table-column>
-      <el-table-column align="center" label="回调地址" width="100" :show-overflow-tooltip="true">
-        <template slot-scope="scope">
-          <span>{{scope.row.returnUrl}}</span>
-        </template>
-      </el-table-column>
-      <!--<el-table-column align="center" :label="$t('user.updateTime')" min-width="100">-->
-        <!--<template slot-scope="scope">-->
-          <!--<span>{{scope.row.updateTime}}</span>-->
-        <!--</template>-->
-      <!--</el-table-column>-->
       <el-table-column align="center" :label="$t('table.actions')" width="150" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button size="mini" type="success"
@@ -85,40 +52,17 @@
     <el-dialog :title="dialogStatus" :visible.sync="dialogFormVisible" >
       <el-form :rules="rules" ref="dataForm" :model="temp" label-position="right" label-width="120px"
                style='width: 600px; margin-left:40px;'>
-        <el-form-item label-width="120px" label="平台名" prop="name" class="postInfo-container-item">
-          <el-input :disabled="editFlag" v-model="temp.name" required placeholder="请输入平台名"></el-input>
+        <el-form-item label-width="120px" label="标题" prop="name" class="postInfo-container-item">
+          <el-input v-model="temp.title" required placeholder="请输入平台名"></el-input>
         </el-form-item>
-        <el-form-item label-width="120px" label="平台标识" prop="platform" class="postInfo-container-item">
-          <el-input :disabled="editFlag" v-model="temp.platform" required placeholder="请输入平台标识"></el-input>
+        <el-form-item label-width="120px" label="排序号" prop="platform" class="postInfo-container-item">
+          <el-input v-model="temp.no" required placeholder="请输入平台标识"></el-input>
         </el-form-item>
-        <el-form-item label-width="120px" label="accessKeyId" prop="accessKeyId" class="postInfo-container-item">
-          <el-input v-model="temp.accessKeyId" required placeholder="请输入accessKeyId"></el-input>
-        </el-form-item>
-        <el-form-item label-width="120px" label="accessKeySecret" prop="accessKeySecret" class="postInfo-container-item">
-          <el-input v-model="temp.accessKeySecret" required placeholder="请输入accessKeySecret"></el-input>
-        </el-form-item>
-        <el-form-item label-width="120px" label="mchid" prop="mchid" class="postInfo-container-item">
-          <el-input v-model="temp.mchid" required placeholder="请输入mchid"></el-input>
-        </el-form-item>
-        <el-form-item label-width="120px" label="key" prop="keyword" class="postInfo-container-item">
-          <el-input v-model="temp.keyword" required placeholder="请输入key"></el-input>
-        </el-form-item>
-        <el-form-item label-width="120px" label="endpoint" prop="endpoint" class="postInfo-container-item">
-          <el-input v-model="temp.endpoint" required placeholder="请输入endpoint"></el-input>
-        </el-form-item>
-        <el-form-item label-width="120px" label="backetName" prop="backetName" class="postInfo-container-item">
-          <el-input v-model="temp.backetName" required placeholder="请输入backetName"></el-input>
-        </el-form-item>
-        <el-form-item label-width="120px" label="二级路径" prop="returnUrl" class="postInfo-container-item">
-          <el-input v-model="temp.towPath" required placeholder="设置二级路径"></el-input>
-        </el-form-item>
-        <el-form-item label-width="120px" label="回调地址" prop="returnUrl" class="postInfo-container-item">
-          <el-input v-model="temp.returnUrl" required placeholder="请输入回调地址"></el-input>
-        </el-form-item>
+
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisible = false">{{$t('table.cancel')}}</el-button>
-        <el-button v-if="dialogStatus=='创建第三方配置'" type="primary" v-loading="btnLoading" @click="createData">{{$t('table.confirm')}}</el-button>
+        <el-button v-if="dialogStatus=='创建标签'" type="primary" v-loading="btnLoading" @click="createData">{{$t('table.confirm')}}</el-button>
         <el-button v-else type="primary" v-loading="btnLoading" @click="updateData">{{$t('table.confirm')}}</el-button>
       </div>
     </el-dialog>
@@ -128,7 +72,7 @@
 </template>
 
 <script>
-  import { tppConfigList, tppConfigInsert, tppConfigUpdate, tppConfigDelete } from '@/api/config'
+  import { homeLabelList, homeLabelInsert, homeLabelUpdate, homeLabelDelete } from '@/api/config'
   import waves from '@/directive/waves' // 水波纹指令
   import store from '@/store'
 
@@ -144,23 +88,14 @@
         total: null,
         listLoading: true,
         btnLoading: false,
-        editFlag: false,
         listQuery: {
           pageNum: 1,
           pageSize: 20
         },
         temp: {
           id: undefined,
-          name: '',
-          platform: '',
-          accessKeyId: '',
-          accessKeySecret: '',
-          mchid: '',
-          keyword: '',
-          endpoint: '',
-          backetName: '',
-          towPath: '',
-          returnUrl: ''
+          title: '',
+          no: ''
         },
         dialogFormVisible: false,
         dialogStatus: '',
@@ -174,7 +109,7 @@
     methods: {
       getList() {
         this.listLoading = true
-        tppConfigList(this.listQuery).then(response => {
+        homeLabelList(this.listQuery).then(response => {
           if (response.code === 50001) {
             store.dispatch('GetRefreshToken').then(() => {
               this.getList()
@@ -210,7 +145,7 @@
           type: 'warning'
         }).then(() => {
           this.listLoading = true
-          tppConfigDelete({ id: id }).then(response => {
+          homeLabelDelete({ id: id }).then(response => {
             if (response.code === 50001) {
               store.dispatch('GetRefreshToken').then(() => {
                 this.handleModifyStatus(id)
@@ -234,23 +169,14 @@
       resetTemp() {
         this.temp = {
           id: undefined,
-          name: '',
-          platform: '',
-          accessKeyId: '',
-          accessKeySecret: '',
-          mchid: '',
-          keyword: '',
-          endpoint: '',
-          backetName: '',
-          towPath: '',
-          returnUrl: ''
+          title: '',
+          no: ''
         }
       },
       handleCreate() {
         this.resetTemp()
-        this.dialogStatus = '创建第三方配置'
+        this.dialogStatus = '创建标签'
         this.dialogFormVisible = true
-        this.editFlag = false
         this.$nextTick(() => {
           this.$refs['dataForm'].clearValidate()
         })
@@ -259,7 +185,7 @@
         this.$refs['dataForm'].validate((valid) => {
           if (valid) {
             this.btnLoading = true
-            tppConfigInsert(this.temp).then(response => {
+            homeLabelInsert(this.temp).then(response => {
               if (response.code === 50001) {
                 store.dispatch('GetRefreshToken').then(() => {
                   this.createData()
@@ -284,18 +210,36 @@
       },
       handleUpdate(row) {
         this.temp = Object.assign({}, row) // copy obj
-        this.dialogStatus = '更新第三方配置'
+        this.dialogStatus = '更新标签'
         this.dialogFormVisible = true
-        this.editFlag = true
         this.$nextTick(() => {
           this.$refs['dataForm'].clearValidate()
+        })
+      },
+      handEnable(row) {
+        homeLabelUpdate(row).then(response => {
+          if (response.code === 50001) {
+            store.dispatch('GetRefreshToken').then(() => {
+              this.handEnable(row)
+            })
+          }
+          if (response.code === 200) {
+            this.getList()
+            this.$notify({
+              title: '成功',
+              message: '更新成功',
+              type: 'success',
+              duration: 2000
+            })
+          }
+        }).catch(() => {
         })
       },
       updateData() {
         this.$refs['dataForm'].validate((valid) => {
           if (valid) {
             this.btnLoading = true
-            tppConfigUpdate(this.temp).then(response => {
+            homeLabelUpdate(this.temp).then(response => {
               if (response.code === 50001) {
                 store.dispatch('GetRefreshToken').then(() => {
                   this.updateData()
