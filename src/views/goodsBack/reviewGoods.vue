@@ -85,6 +85,26 @@
       </el-pagination>
     </div>
     <!-- 分页组件 end -->
+
+    <!-- 弹出框 start -->
+    <el-dialog :title="dialogStatus" :visible.sync="dialogFormVisible">
+      <el-form :rules="rule" :model="temp" ref="dataForm" label-position="left" label-width="70px"
+               style='width: 400px; margin-left:50px;'>
+        <el-form-item label-width="110px" label="审批" class="postInfo-container-item">
+          <el-switch v-model="choice" active-text="同意" inactive-text="拒绝"></el-switch>
+        </el-form-item>
+        <el-form-item v-if="temp.choice === false " label-width="110px" label="拒绝原因"  prop="msg" class="postInfo-container-item">
+          <el-input v-model="temp.msg" type="textarea" :rows="7" required></el-input>
+        </el-form-item>
+      </el-form>
+
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogFormVisible = false">{{$t('table.cancel')}}</el-button>
+        <el-button type="primary" @click="createData">{{$t('table.confirm')}}</el-button>
+      </div>
+    </el-dialog>
+    <!-- 弹出框 end -->
+
   </div>
 </template>
 
@@ -103,12 +123,22 @@
         tableKey: 0,
         list: null,
         total: null,
+        dialogStatus: '',
+        dialogFormVisible: false,
         listLoading: true,
         listQuery: {
           pageNum: 1,
           pageSize: 20,
           isDel: 'N',
           obligate1: 'N'
+        },
+        rule: {
+          msg: [{ required: true, message: '审核意见不能为空！', trigger: 'change' }]
+        },
+        temp: {
+          id: undefined,
+          msg: '',
+          choice: false
         }
       }
     },
@@ -173,25 +203,38 @@
         })
       },
       handleSh(row) {
-        this.$confirm('审核商品，是否通过？').then(_ => {
-          updateGoods({ id: row.id, obligate1: 'Y' }).then(response => {
-            if (response.code === 50001) {
-              store.dispatch('GetRefreshToken').then(() => {
-                this.handleSh(row)
+        this.dialogStatus = '审核'
+        this.dialogFormVisible = true
+        this.temp.id = row.id
+        this.$nextTick(() => {
+          this.$refs['dataForm'].clearValidate()
+        })
+      },
+      createData(row) {
+        this.$refs['dataForm'].validate((valid) => {
+          if (valid) {
+            this.$confirm('审核商品，是否通过？').then(_ => {
+              updateGoods(this.temp).then(response => {
+                if (response.code === 50001) {
+                  store.dispatch('GetRefreshToken').then(() => {
+                    this.createData(row)
+                  })
+                }
+                if (response.code === 200) {
+                  this.dialogFormVisible = false
+                  this.$message({
+                    message: '操作成功',
+                    type: 'success'
+                  })
+                  this.getList()
+                }
+              }).catch(() => {
+                this.listLoading = false
               })
-            }
-            if (response.code === 200) {
-              this.$message({
-                message: '操作成功',
-                type: 'success'
-              })
-              this.getList()
-            }
-          }).catch(() => {
-            this.listLoading = false
-          })
-        }).catch(_ => {
-          return
+            }).catch(_ => {
+              return
+            })
+          }
         })
       }
     }

@@ -147,3 +147,43 @@ export function deleteGoodsLable(params) {
     data: params
   })
 }
+
+export function forecastList(params) {
+  return request({
+    url: '/bf/goods/forecastList',
+    method: 'get',
+    params: params
+  })
+}
+
+export function getClassifyTree(query) {
+  return request({
+    url: '/bf/goods/treeList',
+    method: 'get',
+    params: query
+  })
+}
+
+export function createForecast(params) {
+  return request({
+    url: '/bf/goods/createForecast',
+    method: 'post',
+    data: params
+  })
+}
+
+export function deleteForecast(params) {
+  return request({
+    url: '/bf/goods/deleteForecast',
+    method: 'post',
+    data: params
+  })
+}
+
+export function updateForecast(params) {
+  return request({
+    url: '/bf/goods/updateForecast',
+    method: 'post',
+    data: params
+  })
+}

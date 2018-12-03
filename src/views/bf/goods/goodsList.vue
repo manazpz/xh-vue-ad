@@ -5,14 +5,6 @@
     <div class="filter-container">
       <el-button type="success" size="mini" @click="onJump" class="filter-item" round>发布商品</el-button>
       <div style="float: right;">
-        <!--<label class="filter-item">分类：</label>-->
-        <!--<el-select clearable @change='handleFilter' style="width: 140px;" class="filter-item" v-model="listQuery.model">-->
-          <!--</el-option>-->
-          <!--<el-option key="01" label="新机" value="01">-->
-          <!--</el-option>-->
-          <!--<el-option key="02" label="旧机" value="02">-->
-          <!--</el-option>-->
-        <!--</el-select>-->
         <label class="filter-item">状态：</label>
         <el-select clearable @change='handleFilter' style="width: 140px;" class="filter-item" v-model="listQuery.status">
           </el-option>
@@ -62,14 +54,19 @@
           <span>{{scope.row.useableStock}}</span>
         </template>
       </el-table-column>
+      <el-table-column align="center" label="审核状态" width="110">
+        <template slot-scope="scope">
+          <span>{{scope.row.statusType}}</span>
+        </template>
+      </el-table-column>
+      <el-table-column align="center" label="审核说明" width="110" :show-overflow-tooltip="true">
+        <template slot-scope="scope">
+          <span>{{scope.row.obligate2}}</span>
+        </template>
+      </el-table-column>
       <el-table-column align="center" label="创建时间" min-width="110">
         <template slot-scope="scope">
           <span>{{scope.row.createTime}}</span>
-        </template>
-      </el-table-column>
-      <el-table-column align="center" label="更新时间" min-width="110">
-        <template slot-scope="scope">
-          <span>{{scope.row.lastCreateTime}}</span>
         </template>
       </el-table-column>
       <el-table-column width="70" align="center" :label="$t('table.status')">
@@ -160,6 +157,7 @@
           pageNum: 1,
           pageSize: 20,
           isDel: 'N',
+          obligates: 'N',
           status: undefined,
           model: this.$route.fullPath.split('/')[this.$route.fullPath.split('/').length - 1]
         },
@@ -183,6 +181,14 @@
             })
           }
           if (response.code === 200) {
+            response.data.items.forEach((value,index) => {
+              if(value.obligate1 === 'Y'){
+                value.statusType = '已通过'
+              }
+              if(value.obligate1 === 'R'){
+                value.statusType = '未通过'
+              }
+            })
             this.list = response.data.items
             this.total = response.data.total
             setTimeout(() => {

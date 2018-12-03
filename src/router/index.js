@@ -254,6 +254,12 @@ export const asyncRouterMap = [
       meta: { title: '标签商品', icon: 'drag' }
     },
     {
+      path: 'forecast',
+      component: () => import('@/views/bf/goods/forecast'),
+      name: 'forecast',
+      meta: { title: '价格预测', icon: 'drag' }
+    },
+    {
       path: 'lable',
       component: () => import('@/views/bf/goods/lable'),
       name: 'lable',
