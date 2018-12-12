@@ -171,6 +171,14 @@ export function customerList(query) {
   })
 }
 
+export function customerAllList(query) {
+  return request({
+    url: '/user/customerAllList',
+    method: 'get',
+    params: query
+  })
+}
+
 export function updateCustomer(params) {
   return request({
     url: '/user/updateCustomer',

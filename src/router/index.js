@@ -194,6 +194,22 @@ export const asyncRouterMap = [
   },
 
   {
+    path: '/report',
+    component: Layout,
+    meta: {
+      title: '报表中心',
+      icon: 'report',
+      roles: ['AD']
+    },
+    children: [{
+      path: 'customerReport',
+      component: () => import('@/views/report/customerReport'),
+      name: 'customerReport',
+      meta: { title: '会员报表', icon: 'customerReport', noCache: true }
+    }]
+  },
+
+  {
     path: '',
     component: Layout,
     redirect: '/bfdashboard',

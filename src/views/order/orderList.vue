@@ -6,6 +6,14 @@
       <el-input @keyup.enter.native="handleFilter" style="width: 200px;" class="filter-item" clearable
                 placeholder="订单编号" v-model="listQuery.number">
       </el-input>
+      <el-select v-model="listQuery.buyer" class="filter-item" filterable placeholder="请选择">
+        <el-option
+          v-for="item in buyerOptions"
+          :key="item.id"
+          :label="item.nickName"
+          :value="item.id">
+        </el-option>
+      </el-select>
       <el-select clearable @change='handleFilter' style="width: 140px;" class="filter-item" v-model="listQuery.orderStatus" placeholder="订单状态">
         <el-option key="01" label="已完成" value="01">
         </el-option>
@@ -186,6 +194,7 @@
 <script>
   import { orderList, updateOrder } from '@/api/order'
   import { insertOrder } from '@/api/invoice/invoice'
+  import { customerAllList } from '@/api/user'
   import waves from '@/directive/waves' // 水波纹指令
   import store from '@/store'
 
@@ -204,13 +213,15 @@
         dialogFormVisible: false,
         btnLoading: false,
         dialogStatus: '',
+        buyerOptions: [],
         listQuery: {
           pageNum: 1,
           pageSize: 20,
           number: '',
           orderStatus: '',
           deliveryStatus: '',
-          payStatus: ''
+          payStatus: '',
+          buyer: this.$route.params.buyer
         },
         temp: {
           id: undefined,
@@ -223,10 +234,27 @@
         rules: {}
       }
     },
+    watch: {
+      $route(to, from) {
+        if (this.listQuery.buyer !== this.$route.params.buyer) {
+          this.listQuery.buyer = this.$route.params.buyer
+          this.getList()
+        }
+      }
+    },
     created() {
+      this.getBuyer()
       this.getList()
     },
     methods: {
+      getBuyer() {
+        customerAllList().then(response => {
+          if (response.code === 200) {
+            this.buyerOptions = response.data.items
+          }
+        }).catch(() => {
+        })
+      },
       getList() {
         this.listLoading = true
         orderList(this.listQuery).then(response => {

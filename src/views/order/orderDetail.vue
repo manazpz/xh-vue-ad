@@ -135,7 +135,8 @@
             })
           }
           if (response.code === 200) {
-            this.data = response.data.items[0]
+            if(response.data.items.length > 0)
+              this.data = response.data.items[0]
           }
         }).catch(() => {
         })
