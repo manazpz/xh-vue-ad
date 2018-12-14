@@ -1,5 +1,5 @@
 import request from '@/utils/request'
-import { dataToFormData,dataToFormData1 } from '@/utils/common'
+import { dataToFormData, dataToFormData1 } from '@/utils/common'
 
 export function shopInfo(query) {
   return request({

@@ -221,8 +221,9 @@
         })
       },
       rowClick(row, event, column) {
-        if (column.label !== '操作')
+        if (column.label !== '操作') {
           this.$router.push({ name: 'customerDetail', query: { id: row.id }})
+        }
       }
     }
   }

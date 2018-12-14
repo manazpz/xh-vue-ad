@@ -194,10 +194,10 @@
           }
           if (response.code === 200) {
             this.total = response.data.total
-            response.data.items.forEach((value,index) => {
+            response.data.items.forEach((value, index) => {
               var lists = []
               if (value.checkList.length > 0) {
-                value.checkList.forEach((values,index) => {
+                value.checkList.forEach((values, index) => {
                   lists.push(values.parentId)
                 })
                 value.checkList = lists
@@ -206,7 +206,6 @@
               }
             })
             this.list = response.data.items
-            debugger
             setTimeout(() => {
               this.listLoading = false
             }, 1.5 * 1000)
@@ -370,7 +369,6 @@
       handleUpdate(row) {
         this.falg = false
         this.temp = Object.assign({}, row)
-        debugger
         this.imageUrl = this.temp.imgUrl
         this.dialogStatus = '编辑品牌'
         this.dialogFormVisible = true

@@ -67,7 +67,6 @@
     },
     methods: {
       setLocalStorage() {
-        debugger
         window.localStorage.setItem('mark', JSON.stringify(this.$route.params))
       },
       getList() {

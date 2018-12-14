@@ -205,7 +205,7 @@ export const asyncRouterMap = [
       path: 'customerReport',
       component: () => import('@/views/report/customerReport'),
       name: 'customerReport',
-      meta: { title: '会员报表', icon: 'customerReport', noCache: true }
+      meta: { title: '会员报表', icon: 'report' }
     }]
   },
 

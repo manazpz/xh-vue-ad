@@ -181,11 +181,11 @@
             })
           }
           if (response.code === 200) {
-            response.data.items.forEach((value,index) => {
-              if(value.obligate1 === 'Y'){
+            response.data.items.forEach((value, index) => {
+              if (value.obligate1 === 'Y') {
                 value.statusType = '已通过'
               }
-              if(value.obligate1 === 'R'){
+              if (value.obligate1 === 'R') {
                 value.statusType = '未通过'
               }
             })

@@ -6,12 +6,20 @@
       <el-input @keyup.enter.native="handleFilter" style="width: 200px;" class="filter-item" clearable
                 placeholder="订单编号" v-model="listQuery.number">
       </el-input>
-      <el-select v-model="listQuery.buyer" class="filter-item" filterable placeholder="请选择">
+      <el-select v-model="listQuery.buyer" class="filter-item" filterable placeholder="请选择购买人">
         <el-option
           v-for="item in buyerOptions"
           :key="item.id"
           :label="item.nickName"
           :value="item.id">
+        </el-option>
+      </el-select>
+      <el-select clearable @change='handleFilter' style="width: 140px;" class="filter-item" v-model="listQuery.type" placeholder="订单类型">
+        <el-option key="01" label="购买新机" value="01">
+        </el-option>
+        <el-option key="02" label="出售旧机" value="02">
+        </el-option>
+        <el-option key="03" label="新旧换购" value="03">
         </el-option>
       </el-select>
       <el-select clearable @change='handleFilter' style="width: 140px;" class="filter-item" v-model="listQuery.orderStatus" placeholder="订单状态">
@@ -96,6 +104,11 @@
           <span>{{scope.row.buyer}}</span>
         </template>
       </el-table-column>
+      <el-table-column align="center" label="订单类型" min-width="90">
+        <template slot-scope="scope">
+          <span>{{scope.row.type | orderType}}</span>
+        </template>
+      </el-table-column>
       <el-table-column  align="center" label="实付金额" min-width="90">
         <template slot-scope="scope">
           <span style="color:red">￥{{scope.row.price}}</span>
@@ -106,7 +119,7 @@
           <span>{{scope.row.payStatusName}}</span>
         </template>
       </el-table-column>
-      <el-table-column align="center" label="收/发货状态" min-width="90">
+      <el-table-column align="center" label="收/发货状态" width="90">
         <template slot-scope="scope">
           <span>{{scope.row.deliveryStatusName}}</span>
         </template>
@@ -221,6 +234,7 @@
           orderStatus: '',
           deliveryStatus: '',
           payStatus: '',
+          type: '',
           buyer: this.$route.params.buyer
         },
         temp: {

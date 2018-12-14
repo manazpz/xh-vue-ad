@@ -103,7 +103,7 @@
 </template>
 
 <script>
-  import { orderList } from '@/api/order/order'
+  import { orderDetail } from '@/api/order'
   import waves from '@/directive/waves' // 水波纹指令
   import store from '@/store'
 
@@ -128,15 +128,16 @@
     },
     methods: {
       getData() {
-        orderList(this.listQuery).then(response => {
+        orderDetail(this.listQuery).then(response => {
           if (response.code === 50001) {
             store.dispatch('GetRefreshToken').then(() => {
               this.getData()
             })
           }
           if (response.code === 200) {
-            if(response.data.items.length > 0)
+            if (response.data.items.length > 0) {
               this.data = response.data.items[0]
+            }
           }
         }).catch(() => {
         })
