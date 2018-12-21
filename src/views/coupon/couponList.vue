@@ -2,7 +2,7 @@
   <div class="app-container">
 
     <div class="filter-container">
-      <!--<el-button type="success" size="mini" @click="handleCreate" class="filter-item" round>新增优惠券</el-button>-->
+      <el-button type="success" size="mini" @click="handleCreate" class="filter-item" round>新增优惠券</el-button>
       <div style="float: right;">
         <label class="filter-item">分类：</label>
         <el-select clearable class="filter-item" style="width: 130px" v-model="listQuery.type" placeholder="优惠券分类">
@@ -76,27 +76,28 @@
           <span>{{scope.row.status | sxStatus}}</span>
         </template>
       </el-table-column>
-      <!--<el-table-column align="center" label="审核状态" width="70">-->
-        <!--<template slot-scope="scope">-->
-          <!--<span>{{scope.row.obligate1}}</span>-->
-        <!--</template>-->
-      <!--</el-table-column>-->
-      <!--<el-table-column align="center" :label="$t('table.actions')" width="250" class-name="small-padding fixed-width">-->
-        <!--<template slot-scope="scope">-->
-          <!--<el-button size="mini" type="success"-->
-                     <!--@click="handleUpdate(scope.row)">{{$t('table.edit')}}-->
-          <!--</el-button>-->
-          <!--<el-button v-if="scope.row.status === '02'" size="mini" type="warning"-->
-                     <!--@click="sxj(scope.row,'01')">上架-->
-          <!--</el-button>-->
-          <!--<el-button v-else size="mini" type="info"-->
-                     <!--@click="sxj(scope.row,'02')">下架-->
-          <!--</el-button>-->
-          <!--<el-button size="mini" type="danger"-->
-                     <!--@click="handleModifyStatus(scope.row.id)">{{$t('table.delete')}}-->
-          <!--</el-button>-->
-        <!--</template>-->
-      <!--</el-table-column>-->
+      <el-table-column align="center" label="审核状态" width="70">
+        <template slot-scope="scope">
+          <span v-if="scope.row.obligate1 == 'Y'">已审核</span>
+          <span v-if="scope.row.obligate1 == 'N'">未审核</span>
+        </template>
+      </el-table-column>
+      <el-table-column align="center" :label="$t('table.actions')" width="250" class-name="small-padding fixed-width">
+        <template slot-scope="scope">
+          <el-button size="mini" type="success"
+                     @click="handleUpdate(scope.row)">{{$t('table.edit')}}
+          </el-button>
+          <el-button v-if="scope.row.status === '02'" size="mini" type="warning"
+                     @click="sxj(scope.row,'01')">上架
+          </el-button>
+          <el-button v-else size="mini" type="info"
+                     @click="sxj(scope.row,'02')">下架
+          </el-button>
+          <el-button size="mini" type="danger"
+                     @click="handleModifyStatus(scope.row.id)">{{$t('table.delete')}}
+          </el-button>
+        </template>
+      </el-table-column>
     </el-table>
     <!-- 表格 end -->
 

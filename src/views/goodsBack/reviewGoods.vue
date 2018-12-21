@@ -91,7 +91,7 @@
       <el-form :rules="rule" :model="temp" ref="dataForm" label-position="left" label-width="70px"
                style='width: 400px; margin-left:50px;'>
         <el-form-item label-width="110px" label="审批" class="postInfo-container-item">
-          <el-switch v-model="choice" active-text="同意" inactive-text="拒绝"></el-switch>
+          <el-switch v-model="temp.choice" active-text="同意" inactive-text="拒绝" ></el-switch>
         </el-form-item>
         <el-form-item v-if="temp.choice === false " label-width="110px" label="拒绝原因"  prop="msg" class="postInfo-container-item">
           <el-input v-model="temp.msg" type="textarea" :rows="7" required></el-input>

@@ -176,23 +176,6 @@ export const asyncRouterMap = [
         meta: { title: 'orderDetail' }
       }]
   },
-
-  {
-    path: '/coupon',
-    component: Layout,
-    meta: {
-      title: '优惠券后台',
-      icon: 'goods',
-      roles: ['AD']
-    },
-    children: [{
-      path: 'couponList',
-      component: () => import('@/views/coupon/couponList'),
-      name: 'couponList',
-      meta: { title: '优惠券后台', icon: 'component', noCache: true }
-    }]
-  },
-
   {
     path: '/report',
     component: Layout,
@@ -335,6 +318,21 @@ export const asyncRouterMap = [
         name: 'invoiceBf',
         meta: { title: '发票', icon: 'theme' }
       }]
+  },
+  {
+    path: '/coupon',
+    component: Layout,
+    meta: {
+      title: '优惠券后台',
+      icon: 'goods',
+      roles: ['SD']
+    },
+    children: [{
+      path: 'couponList',
+      component: () => import('@/views/coupon/couponList'),
+      name: 'couponList',
+      meta: { title: '优惠券后台', icon: 'component', noCache: true }
+    }]
   },
 
   {

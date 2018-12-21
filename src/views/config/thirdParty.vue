@@ -23,7 +23,7 @@
           <span>{{scope.row.platform}}</span>
         </template>
       </el-table-column>
-      <el-table-column align="center" label="accessKeyId" width="100" :show-overflow-tooltip="true">
+      <el-table-column align="center" label="accessKeyId" min-width="100" :show-overflow-tooltip="true">
         <template slot-scope="scope">
           <span>{{scope.row.accessKeyId}}</span>
         </template>
@@ -58,7 +58,7 @@
           <span>{{scope.row.towPath}}</span>
         </template>
       </el-table-column>
-      <el-table-column align="center" label="回调地址" width="100" :show-overflow-tooltip="true">
+      <el-table-column align="center" label="回调地址" min-width="100" :show-overflow-tooltip="true">
         <template slot-scope="scope">
           <span>{{scope.row.returnUrl}}</span>
         </template>
