@@ -123,7 +123,7 @@
           <el-button type="success"
                      @click="handleDetail(scope.row.id)">查看详情
           </el-button>
-          <el-dropdown v-if="scope.row.orderStatus == '03'">
+          <el-dropdown v-if="(scope.row.orderStatus == '03' && scope.row.price < 0 && scope.row.checkStatus === '02') || (scope.row.orderStatus == '03' && scope.row.deliveryStatus === '02' && scope.row.payStatus === '02')" >
             <el-button type="primary" >
               {{$t('table.actions')}}<i class="el-icon-arrow-down el-icon--right"></i>
             </el-button>

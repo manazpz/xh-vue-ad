@@ -6,7 +6,7 @@
       <el-input @keyup.enter.native="handleFilter" style="width: 200px;" class="filter-item" clearable
                 placeholder="订单编号" v-model="listQuery.number">
       </el-input>
-      <el-select v-model="listQuery.buyer" class="filter-item" filterable placeholder="请选择购买人">
+      <el-select clearable v-model="listQuery.buyer" class="filter-item" filterable placeholder="请选择购买人">
         <el-option
           v-for="item in buyerOptions"
           :key="item.id"
