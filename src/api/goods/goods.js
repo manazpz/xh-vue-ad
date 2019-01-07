@@ -187,3 +187,43 @@ export function updateForecast(params) {
     data: params
   })
 }
+
+export function instertLable(params) {
+  return request({
+    url: '/bf/goods/instertLable',
+    method: 'post',
+    data: params
+  })
+}
+
+export function createForecastMain(params) {
+  return request({
+    url: '/bf/goods/createForecastMain',
+    method: 'post',
+    data: params
+  })
+}
+
+export function forecastMainList(params) {
+  return request({
+    url: '/bf/goods/forecastMainList',
+    method: 'get',
+    params: params
+  })
+}
+
+export function deleteForecastMain(params) {
+  return request({
+    url: '/bf/goods/deleteForecastMain',
+    method: 'post',
+    data: params
+  })
+}
+
+export function updateForecastMain(params) {
+  return request({
+    url: '/bf/goods/updateForecastMain',
+    method: 'post',
+    data: params
+  })
+}

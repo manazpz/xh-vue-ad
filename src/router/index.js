@@ -247,16 +247,22 @@ export const asyncRouterMap = [
       meta: { title: 'editOldGoods', icon: 'people' }
     },
     {
-      path: 'lableGoods',
-      component: () => import('@/views/bf/goods/lableGoods'),
-      name: 'lableGoods',
-      meta: { title: '标签商品', icon: 'drag' }
-    },
-    {
       path: 'forecast',
       component: () => import('@/views/bf/goods/forecast'),
       name: 'forecast',
       meta: { title: '价格预测', icon: 'drag' }
+    },
+    {
+      path: 'forecastMain',
+      component: () => import('@/views/bf/goods/forecastMain'),
+      name: 'forecastMain',
+      meta: { title: '预测属性', icon: 'drag' }
+    },
+    {
+      path: 'lableGoods',
+      component: () => import('@/views/bf/goods/lableGoods'),
+      name: 'lableGoods',
+      meta: { title: '标签商品', icon: 'drag' }
     },
     {
       path: 'lable',

@@ -8,7 +8,7 @@
         {{$t('table.search')}}
       </el-button>
       <el-button class="filter-item" style="margin-left: 10px;" @click="handleCreate" type="primary"
-                 icon="el-icon-edit">{{$t('table.add')}}
+                 icon="el-icon-edit">新增方案
       </el-button>
     </div>
     <!-- 过滤条件 end -->
@@ -26,16 +26,22 @@
           <span>{{scope.row.goodsName}}</span>
         </template>
       </el-table-column>
-      <el-table-column align="center" label="日期" width="120">
+      <el-table-column align="center" label="方案名称" min-width="110">
         <template slot-scope="scope">
-          <span>{{scope.row.date}}</span>
+          <span>{{scope.row.name}}</span>
         </template>
       </el-table-column>
-      <el-table-column align="center" label="价格" width="90">
+      <el-table-column align="center" label="周期（当前时间往前/周）" min-width="120">
         <template slot-scope="scope">
-          <span>{{scope.row.price}}</span>
+          <span>{{scope.row.begin}}</span>
         </template>
       </el-table-column>
+      <el-table-column align="center" label="周期（当前时间往后/周）" min-width="120">
+        <template slot-scope="scope">
+          <span>{{scope.row.end}}</span>
+        </template>
+      </el-table-column>
+
       <el-table-column align="center" label="创建时间" min-width="110">
         <template slot-scope="scope">
           <span>{{scope.row.createTime}}</span>
@@ -62,21 +68,24 @@
     <!-- 弹出框 start -->
     <el-dialog :title="dialogStatus" :visible.sync="dialogFormVisible">
       <el-form :rules="rule" ref="dataForm" :model="temp" label-position="left" label-width="70px"
-               style='width: 400px; margin-left:50px;'>
-        <el-form-item label-width="110px" label="商品名" prop="classify_id" class="postInfo-container-item">
+               style='width: 500px; margin-left:50px;'>
+        <el-form-item label-width="190px" label="商品名" prop="classify_id" class="postInfo-container-item">
           <select-tree v-model="temp.classify_id" :options="options" :props="defaultProps" >
           </select-tree>
         </el-form-item>
-        <el-form-item label-width="110px" label="日期" prop="date" class="postInfo-container-item">
-          <el-date-picker v-model="temp.date" value-format="yyyy-MM-dd" type="date" placeholder="选择日期"></el-date-picker>
+        <el-form-item label-width="190px" label="方案名称" prop="name" class="postInfo-container-item">
+          <el-input  v-model="temp.name" placeholder="请输入方案名称"></el-input>
         </el-form-item>
-        <el-form-item label-width="110px" label="价格"  prop="price" class="postInfo-container-item">
-          <el-input  v-model="temp.price" placeholder="请输入价格"></el-input>
+        <el-form-item label-width="190px" label="周期（当前时间往前/周）" prop="begin" class="postInfo-container-item">
+          <el-input  v-model="temp.begin" placeholder="请输入周数"></el-input>
+        </el-form-item>
+        <el-form-item label-width="190px" label="周期（当前时间往后/周）" prop="end" class="postInfo-container-item">
+          <el-input  v-model="temp.end" placeholder="请输入周数"></el-input>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisible = false">{{$t('table.cancel')}}</el-button>
-        <el-button v-if="dialogStatus=='新增预测'" type="primary" @click="createData">{{$t('table.confirm')}}</el-button>
+        <el-button v-if="dialogStatus=='新增方案'" type="primary" @click="createData">{{$t('table.confirm')}}</el-button>
         <el-button v-else type="primary" @click="updateData">{{$t('table.confirm')}}</el-button>
       </div>
     </el-dialog>
@@ -85,13 +94,13 @@
 </template>
 
 <script>
-  import { forecastList, getClassifyTree, createForecast, deleteForecast, updateForecast } from '@/api/goods/goods'
+  import { forecastMainList, getClassifyTree, createForecastMain, deleteForecastMain, updateForecastMain } from '@/api/goods/goods'
   import SelectTree from '@/components/widget/SelectTree.vue'
   import waves from '@/directive/waves' // 水波纹指令
   import store from '@/store'
 
   export default {
-    name: 'forecast',
+    name: 'forecastMain',
     inject: ['reload'],
     directives: {
       waves
@@ -104,6 +113,7 @@
         tableKey: 0,
         list: null,
         total: null,
+        brandId: '',
         listLoading: false,
         btnLoading: false,
         dialogStatus: '',
@@ -122,13 +132,15 @@
         temp: {
           id: undefined,
           classify_id: '',
-          date: '',
-          price: 0
+          name: '',
+          begin: '',
+          end: ''
         },
         rule: {
           classify_id: [{ required: true, message: '商品名不能为空！', trigger: 'change' }],
-          date: [{ required: true, message: '日期不能为空！', trigger: 'change' }],
-          price: [{ required: true, message: '价格不能为空！', trigger: 'change' }]
+          name: [{ required: true, message: '方案名称不能为空！', trigger: 'change' }],
+          begin: [{ required: true, message: '开始周期不能为空！', trigger: 'change' }],
+          end: [{ required: true, message: '结束周期不能为空！', trigger: 'change' }]
         },
         // 默认选中值
         selected: 'A',
@@ -154,7 +166,7 @@
     methods: {
       getList() {
         this.listLoading = true
-        forecastList(this.listQuery).then(response => {
+        forecastMainList(this.listQuery).then(response => {
           if (response.code === 50001) {
             store.dispatch('GetRefreshToken').then(() => {
               this.getList()
@@ -204,13 +216,14 @@
         this.temp = {
           id: undefined,
           classify_id: '',
-          date: '',
-          price: 0
+          name: '',
+          begin: '',
+          end: ''
         }
       },
       handleCreate() {
         this.resetTemp()
-        this.dialogStatus = '新增预测'
+        this.dialogStatus = '新增方案'
         this.dialogFormVisible = true
         this.$nextTick(() => {
           this.$refs['dataForm'].clearValidate()
@@ -220,7 +233,7 @@
         this.$refs['dataForm'].validate((valid) => {
           if (valid) {
             this.listLoading = true
-            createForecast(this.temp).then(response => {
+            createForecastMain(this.temp).then(response => {
               if (response.code === 50001) {
                 store.dispatch('GetRefreshToken').then(() => {
                   this.createData()
@@ -242,7 +255,7 @@
       },
       handleUpdate(row) {
         this.temp = Object.assign({}, row)
-        this.dialogStatus = '编辑预测'
+        this.dialogStatus = '编辑方案'
         this.dialogFormVisible = true
         this.$nextTick(() => {
           this.$refs['dataForm'].clearValidate()
@@ -252,7 +265,7 @@
         this.$refs['dataForm'].validate((valid) => {
           if (valid) {
             this.listLoading = true
-            updateForecast(this.temp).then((response) => {
+            updateForecastMain(this.temp).then((response) => {
               if (response.code === 50001) {
                 store.dispatch('GetRefreshToken').then(() => {
                   this.updateData()
@@ -284,7 +297,7 @@
         this.$confirm('您确定删除吗？').then(_ => {
           this.listLoading = true
           const params = { id: row.id }
-          deleteForecast(params).then(response => {
+          deleteForecastMain(params).then(response => {
             if (response.code === 50001) {
               store.dispatch('GetRefreshToken').then(() => {
                 this.handleModifyStatus(row, isValid)

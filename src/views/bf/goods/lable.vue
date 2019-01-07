@@ -1,6 +1,10 @@
 <template>
   <div class="app-container">
 
+    <div class="filter-container">
+      <el-button type="success" size="mini" @click="handleCreat" class="filter-item" round>添加标签</el-button>
+    </div>
+
     <!-- 表格 start -->
     <el-table :key='tableKey' :data="list" v-loading="listLoading" stripe border fit highlight-current-row
               style="width: 100%;min-height:100%;">
@@ -55,11 +59,30 @@
       </div>
     </el-dialog>
     <!-- 编辑弹出框 end -->
+
+
+    <!-- 弹出框 start -->
+    <el-dialog title="新增标签" :visible.sync="dialogLableVisible">
+      <el-form ref="dataLable" :model="tempLable" label-position="left" label-width="70px"
+               style='width: 400px; margin-left:50px;'>
+        <el-form-item label-width="110px" label="标签名称" class="postInfo-container-item">
+          <el-input v-model="tempLable.name"></el-input>
+        </el-form-item>
+        <el-form-item label-width="110px" label="标签值" class="postInfo-container-item">
+          <el-input v-model="tempLable.value"></el-input>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogLableVisible = false">{{$t('table.cancel')}}</el-button>
+        <el-button type="primary" v-loading="btnLoading" @click="creatLable">{{$t('table.confirm')}}</el-button>
+      </div>
+    </el-dialog>
+    <!-- 弹出框 end -->
   </div>
 </template>
 
 <script>
-  import { lables, goodsList, addGoodsLable } from '@/api/goods/goods'
+  import { lables, goodsList, addGoodsLable, instertLable } from '@/api/goods/goods'
   import waves from '@/directive/waves' // 水波纹指令
   import store from '@/store'
 
@@ -76,6 +99,10 @@
         listLoading: true,
         btnLoading: false,
         dialogFormVisible: false,
+        dialogLableVisible: false,
+        tempLable: {
+          name: ''
+        },
         lableId: '',
         listQuery: {
           pageNum: 1,
@@ -164,7 +191,34 @@
         }).catch(() => {
           this.btnLoading = false
         })
-      }
+      },
+      handleCreat() {
+        this.dialogLableVisible = true
+        this.$nextTick(() => {
+          this.$refs['dataLable'].clearValidate()
+        })
+      },
+      creatLable() {
+        this.btnLoading = true
+        instertLable(this.tempLable).then(response => {
+          if (response.code === 50001) {
+            store.dispatch('GetRefreshToken').then(() => {
+              this.creatLable()
+            })
+          }
+          if (response.code === 200) {
+            this.dialogLableVisible = false
+            this.btnLoading = false
+            this.$message({
+              message: '操作成功',
+              type: 'success'
+            })
+            this.getList()
+          }
+        }).catch(() => {
+          this.btnLoading = false
+        })
+      },
     }
   }
 </script>
