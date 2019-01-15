@@ -51,7 +51,7 @@
     },
     watch: {
       $route(to, from) {
-        if (to.path === ('/bf/gm/editGoods/01' || '/bf/gm/editGoods/02')) {
+        if (to.path === ('/bf/gm/editGoods/01') || to.path === ('/bf/gm/editGoods/02')) {
           if (to.query.goodsId !== this.goodsId) {
             this.goodsId = to.query.goodsId
             this.initdata()
@@ -60,7 +60,7 @@
       }
     },
     created() {
-      if (this.$route.path === ('/bf/gm/editGoods/01' || '/bf/gm/editGoods/02')) {
+      if (this.$route.path === ('/bf/gm/editGoods/01') || this.$route.path === ('/bf/gm/editGoods/02')) {
         if (this.$route.query.goodsId !== this.goodsId) {
           this.goodsId = this.$route.query.goodsId
           this.initdata()
