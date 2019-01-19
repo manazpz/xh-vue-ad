@@ -85,10 +85,10 @@
 
     <!-- 弹出框 start -->
     <el-dialog :title="dialogStatus" :visible.sync="dialogFormVisible">
-      <el-form :rules="rule" ref="dataForm" :model="temp" label-position="left" label-width="70px"
+      <el-form :rules="rule" ref="dataForm" :model="tempClassify" label-position="left" label-width="70px"
                style='width: 400px; margin-left:50px;'>
         <el-form-item label-width="110px" label="分类名称"  prop="name" class="postInfo-container-item">
-          <el-input v-model="temp.name" required placeholder="请输入分类名称"></el-input>
+          <el-input v-model="tempClassify.name" required placeholder="请输入分类名称"></el-input>
         </el-form-item>
         <!--<el-form-item v-if="type" label-width="110px" label="分类属性"  prop="model" class="postInfo-container-item">-->
           <!--<el-select clearable  style="width: 100%;" class="filter-item" v-model="temp.model" required placeholder="请输入分类属性">-->
@@ -99,10 +99,10 @@
           <!--</el-select>-->
         <!--</el-form-item>-->
         <el-form-item label-width="110px" label="排序号"  prop="px" class="postInfo-container-item">
-          <el-input v-model="temp.px" required placeholder="请输入排序号"></el-input>
+          <el-input v-model="tempClassify.px" required placeholder="请输入排序号"></el-input>
         </el-form-item>
         <el-form-item label-width="110px" label="备注"   class="postInfo-container-item">
-          <el-input  v-model="temp.remarks" placeholder="请输入备注"></el-input>
+          <el-input  v-model="tempClassify.remarks" placeholder="请输入备注"></el-input>
         </el-form-item>
       </el-form>
 
@@ -227,6 +227,12 @@
           specId: [],
           index: '',
           specName: []
+        },
+        tempClassify: {
+          id: '',
+          name: '',
+          px: '',
+          remarks: ''
         },
         rule: {
           name: [{ required: true, message: '分类名称不能为空', trigger: 'change' }],
@@ -461,10 +467,10 @@
           this.type = false
         }
         this.falg = false
-        this.temp = Object.assign({}, row)
+        this.tempClassify = Object.assign({}, row)
         this.dialogStatus = '编辑分类'
         this.dialogFormVisible = true
-        this.temp.index = row.index
+        this.tempClassify.index = row.index
         this.$nextTick(() => {
           this.$refs['dataForm'].clearValidate()
         })
@@ -473,7 +479,7 @@
         this.$refs['dataForm'].validate((valid) => {
           if (valid) {
             this.listLoading = true
-            updateClassify(this.temp).then((response) => {
+            updateClassify(this.tempClassify).then((response) => {
               if (response.code === 50001) {
                 store.dispatch('GetRefreshToken').then(() => {
                   this.updateData()
