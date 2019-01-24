@@ -31,7 +31,7 @@
               {{$t('navbar.dashboard')}}
             </el-dropdown-item>
           </router-link>
-          <router-link to="/user/changePwd">
+          <router-link to="/um/changePwd">
             <el-dropdown-item>
               {{$t('navbar.changePwd')}}
             </el-dropdown-item>

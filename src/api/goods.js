@@ -49,6 +49,7 @@ export function createClassify(params) {
 }
 
 export function updateClassify(params) {
+  params.history = ''
   return request({
     url: '/goods/updateClassify',
     method: 'POST',

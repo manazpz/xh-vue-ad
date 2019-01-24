@@ -49,14 +49,14 @@
       </el-table-column>
       <el-table-column align="center" label="提示类型" min-width="140">
         <template slot-scope="scope">
-          <span>{{scope.row.tipsType}}</span>
+          <span>{{scope.row.tipsTypeValue}}</span>
         </template>
       </el-table-column>
 
       <el-table-column align="center" label="操作" min-width="120" class-name="small-padding fixed-width">
         <template slot-scope="scope">
-          <el-button type="primary" plain @click="handleUpdateSpec(scope.row)">修改规格</el-button>
-          <el-button  type="danger" plain @click="handleDeleteSpec(scope.row)">删除</el-button>
+          <el-button type="primary" @click='handleUpdateSpec(scope.row)' size="mini" icon="el-icon-edit">编辑</el-button>
+          <el-button type="success" @click="handleDeleteSpec(scope.row)" size="mini" >删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -77,7 +77,7 @@
       <el-form :rules="rule" ref="dataForm" :model="temp" label-position="left" label-width="70px"
                style='width: 400px; margin-left:50px;'>
         <el-form-item label-width="110px" label="分组名称" prop="grouName" class="postInfo-container-item">
-          <select-tree v-model="temp.grouName" :options="options" :props="defaultProps" >
+          <select-tree v-model="temp.grouId" :options="options" :props="defaultProps" >
           </select-tree>
         </el-form-item>
         <el-form-item label-width="110px" label="规格组名称"  prop="specName" class="postInfo-container-item">
@@ -92,7 +92,7 @@
           </el-radio-group>
         </el-form-item>
         <el-form-item  label-width="110px" label="是否多选"  prop="multi" class="postInfo-container-item">
-          <el-select clearable  style="width: 100%;" class="filter-item" v-model="temp.multi" required placeholder="请输入分类属性">
+          <el-select clearable  style="width: 100%;" class="filter-item" v-model="temp.obligate" required placeholder="请输入分类属性">
             <el-option key="01" label="否" value="01">
             </el-option>
             <el-option key="02" label="是" value="02">
@@ -231,9 +231,9 @@
             this.total = response.data.total
             this.list.forEach((k) => {
               if (k.tipsType === '01') {
-                k.tipsType = '文字'
+                k.tipsTypeValue = '文字'
               } else {
-                k.tipsType = '图片'
+                k.tipsTypeValue = '图片'
               }
             })
             setTimeout(() => {

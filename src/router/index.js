@@ -357,6 +357,12 @@ export const asyncRouterMap = [
       component: () => import('@/views/bf/shop/settlementList'),
       name: 'bfSettlementList',
       meta: { title: '结算账单', icon: 'theme' }
+    },
+    {
+      path: 'resourceImgs',
+      component: () => import('@/views/bf/resource/imgList'),
+      name: 'resourceImgs',
+      meta: { title: 'Banner设置', icon: 'theme' }
     }]
   },
   {
@@ -470,12 +476,12 @@ export const asyncRouterMap = [
         name: 'statementList',
         meta: { title: 'statementList' }
       },
-      {
-        path: 'resourceImgs',
-        component: () => import('@/views/resource/imgList'),
-        name: 'resourceImgs',
-        meta: { title: 'resourceImgs' }
-      },
+      // {
+      //   path: 'resourceImgs',
+      //   component: () => import('@/views/resource/imgList'),
+      //   name: 'resourceImgs',
+      //   meta: { title: 'resourceImgs' }
+      // },
       {
         path: 'logoUpload',
         component: () => import('@/views/user/basic/logoUpload'),
