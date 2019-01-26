@@ -51,6 +51,11 @@
           <span>{{scope.row.extend}}</span>
         </template>
       </el-table-column>
+      <el-table-column align="center" label="链接模式" min-width="220">
+        <template slot-scope="scope">
+          <span>{{scope.row.bannerTypeName}}</span>
+        </template>
+      </el-table-column>
       <el-table-column align="center" label="链接" min-width="220">
         <template slot-scope="scope">
           <span>{{scope.row.link}}</span>
@@ -106,14 +111,11 @@
             </el-option>
           </el-select>
         </el-form-item>
-        <el-form-item v-if="temp.bannerType !== ''" label-width="110px" label="选择商品" class="postInfo-container-item">
+        <el-form-item  label-width="110px" label="选择商品" class="postInfo-container-item">
           <el-select v-model="temp.goodsType" style="width: 290px" >
-            <el-option v-for="item in goodsTypeOptions" :key="item.keyWord" :label="item.name" :value="item.keyWord" >
+            <el-option v-for="item in goodsTypeOptions" :key="item.id" :label="item.name" :value="item.id" >
             </el-option>
           </el-select>
-        </el-form-item>
-        <el-form-item label-width="110px" label="链接" class="postInfo-container-item">
-          <el-input v-model="temp.link" ></el-input>
         </el-form-item>
         <el-form-item label-width="70px" label="上传图标" prop="nickName" class="postInfo-container-item">
           <el-upload
@@ -147,6 +149,7 @@
 
 <script>
   import { queryResources, insertResources, updateResources, deleteResources } from '@/api/resource'
+  import { goodsList } from '@/api/goods'
   import { getConfig, deleteFile } from '@/api/user'
   import waves from '@/directive/waves' // 水波纹指令
   import store from '@/store'
@@ -182,6 +185,13 @@
           goodsType: '',
           link: ''
         },
+        goodsQuery: {
+          id: '',
+          isDel: 'N',
+          obligates: 'N',
+          status: '01',
+          model: ''
+        },
         dialogFormVisible: false,
         dialogStatus: '',
         rules: {
@@ -204,6 +214,14 @@
             })
           }
           if (response.code === 200) {
+            response.data.items.forEach((value, index) => {
+              if (value.goodsType !== null){
+                this.goodsQuery.id = value.goodsType
+                goodsList(this.goodsQuery).then(response => {
+                  this.goodsTypeOptions.push(response.data.items[0])
+                })
+              }
+            })
             this.list = response.data.items
             this.total = response.data.total
             setTimeout(() => {
@@ -225,7 +243,15 @@
         })
       },
       onSelectedDrug(event) {
-        debugger
+        if (event === 'XT') {
+          this.goodsQuery.model = '01'
+        }
+        if (event === 'JT') {
+          this.goodsQuery.model = '02'
+        }
+        goodsList(this.goodsQuery).then(response => {
+          this.goodsTypeOptions = response.data.items
+        })
       },
       handleFilter() {
         this.listQuery.pageNum = 1
@@ -288,6 +314,8 @@
           id: undefined,
           name: '',
           type: 'HB',
+          bannerType: '',
+          goodsType: '',
           link: ''
         }
       },
@@ -304,6 +332,11 @@
           if (valid) {
             this.btnLoading = true
             this.temp.files = this.fileList
+            if (this.temp.bannerType === 'XT') {
+              this.temp.link = '/#/goods/new?id=' + this.temp.goodsType
+            } else {
+              this.temp.link = '/#/goods/old?id=' + this.temp.goodsType
+            }
             insertResources(this.temp).then(response => {
               if (response.code === 50001) {
                 store.dispatch('GetRefreshToken').then(() => {
@@ -344,6 +377,11 @@
           if (valid) {
             this.btnLoading = true
             this.temp.files = this.fileList
+            if (this.temp.bannerType === 'XT') {
+              this.temp.link = '/#/goods/new?id=' + this.temp.goodsType
+            } else {
+              this.temp.link = '/#/goods/old?id=' + this.temp.goodsType
+            }
             updateResources(this.temp).then(response => {
               if (response.code === 50001) {
                 store.dispatch('GetRefreshToken').then(() => {
