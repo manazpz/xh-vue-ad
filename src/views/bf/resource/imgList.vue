@@ -215,7 +215,7 @@
           }
           if (response.code === 200) {
             response.data.items.forEach((value, index) => {
-              if (value.goodsType !== null){
+              if (value.goodsType !== null) {
                 this.goodsQuery.id = value.goodsType
                 goodsList(this.goodsQuery).then(response => {
                   this.goodsTypeOptions.push(response.data.items[0])
