@@ -65,16 +65,16 @@
                 <el-table-column min-width="50">
                   <template slot-scope="scope">
                     <span>{{scope.row.name}}</span>
-                    <span style="padding: 3px 100px">{{scope.row.px}}</span>
+                    <span >{{scope.row.px}}</span>
                   </template>
                 </el-table-column>
                 <el-table-column min-width="200">
                   <template slot-scope="scope" v-if="scope.row.showDropDown" style="display: inline-block">
                     <el-button-group style="float: right" >
-                      <el-button size="mini" type="primary" icon="el-icon-edit" @click="handleBrand(scope.row)">品牌</el-button>
-                      <el-button size="mini" type="primary" icon="el-icon-edit" @click="handleSpec(scope.row)">规格</el-button>
-                      <el-button size="mini" type="primary" icon="el-icon-edit" @click="handleUpdate(scope.row,'2')">编辑</el-button>
                       <el-button size="mini" type="primary" icon="el-icon-delete" @click="handleDeleteClassify(scope.row)">删除</el-button>
+                      <el-button size="mini" type="primary" icon="el-icon-edit" @click="handleUpdate(scope.row,'2')">编辑</el-button>
+                      <el-button size="mini" type="primary" icon="el-icon-edit" @click="handleSpec(scope.row)">规格</el-button>
+                      <el-button size="mini" type="primary" icon="el-icon-edit" @click="handleBrand(scope.row)">品牌</el-button>
                     </el-button-group>
                   </template>
                 </el-table-column>
@@ -672,6 +672,17 @@
 </script>
 
 <style>
+  .el-table_3_column_5 .cell span:nth-child(1){
+    float: left;
+    width: 150px;
+  }
+  .el-table_2_column_3 .cell span:nth-child(1){
+    float: left;
+    width: 70px;
+  }
+  .el-table .cell {
+    width: 300px;
+  }
   .bg-from {
     background: #f8f8f8;
   }
@@ -692,5 +703,24 @@
   }
   .el-select {
     width: 400px;
+  }
+  .el-table .cell {
+    width: 500px;
+  }
+  .el-button-group {
+    width: 500px;
+  }
+  .el-button-group .el-button {
+    float: right;
+  }
+  .el-button-group .el-button:nth-child(1) {
+    border-radius: none;
+  }
+  .el-table--enable-row-transition .el-table__body td {
+    -webkit-transition: none;
+    transition: none;
+  }
+  .el-table--enable-row-hover .el-table__body tr:hover>td {
+    background: none;
   }
 </style>
