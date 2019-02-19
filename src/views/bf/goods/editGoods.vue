@@ -234,6 +234,7 @@
         dateil.parameter = data.parameter
         dateil.detail = data.detail
         dateil.afileList = data.afileList
+        dateil.afileLists = data.afileLists
         return dateil
       }
     }

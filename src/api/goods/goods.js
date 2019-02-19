@@ -227,3 +227,19 @@ export function updateForecastMain(params) {
     data: params
   })
 }
+
+export function insertGoodsResource(params) {
+  return request({
+    url: '/bf/goods/insertResource',
+    method: 'post',
+    data: params
+  })
+}
+
+export function deleteGoodsResource(params) {
+  return request({
+    url: '/bf/goods/deleteResource',
+    method: 'post',
+    data: params
+  })
+}

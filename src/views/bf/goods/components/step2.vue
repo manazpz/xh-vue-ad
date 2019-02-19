@@ -81,6 +81,22 @@
                         </el-tooltip>
                       </el-upload>
                   </el-form-item>
+                  <el-form-item  v-if="info.classify.model === '01'" label="上传商品详情图片：" class="postInfo-container-item">
+                    <el-upload
+                      :action="action"
+                      list-type="picture-card"
+                      :file-list="fileLists"
+                      :limit="1"
+                      accept="image/jpeg,image/gif,image/png"
+                      :on-change="OnGoodsChanges"
+                      :on-remove="OnGoodsRemoves"
+                      :on-success="handleSuccess"
+                      :auto-upload="true">
+                      <el-tooltip class="item" effect="light" content="请上传jpg/png格式,不大于2M的图片" placement="bottom" >
+                        <i class="el-icon-plus"></i>
+                      </el-tooltip>
+                    </el-upload>
+                  </el-form-item>
                 </el-form>
               </div>
             </el-col>
@@ -111,7 +127,7 @@
                       </el-table-column>
                     </el-table>
                   </el-form-item>
-                  <el-form-item v-if="info.classify.model == '02'" label="设置规格：" class="postInfo-container-item">
+                  <el-form-item v-if="info.classify.model === '02'" label="设置规格：" class="postInfo-container-item">
                     <el-input
                       style="width:97%;"
                       prepend="基准价格："
@@ -266,7 +282,7 @@
   </div>
 </template>
 <script>
-  import { classifyBrandParam, classifySpecParam } from '@/api/goods/goods'
+  import { classifyBrandParam, classifySpecParam, insertGoodsResource, deleteGoodsResource } from '@/api/goods/goods'
   import { getConfig } from '@/api/user'
   import Ueditor from '@/components/Ueditor'
 
@@ -284,11 +300,15 @@
       return {
         tableKey: 0,
         goodsId: '',
+        fileId: {
+          id: ''
+        },
         listLoading: true,
         activeName: 'first',
         standardVisible: false,
         action: process.env.BASE_API + '/resources/uploadFile',
         fileList: this.info.info ? this.info.info.afileList : [],
+        fileLists: this.info.info ? this.info.info.afileLists : [],
         brands: [],
         units: [],
         u1: 'u1' + new Date(),
@@ -600,6 +620,26 @@
       },
       OnGoodsRemove(file, fileList) {
         this.info.data.fileList = fileList
+      },
+      OnGoodsChanges(response, file, fileList) {
+        this.info.data.fileLists = fileList
+        if (response.code === 200) {
+          response.data.file.refId = this.info.data.id
+          insertGoodsResource(response.data.file).then(response => {
+          })
+        }
+      },
+      OnGoodsRemoves(response, file, fileList) {
+        this.fileId.id = response.id
+        deleteGoodsResource(this.fileId).then(response => {
+        })
+      },
+      handleSuccess(response, file, fileList) {
+        if (response.code === 200) {
+          response.data.file.refId = this.info.data.id
+          insertGoodsResource(response.data.file).then(response => {
+          })
+        }
       },
       onTipsImg(val) {
         this.tipsRow = undefined
