@@ -45,6 +45,7 @@ export default {
     smsList: '短信网关',
     // 商家端
     goodsManagement: '商品管理',
+    couponManagement: '优惠卷管理',
     newGoodsList: '商品列表（新）',
     oldGoodsList: '商品列表（旧）',
     recycleGoodsList: '商品回收站',

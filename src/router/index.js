@@ -272,22 +272,22 @@ export const asyncRouterMap = [
     }]
   },
 
-  {
-    path: '/bf/cm',
-    component: Layout,
-    redirect: '/bf/cm/couponList',
-    meta: {
-      title: '优惠券管理',
-      icon: 'goods',
-      roles: ['SM']
-    },
-    children: [{
-      path: 'couponBfList',
-      component: () => import('@/views/bf/coupon/couponList'),
-      name: 'couponBfList',
-      meta: { title: '优惠券管理', icon: 'component', noCache: true }
-    }]
-  },
+  // {
+  //   path: '/bf/cm',
+  //   component: Layout,
+  //   redirect: '/bf/cm/couponList',
+  //   meta: {
+  //     title: 'couponManagement',
+  //     icon: 'goods',
+  //     roles: ['AD']
+  //   },
+  //   children: [{
+  //     path: 'couponBfList',
+  //     component: () => import('@/views/bf/coupon/couponList'),
+  //     name: 'couponBfList',
+  //     meta: { title: '优惠券管理', icon: 'component', noCache: true }
+  //   }]
+  // },
 
   {
     path: '/bf/od',
@@ -326,10 +326,10 @@ export const asyncRouterMap = [
       }]
   },
   {
-    path: '/coupon',
+    path: '/bf/coupon',
     component: Layout,
     meta: {
-      title: '优惠券后台',
+      title: 'couponManagement',
       icon: 'goods',
       roles: ['SD']
     },

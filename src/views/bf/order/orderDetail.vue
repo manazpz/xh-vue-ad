@@ -38,26 +38,41 @@
           </el-main>
           <el-footer style="padding: 0;height:auto">
             <el-row style="background: #F3F3F3;padding: 10px">
-              <el-col :span="24">其他信息</el-col>
+              <el-col :span="24">用户银行信息</el-col>
             </el-row>
             <el-row style="padding: 10px 0 10px 20px;font-size: 10px">
-              <el-col :span="24">送货时间：任意时间</el-col>
+              <el-col :span="24">开户行名称：{{data.bank.bankName}}</el-col>
+            </el-row>
+            <el-row style="padding: 10px 0 10px 20px;font-size: 10px">
+              <el-col :span="24">开户行地址：{{data.bank.bankAddress}}</el-col>
+            </el-row>
+            <el-row style="padding: 10px 0 10px 20px;font-size: 10px">
+              <el-col :span="24">持卡人姓名：{{data.bank.accountName}}</el-col>
+            </el-row>
+            <el-row style="padding: 10px 0 10px 20px;font-size: 10px">
+              <el-col :span="24">开户行卡号：{{data.bank.accountNo}}</el-col>
             </el-row>
           </el-footer>
         </el-container>
         <el-container style="width: 70%">
           <el-main>
             <el-row style="background: #F3F3F3;padding: 10px">
-              <el-col :span="24">订单状态：{{data.orderStatus | orderStatus}}</el-col>
+              <el-col :span="24">收付款状态</el-col>
             </el-row>
             <el-row style="padding: 10px 0 0 20px;font-size: 10px">
-              <el-col :span="24">1.送货时间：任意时间</el-col>
+              <el-col :span="24">1.收款人账号：{{data.invoice.account_no}}</el-col>
             </el-row>
             <el-row style="padding: 10px 0 0 20px;font-size: 10px">
-              <el-col :span="24">2.发票抬头：{{data.invoiceTitle}}</el-col>
+              <el-col :span="24">2.发票抬头：{{data.invoice.title}}</el-col>
             </el-row>
             <el-row style="padding: 10px 0 0 20px;font-size: 10px">
-              <el-col :span="24">3.发票内容：{{data.invoiceContent}}</el-col>
+              <el-col :span="24">3.发票内容：{{data.invoice.content}}</el-col>
+            </el-row>
+            <el-row style="padding: 10px 0 0 20px;font-size: 10px">
+              <el-col :span="24">4.付款人：{{data.invoice.payment}}</el-col>
+            </el-row>
+            <el-row style="padding: 10px 0 0 20px;font-size: 10px">
+              <el-col :span="24">5.付款人账号：{{data.invoice.paymentno}}</el-col>
             </el-row>
             <!--<el-row style="padding: 10px 0 10px 50px;font-size: 10px">-->
               <!--<el-col :span="24">订单操作原因：无</el-col>-->
@@ -153,7 +168,8 @@
           name: '',
           com_code: '',
           code: ''
-        }
+        },
+        rules: {}
       }
     },
     created() {

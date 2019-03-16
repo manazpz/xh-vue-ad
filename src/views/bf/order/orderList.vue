@@ -34,7 +34,7 @@
     <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
       <el-tab-pane label="全部" name="all" ></el-tab-pane>
       <el-tab-pane label="待付款" name="dfk" ></el-tab-pane>
-      <el-tab-pane label="代发货" name="dfh"></el-tab-pane>
+      <el-tab-pane label="待发货" name="dfh"></el-tab-pane>
       <el-tab-pane label="待收货" name="dsh"></el-tab-pane>
     </el-tabs>
 
@@ -155,6 +155,15 @@
         <el-form-item label-width="110px" label="税号：" prop="duty" class="postInfo-container-item">
           <el-input v-model="temp.duty" required placeholder="请输入税号"></el-input>
         </el-form-item>
+        <el-form-item label-width="110px" label="收款账号：" prop="account_no" class="postInfo-container-item">
+          <el-input v-model="temp.account_no" required placeholder="请输入收款账号"></el-input>
+        </el-form-item>
+        <el-form-item label-width="110px" label="付款人：" prop="payment" class="postInfo-container-item">
+          <el-input v-model="temp.payment" required placeholder="请输入付款人"></el-input>
+        </el-form-item>
+        <el-form-item label-width="110px" label="付款人账号：" prop="paymentno" class="postInfo-container-item">
+          <el-input v-model="temp.paymentno" required placeholder="请输入付款人账号"></el-input>
+        </el-form-item>
         <el-form-item label-width="110px" label="类型：" class="postInfo-container-item">
           <el-radio v-model="temp.type" label="01">个人</el-radio>
           <el-radio v-model="temp.type" label="02">公司</el-radio>
@@ -217,6 +226,9 @@
           title: '',
           duty: '',
           type: '',
+          account_no: '',
+          payment: '',
+          paymentno: '',
           content: '',
           createTime: ''
         },
